@@ -9,9 +9,43 @@
 // --- get a line of shooting sight with the player.
 // --- stands there and shoots until i die.
 
-void aiSmartFrame(int i) {
-	// attempt to shoot all the time.
-	fireShot(i);
+double getDistance(Coord a, Coord b) {
+	// source: http://www.mathwarehouse.com/algebra/distance_formula/index.php
+	return sqrt(
+		pow(a.x - b.x, 2) + 
+		pow(a.y - b.y, 2)
+	);
+}
+
+void aiSmartFrame(int enemyInc) {
+
+	// shoot at the nearest opponent.
+	// walk to the next waypoint.
+
+	Coord target;
+	double bestDistance = 1000;
+	Coord usPos = enemies[enemyInc].coord;
+	for(int i=0; i < MAX_ENEMY; i++) {
+		if(enemies[i].coord.x == 0) continue;
+		if(i == enemyInc) continue;				// don't shoot ourselves! :p
+
+		Coord themPos = enemies[i].coord;
+		double distance = getDistance(usPos, themPos);
+
+		// we're the shortest so far!
+		if(distance < bestDistance) {
+			target = themPos;
+			bestDistance = distance;
+		}
+	}
+
+	// give us a chance to target the player too!
+	if(getDistance(usPos, pos) < bestDistance) {
+		target = pos;
+	}
+
+	// shoot at the chosen target
+	fireShot(enemyInc, target);
 }
 
 void aiChaseFrame(int i) {

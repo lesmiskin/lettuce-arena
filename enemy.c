@@ -82,7 +82,7 @@ bool wouldTouchEnemy(Coord a, int selfIndex, bool includePlayer) {
 	return false;
 }
 
-void fireShot(int enemyIndex) {
+void fireShot(int enemyIndex, Coord target) {
 
 	// can we fire? (e.g. are we still waiting for recoil on last shot)
 	if(isDue(clock(), enemies[enemyIndex].lastShot, 500)) {
@@ -90,7 +90,7 @@ void fireShot(int enemyIndex) {
 		for(int i=0; i < MAX_SHOTS; i++) {
 			if(!shots[i].valid) {
 				Coord origin = enemies[enemyIndex].coord;
-				Coord shotStep = getStep(origin, pos, SHOT_SPEED, false);
+				Coord shotStep = getStep(origin, target, SHOT_SPEED, false);
 				Shot s = { true, origin, shotStep, 0, false};
 				shots[i] = s;
 				break;

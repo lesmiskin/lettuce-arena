@@ -46,7 +46,7 @@ extern const double DIR_CHANGE;
 extern const double ENEMY_SPEED;
 const double CHAR_BOUNDS;
 
-extern void fireShot(int enemyIndex);
+extern void fireShot(int enemyIndex, Coord target);
 extern Coord calcDirOffset(Coord original, Dir dir);
 extern Enemy enemies[MAX_ENEMY];
 extern void enemyGameFrame(void);

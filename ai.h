@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-extern void aiSmartFrame(int i);
+extern void aiSmartFrame(int enemyInc);
 extern void aiChaseFrame(int i);
 
 #endif
