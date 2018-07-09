@@ -78,7 +78,8 @@ static void loadImages(void) {
     //Define assets to be loaded.
     AssetDef definitions[] = {
         { "enemy.png" },
-        { "player.png" }
+        { "player.png" },
+        { "dirt.png" }
     };
 
     //Infer asset path from current directory.

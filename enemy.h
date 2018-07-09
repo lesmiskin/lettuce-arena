@@ -6,6 +6,7 @@
 #define MAX_SHOTS 50
 
 typedef struct {
+	bool valid;
     Coord coord;
     Coord target;
     double angle;
@@ -38,12 +39,14 @@ typedef struct {
 	long lastRoamTime;
 	Dir roamDir;
 	bool isRoaming;
+	long lastShot;
 } Enemy;
 
 extern const double DIR_CHANGE;
 extern const double ENEMY_SPEED;
 const double CHAR_BOUNDS;
 
+extern void fireShot(int enemyIndex);
 extern Coord calcDirOffset(Coord original, Dir dir);
 extern Enemy enemies[MAX_ENEMY];
 extern void enemyGameFrame(void);

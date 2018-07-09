@@ -15,38 +15,14 @@
  Enemy enemies[MAX_ENEMY];
 long lastIdleTime;
 int enemyCount = 0;
-const int INITIAL_ENEMIES = 50;
+const int INITIAL_ENEMIES = 3;
 const int IDLE_HZ = 1000 / 4;
 const double ENEMY_SPEED = 0.5;
 const double CHAR_BOUNDS = 15;
 const double DIR_CHANGE = 250;
+Shot shots[MAX_SHOTS];
 
-bool onScreen(Coord coord, double threshold) {
-	return inBounds(coord, makeRect(
-			0 + threshold,
-			0 + threshold,
-			screenBounds.x - (threshold),
-			screenBounds.y - (threshold)
-	));
-}
-
-bool wouldTouchEnemy(Coord a, int selfIndex, bool includePlayer) {
-	//Check player
-	if(includePlayer) {
-		if(inBounds(a, makeSquareBounds(pos, CHAR_BOUNDS))) {
-			return true;
-		}
-	}
-
-	//Check enemies.
-	for(int i=0; i < MAX_ENEMY; i++) {
-		if(selfIndex != i && inBounds(a, makeSquareBounds(enemies[i].coord, CHAR_BOUNDS))) {
-			return true;
-		}
-	}
-
-	return false;
-}
+const double SHOT_SPEED = 2.0;
 
 Coord calcDirOffset(Coord original, Dir dir) {
 	Coord offset = zeroCoord();
@@ -79,12 +55,72 @@ Coord calcDirOffset(Coord original, Dir dir) {
 	return mergeCoord(original, offset);
 }
 
+bool onScreen(Coord coord, double threshold) {
+	return inBounds(coord, makeRect(
+			0 + threshold,
+			0 + threshold,
+			screenBounds.x - (threshold),
+			screenBounds.y - (threshold)
+	));
+}
+
+bool wouldTouchEnemy(Coord a, int selfIndex, bool includePlayer) {
+	//Check player
+	if(includePlayer) {
+		if(inBounds(a, makeSquareBounds(pos, CHAR_BOUNDS))) {
+			return true;
+		}
+	}
+
+	//Check enemies.
+	for(int i=0; i < MAX_ENEMY; i++) {
+		if(selfIndex != i && inBounds(a, makeSquareBounds(enemies[i].coord, CHAR_BOUNDS))) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void fireShot(int enemyIndex) {
+
+	// can we fire? (e.g. are we still waiting for recoil on last shot)
+	if(isDue(clock(), enemies[enemyIndex].lastShot, 500)) {
+		// find a spare projectile 
+		for(int i=0; i < MAX_SHOTS; i++) {
+			if(!shots[i].valid) {
+				Coord origin = enemies[enemyIndex].coord;
+				Coord shotStep = getStep(origin, pos, SHOT_SPEED, false);
+				Shot s = { true, origin, shotStep, 0, false};
+				shots[i] = s;
+				break;
+			}
+		}
+		enemies[enemyIndex].lastShot = clock();
+	}
+}
+
 void enemyGameFrame(void) {
 	for(int i=0; i < MAX_ENEMY; i++) {
 		if(enemies[i].coord.x == 0) continue;
 
+		aiSmartFrame(i);
+
 		// chase the player
-		aiChaseFrame(i);
+		// aiChaseFrame(i);
+	}
+
+	// home shots towards target.
+	for(int i=0; i < MAX_SHOTS; i++) {
+		if(!shots[i].valid) continue;
+		shots[i].coord.x += shots[i].target.x;
+		shots[i].coord.y += shots[i].target.y;
+
+		// TODO: turn off shot if hit player.
+
+		// turn off shots out of range.
+		if(!onScreen(shots[i].coord, 0)) 
+			shots[i].valid = false;
 	}
 }
 
@@ -182,6 +218,12 @@ void enemyRenderFrame(void){
 
 		sprite = makeFlippedSprite(frameFile, flip);
 		drawSprite(sprite, enemies[i].coord);
+	}
+
+	// draw shots 
+	for(int i=0; i < MAX_SHOTS; i++) {
+		if(!shots[i].valid) continue;
+		drawSprite(makeSimpleSprite("dirt.png"), shots[i].coord);
 	}
 }
 

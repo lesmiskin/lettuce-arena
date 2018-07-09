@@ -1,7 +1,18 @@
 #include "enemy.h"
 #include "time.h"
+#include "enemy.h"
 #include "player.h"
 #include "ai.h"
+
+// ai which does the following.
+// moves in an X/Y position to...
+// --- get a line of shooting sight with the player.
+// --- stands there and shoots until i die.
+
+void aiSmartFrame(int i) {
+	// attempt to shoot all the time.
+	fireShot(i);
+}
 
 void aiChaseFrame(int i) {
 	Coord heading;
