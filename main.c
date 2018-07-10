@@ -11,28 +11,56 @@
 #include "scene.h"
 // #include "hud.h"
 
+
 // BUG BUG BUG! enemies don't shoot if you're ABOVE THEM!!!!!!!!!!!!!!!!!!!!!!!
-// BUG BUG BUG! when enemies are chilling, they DONT SHOOT AT EACH OTHER.
+
+// combatants have DIFFERENT COLORS
+
+
+
+
+
+
+// combatants clip against each other.
+// aiming reticle based on current facing direction.
+// ability for player to shoot.
+
+
+
+
 
 // EXPLOSIONS when rockets hit combatants, or BORDERS.
+// corpse with blood (ala gta)
+// name-tags for players.
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// polish: rockets could spin when in motion
+// polish: two-frame puff, one is darker.
 // idle breathing sprite?
+// directional frames (up and down?)
 // minor: Projectiles and puffs should show ON TOP of combatants.
-// AI: enemies stand still sometimes..?
 // big green "YOU" sign (ala neogeo)
-
-// TODO: Combatants clip against each other.
-
-
-
-
 
 // chairs and computer desks lying around.
 
 // office theme (worker sprites, chairs, desks with computers)
 // office worker sprite.
-// name-tags for players.
 // rockets explode when hitting something.
 
 // that opponent respawns at the edge of the map.
