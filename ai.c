@@ -47,19 +47,19 @@ const double UP = 270;
 const double DOWN = 90;
 
 double avoidRight() {
-	return degToRad(180);
+	return degToRad(LEFT);
 }
 
 double avoidLeft() {
-	return degToRad(0);
+	return degToRad(RIGHT);
 }
 
 double avoidTop() {
-	return degToRad(90);
+	return degToRad(DOWN);
 }
 
 double avoidBottom() {
-	return degToRad(270);
+	return degToRad(UP);
 
 	// while(radToDeg(try) > 90 && radToDeg(try) < 315) try = randomEnemyAngle();
 	// return try;
