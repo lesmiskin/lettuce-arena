@@ -82,6 +82,7 @@ static void loadImages(void) {
         { "dirt.png" },
         { "rocket.png" },
         { "puff.png" },
+        { "worker.png" },
     };
 
     //Infer asset path from current directory.

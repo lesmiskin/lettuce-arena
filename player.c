@@ -28,7 +28,7 @@ void playerRenderFrame(void) {
 
 	// char frameFile[25];
 	// sprintf(frameFile, "player-walk-sword-%02d.png", walkInc);
-	char frameFile[25] = "player.png";
+	char frameFile[25] = "worker.png";
 
 	Sprite player = makeFlippedSprite(frameFile, flip);
 

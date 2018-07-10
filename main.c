@@ -41,7 +41,7 @@ const int GAME_HZ = 1000 / 60;			//60fps
 bool running = true;
 SDL_Window *window = NULL;
 
-Coord windowSize = { 800, 600 };   // 320x240
+Coord windowSize = { 1024, 768 };   // 320x240
 
 static void initSDL(void) {
     SDL_Init(SDL_INIT_AUDIO);

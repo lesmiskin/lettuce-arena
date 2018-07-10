@@ -277,7 +277,7 @@ void enemyRenderFrame(void){
 
 		// sprintf(frameFile, frameFile, enemies[i].animInc);
 
-		char frameFile[25] = "enemy.png";
+		char frameFile[25] = "worker.png";
 
 		sprite = makeFlippedSprite(frameFile, flip);
 		drawSprite(sprite, enemies[i].coord);
