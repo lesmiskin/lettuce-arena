@@ -21,11 +21,25 @@ const double CHAR_BOUNDS = 15;
 const double DIR_CHANGE = 250;
 Shot shots[MAX_SHOTS];
 
-const int INITIAL_ENEMIES = 7;
+const int INITIAL_ENEMIES = 4;
 const double ENEMY_SPEED = 1;
 
 const double SHOT_SPEED = 2.0;
 const double SHOT_RELOAD = 1000;
+
+
+typedef struct {
+	bool valid;
+	Coord coord;
+	long spawntime;
+} Puff;
+
+#define MAX_PUFFS 1000
+const double PUFF_FREQ = 75;
+const double PUFF_DURATION = 350;
+
+Puff puffs[MAX_PUFFS];
+
 
 // Random 8-way direction.
 double randomEnemyAngle() {
@@ -122,7 +136,7 @@ void fireShot(int enemyIndex, Coord target) {
 			if(!shots[i].valid) {
 				Coord origin = enemies[enemyIndex].coord;
 				Coord shotStep = getStep(origin, target, SHOT_SPEED, false);
-				Shot s = { true, origin, shotStep, 0 };
+				Shot s = { true, origin, shotStep, 0, clock() };
 				shots[i] = s;
 				break;
 			}
@@ -152,6 +166,24 @@ void enemyGameFrame(void) {
 		// turn off shots out of range.
 		if(!onScreen(shots[i].coord, 0)) 
 			shots[i].valid = false;
+
+		// spawn a puff
+		if(timer(&shots[i].lastPuff, PUFF_FREQ)) {
+			for(int p=0; p < MAX_PUFFS; p++){
+				if(puffs[p].valid) continue;
+				Puff puff = { true, shots[i].coord, clock() };
+				puffs[p] = puff;
+				break;
+			}
+		}
+	}
+
+	// make puffs go away after a short time.
+	for(int p=0; p < MAX_PUFFS; p++){
+		if(!puffs[p].valid) continue;
+		if(isDue(clock(), puffs[p].spawntime, PUFF_DURATION)) {
+			puffs[p].valid = false;
+		}
 	}
 }
 
@@ -249,6 +281,12 @@ void enemyRenderFrame(void){
 
 		sprite = makeFlippedSprite(frameFile, flip);
 		drawSprite(sprite, enemies[i].coord);
+	}
+
+	// draw puffs
+	for(int p=0; p < MAX_PUFFS; p++){
+		if(!puffs[p].valid) continue;
+		drawSprite(makeSimpleSprite("puff.png"), puffs[p].coord);
 	}
 
 	// draw shots 

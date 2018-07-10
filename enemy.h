@@ -10,6 +10,7 @@ typedef struct {
     Coord coord;
     Coord target;
     double angle;
+    long lastPuff;
 } Shot;
 
 typedef enum {
