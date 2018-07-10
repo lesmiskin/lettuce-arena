@@ -104,7 +104,7 @@ void fireAngleShot(int enemyIndex, double deg) {
 			if(!shots[i].valid) {
 				Coord origin = enemies[enemyIndex].coord;
 				Coord shotStep = getAngleStep(rad, SHOT_SPEED, false);
-				Shot s = { true, origin, shotStep, 0, false};
+				Shot s = { true, origin, shotStep, deg };
 				shots[i] = s;
 				break;
 			}
@@ -122,7 +122,7 @@ void fireShot(int enemyIndex, Coord target) {
 			if(!shots[i].valid) {
 				Coord origin = enemies[enemyIndex].coord;
 				Coord shotStep = getStep(origin, target, SHOT_SPEED, false);
-				Shot s = { true, origin, shotStep, 0, false};
+				Shot s = { true, origin, shotStep, 0 };
 				shots[i] = s;
 				break;
 			}
@@ -254,7 +254,8 @@ void enemyRenderFrame(void){
 	// draw shots 
 	for(int i=0; i < MAX_SHOTS; i++) {
 		if(!shots[i].valid) continue;
-		drawSprite(makeSimpleSprite("rocket.png"), shots[i].coord);
+		Sprite sprite = makeSimpleSprite("rocket.png");
+		drawSpriteFull(sprite, shots[i].coord, 1, shots[i].angle+90);
 	}
 }
 
