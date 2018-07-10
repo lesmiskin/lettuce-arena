@@ -44,12 +44,14 @@ typedef struct {
 	double idleTarget;
 	long lastDirTime;
 	int nextDirTime;
+	long lastBreather;
 } Enemy;
 
 extern const double DIR_CHANGE;
 extern const double ENEMY_SPEED;
 const double CHAR_BOUNDS;
 
+extern bool havingBreather(int enemyInc);
 extern double randomEnemyAngle();
 extern bool onScreen(Coord coord, double threshold);
 extern void fireAngleShot(int enemyIndex, double deg);

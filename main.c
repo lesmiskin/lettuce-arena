@@ -11,7 +11,24 @@
 #include "scene.h"
 // #include "hud.h"
 
-// enemies stand still sometimes..?
+// BUG BUG BUG! enemies don't shoot if you're ABOVE THEM!!!!!!!!!!!!!!!!!!!!!!!
+// BUG BUG BUG! when enemies are chilling, they DONT SHOOT AT EACH OTHER.
+
+// EXPLOSIONS when rockets hit combatants, or BORDERS.
+
+
+// idle breathing sprite?
+// minor: Projectiles and puffs should show ON TOP of combatants.
+// AI: enemies stand still sometimes..?
+// big green "YOU" sign (ala neogeo)
+
+// TODO: Combatants clip against each other.
+
+
+
+
+
+// chairs and computer desks lying around.
 
 // office theme (worker sprites, chairs, desks with computers)
 // office worker sprite.

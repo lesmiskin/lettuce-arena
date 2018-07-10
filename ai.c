@@ -23,6 +23,8 @@ const double UP_RIGHT = 315;
 const double MIN_DIR_CHANGE = 500;
 const double MAX_DIR_CHANGE = 3000;
 
+const int BREATHER_CHANCE = 20;
+
 const double SPREAD = 5;	// how wide the targetting range is from the exact angle.
 
 bool inRange(double deg, double target) {
@@ -65,9 +67,9 @@ void shootAtOpponent(int enemyInc) {
 	else if(inRange(deg, DOWN)) 		fireAngleShot(enemyInc, DOWN);
 	else if(inRange(deg, DOWN_LEFT)) 	fireAngleShot(enemyInc, DOWN_LEFT);
 	else if(inRange(deg, LEFT)) 		fireAngleShot(enemyInc, LEFT);
-	else if(inRange(deg, UP_LEFT)) 		fireAngleShot(enemyInc, UP_LEFT);
-	else if(inRange(deg, UP)) 			fireAngleShot(enemyInc, UP);
-	else if(inRange(deg, UP_RIGHT)) 	fireAngleShot(enemyInc, UP_RIGHT);
+	else if(inRange(deg, UP_LEFT)) 		fireAngleShot(enemyInc, DOWN);
+	else if(inRange(deg, UP)) 			fireAngleShot(enemyInc, DOWN);
+	else if(inRange(deg, UP_RIGHT)) 	fireAngleShot(enemyInc, DOWN);
 }
 
 // Note: most sensible to do perpendicular avoidance, lest we wedge into a corner.
@@ -97,10 +99,25 @@ void aiSmartFrame(int enemyInc) {
 	// double angle = radToDeg(enemies[enemyInc].idleTarget);
 	// printf("%f\n", enemies[enemyInc].coord.x);
 
+	bool takingBreather = havingBreather(enemyInc);
+
 	// Time to change direction?
 	if (timer(&enemies[enemyInc].lastDirTime, enemies[enemyInc].nextDirTime)) {
+		// Start a breather.
+		if(chance(BREATHER_CHANCE) && !takingBreather) {
+			enemies[enemyInc].lastBreather = clock();
+		}
 		enemies[enemyInc].nextDirTime = randomMq(MIN_DIR_CHANGE, MAX_DIR_CHANGE);
 		enemies[enemyInc].idleTarget = randomEnemyAngle();
+	}
+
+	// stop the breather
+	if(takingBreather && isDue(clock(), enemies[enemyInc].lastBreather, randomMq(250, 750))) {
+		enemies[enemyInc].lastBreather = 0;
+	}
+	// take a breather
+	else if(takingBreather) {
+		return;
 	}
 
 	int border = 10;

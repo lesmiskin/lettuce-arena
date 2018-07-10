@@ -41,6 +41,10 @@ const double PUFF_DURATION = 350;
 Puff puffs[MAX_PUFFS];
 
 
+bool havingBreather(int enemyInc) {
+	return enemies[enemyInc].lastBreather > 0;
+}
+
 // Random 8-way direction.
 double randomEnemyAngle() {
 	// double angle = 270;
@@ -194,6 +198,12 @@ void enemyAnimateFrame(void) {
 	for(int i=0; i < MAX_ENEMY; i++) {
 		if(enemies[i].coord.x == 0) continue;
 
+		// tell lemmings to stand still when taking a breather.
+		if(havingBreather(i)) {
+			enemies[i].animInc = 2;
+			continue;
+		}
+
 		//Slight hack - we want to move the enemies in sync with their animation.
 
 		//Increment animations.
@@ -317,7 +327,8 @@ void spawnEnemy(EnemyType type, Coord coord) {
 		0,
 		randomEnemyAngle(),
 		clock(),
-		500
+		500,
+		0
 	};
 	enemies[enemyCount++] = e;
 }
