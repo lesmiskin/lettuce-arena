@@ -11,6 +11,8 @@
 #include "scene.h"
 // #include "hud.h"
 
+// enemies stand still sometimes..?
+
 // office theme (worker sprites, chairs, desks with computers)
 // office worker sprite.
 // name-tags for players.
@@ -34,7 +36,7 @@
 
 
 static const char *GAME_TITLE = "Nova III Arena (version 1.0)";
-const int ANIMATION_HZ = 1000 / 4;		//12fps
+const int ANIMATION_HZ = 1000 / 60;		//12fps
 const int RENDER_HZ = 1000 / 60;		//60fps
 const int GAME_HZ = 1000 / 60;			//60fps
 
@@ -120,7 +122,8 @@ int main()  {
 		//Animation frame
 		if(timer(&lastAnimFrameTime, ANIMATION_HZ)) {
 			// sceneAnimateFrame();
-            playerAnimateFrame();
+           enemyAnimateFrame();
+           playerAnimateFrame();
 		}
 
         //Renderer frame

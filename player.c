@@ -16,25 +16,26 @@ int walkInc = 1;
 double health = 100;
 bool playerDir = false;
 bool walking = false;
+long plastIdleTime;
+static const int PANIM_HZ = 1000 / 4;
 
 void playerAnimateFrame(void) {
-	if(!walking) return;
+	if(!walking || !timer(&plastIdleTime, PANIM_HZ)) return;
+
 	walkInc = (walkInc == WALK_FRAMES) ? 1 : walkInc + 1;
 }
 
 void playerRenderFrame(void) {
-	//Draw player.
+	// apply the animation frame
+	char frameFile[25];
+	sprintf(frameFile, "lem-0%d.png", walkInc);
+
+	// are we traveling left or right?
 	SDL_RendererFlip flip = playerDir ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
 
-	// char frameFile[25];
-	// sprintf(frameFile, "player-walk-sword-%02d.png", walkInc);
-	char frameFile[25] = "worker.png";
-
-	Sprite player = makeFlippedSprite(frameFile, flip);
-
-//	SDL_SetTextureColorMod(player.texture, 164, 164, 192);
-
-	drawSprite(player, pos);
+	// draw the sprite
+	Sprite sprite = makeFlippedSprite(frameFile, flip);
+	drawSprite(sprite, pos);
 }
 
 void playerGameFrame(void) {

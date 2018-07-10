@@ -13,10 +13,10 @@
 //TODO: Up and down enemy walking graphics.
 
 #define WALK_FRAMES 4
- Enemy enemies[MAX_ENEMY];
+Enemy enemies[MAX_ENEMY];
 long lastIdleTime;
 int enemyCount = 0;
-const int IDLE_HZ = 1000 / 4;
+static const int ANIM_HZ = 1000 / 4;
 const double CHAR_BOUNDS = 15;
 const double DIR_CHANGE = 250;
 Shot shots[MAX_SHOTS];
@@ -188,7 +188,7 @@ void enemyGameFrame(void) {
 }
 
 void enemyAnimateFrame(void) {
-	if(!timer(&lastIdleTime, IDLE_HZ)) return;
+	if(!timer(&lastIdleTime, ANIM_HZ)) return;
 
 	//Animate the enemies
 	for(int i=0; i < MAX_ENEMY; i++) {
@@ -277,8 +277,15 @@ void enemyRenderFrame(void){
 
 		// sprintf(frameFile, frameFile, enemies[i].animInc);
 
-		char frameFile[25] = "worker.png";
+		// apply the animation frame
+		char frameFile[25];
+		sprintf(frameFile, "lem-0%d.png", enemies[i].animInc);
 
+		// are we traveling left or right?
+		double deg = radToDeg(enemies[i].idleTarget);
+		flip = deg > 90 && deg < 270 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+
+		// draw the sprite
 		sprite = makeFlippedSprite(frameFile, flip);
 		drawSprite(sprite, enemies[i].coord);
 	}

@@ -83,6 +83,10 @@ static void loadImages(void) {
         { "rocket.png" },
         { "puff.png" },
         { "worker.png" },
+        { "lem-01.png" },
+        { "lem-02.png" },
+        { "lem-03.png" },
+        { "lem-04.png" },
     };
 
     //Infer asset path from current directory.
