@@ -11,14 +11,6 @@
 // --- get a line of shooting sight with the player.
 // --- stands there and shoots until i die.
 
-double getDistance(Coord a, Coord b) {
-	// source: http://www.mathwarehouse.com/algebra/distance_formula/index.php
-	return sqrt(
-		pow(a.x - b.x, 2) + 
-		pow(a.y - b.y, 2)
-	);
-}
-
 void shootAtOpponent(int enemyInc) {
 	Coord target;
 	double bestDistance = 1000;
@@ -49,14 +41,10 @@ void shootAtOpponent(int enemyInc) {
 	fireShot(enemyInc, target);
 }
 
-double randomAngle() {
-	return randomMq(0, 360);
-}
-
-Coord randomDir(Coord coord) {
-	//Randomly set the target for the enemy, so they walk towards it.
-	return deriveCoord(coord, chance(50) ? -100 : 100, chance(50) ? -100 : 100);
-}
+const double LEFT = 180;
+const double RIGHT = 0;
+const double UP = 270;
+const double DOWN = 90;
 
 double avoidRight() {
 	return degToRad(180);
@@ -86,10 +74,9 @@ void aiSmartFrame(int enemyInc) {
 
 	// Time to change direction?
 	if (timer(&enemies[enemyInc].lastDirTime, enemies[enemyInc].nextDirTime)) {
-		enemies[enemyInc].nextDirTime = 500;
+		enemies[enemyInc].nextDirTime = randomMq(1000, 3000);
 		enemies[enemyInc].idleTarget = randomEnemyAngle();
 	}
-
 
 	int border = 10;
 

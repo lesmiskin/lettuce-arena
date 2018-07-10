@@ -97,6 +97,14 @@ int randomMq(int min, int max) {
     return (rand() % (max + 1 - min)) + min;
 }
 
+double getDistance(Coord a, Coord b) {
+    // source: http://www.mathwarehouse.com/algebra/distance_formula/index.php
+    return sqrt(
+        pow(a.x - b.x, 2) + 
+        pow(a.y - b.y, 2)
+    );
+}
+
 double getAngle(Coord a, Coord b) {
     return atan2(b.y - a.y, b.x - a.x);
 }

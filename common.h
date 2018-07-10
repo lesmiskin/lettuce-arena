@@ -17,6 +17,7 @@ typedef struct {
 	int width, height;
 } Rect;
 
+extern double getDistance(Coord a, Coord b);
 extern double radToDeg(double radians);
 extern double degToRad(double degrees);
 extern double calcDistance(Coord a, Coord b);
