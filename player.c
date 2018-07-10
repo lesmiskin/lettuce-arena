@@ -7,20 +7,28 @@
 // #include "hud.h"
 // #include "scene.h"
 
-double MOVE_INC = 1.5;
+double MOVE_INC = 1;
 
 #define WALK_FRAMES 4
 
+#define STAND 2
+
+bool playerDir = true;		// facing right
+int walkInc = STAND;		// standing frame.
 Coord pos = { 25, 50 };
-int walkInc = 1;
 double health = 100;
-bool playerDir = false;
 bool walking = false;
 long plastIdleTime;
 static const int PANIM_HZ = 1000 / 4;
 
 void playerAnimateFrame(void) {
-	if(!walking || !timer(&plastIdleTime, PANIM_HZ)) return;
+	// Stand still when not walking.
+	if(!walking) {
+		walkInc = STAND;
+		return;
+	}
+
+	if(!timer(&plastIdleTime, PANIM_HZ)) return;
 
 	walkInc = (walkInc == WALK_FRAMES) ? 1 : walkInc + 1;
 }
@@ -38,26 +46,28 @@ void playerRenderFrame(void) {
 	drawSprite(sprite, pos);
 }
 
+const double BORDER = 10;
+
 void playerGameFrame(void) {
 	walking = false;
 
 	//NB: We still turn the player sprite where we can, even if we're hard
 	// up against a screen bound.
 	if (checkCommand(CMD_PLAYER_LEFT)) {
-		if(pos.x > 0) pos.x -= MOVE_INC;
+		if(pos.x > BORDER) pos.x -= MOVE_INC;
 		playerDir = false;
 		walking = true;
 	}
 	if (checkCommand(CMD_PLAYER_RIGHT)) {
-		if(pos.x < screenBounds.x) pos.x += MOVE_INC;
+		if(pos.x < screenBounds.x-BORDER) pos.x += MOVE_INC;
 		playerDir = true;
 		walking = true;
 	}
-	if (checkCommand(CMD_PLAYER_UP) && pos.y > 0) {
+	if (checkCommand(CMD_PLAYER_UP) && pos.y > BORDER) {
 		pos.y -= MOVE_INC;
 		walking = true;
 	}
-	if (checkCommand(CMD_PLAYER_DOWN) && pos.y < screenBounds.y) {
+	if (checkCommand(CMD_PLAYER_DOWN) && pos.y < screenBounds.y-BORDER) {
 		pos.y += MOVE_INC;
 		walking = true;
 	}

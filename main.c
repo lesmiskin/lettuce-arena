@@ -35,7 +35,7 @@
 // huge gibs fly out when this is used.
 
 
-static const char *GAME_TITLE = "Nova III Arena (version 1.0)";
+static const char *GAME_TITLE = "Lettuce Arena v0.1";
 const int ANIMATION_HZ = 1000 / 60;		//12fps
 const int RENDER_HZ = 1000 / 60;		//60fps
 const int GAME_HZ = 1000 / 60;			//60fps
