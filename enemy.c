@@ -16,14 +16,16 @@
  Enemy enemies[MAX_ENEMY];
 long lastIdleTime;
 int enemyCount = 0;
-const int INITIAL_ENEMIES = 50;
 const int IDLE_HZ = 1000 / 4;
-const double ENEMY_SPEED = 1;
 const double CHAR_BOUNDS = 15;
 const double DIR_CHANGE = 250;
 Shot shots[MAX_SHOTS];
 
-const double SHOT_SPEED = 6.0;
+const int INITIAL_ENEMIES = 7;
+const double ENEMY_SPEED = 1;
+
+const double SHOT_SPEED = 2.0;
+const double SHOT_RELOAD = 1000;
 
 // Random 8-way direction.
 double randomEnemyAngle() {
@@ -92,10 +94,29 @@ bool wouldTouchEnemy(Coord a, int selfIndex, bool includePlayer) {
 	return false;
 }
 
+void fireAngleShot(int enemyIndex, double deg) {
+	double rad = degToRad(deg);
+
+	// can we fire? (e.g. are we still waiting for recoil on last shot)
+	if(isDue(clock(), enemies[enemyIndex].lastShot, SHOT_RELOAD)) {
+		// find a spare projectile 
+		for(int i=0; i < MAX_SHOTS; i++) {
+			if(!shots[i].valid) {
+				Coord origin = enemies[enemyIndex].coord;
+				Coord shotStep = getAngleStep(rad, SHOT_SPEED, false);
+				Shot s = { true, origin, shotStep, 0, false};
+				shots[i] = s;
+				break;
+			}
+		}
+		enemies[enemyIndex].lastShot = clock();
+	}
+}
+
 void fireShot(int enemyIndex, Coord target) {
 
 	// can we fire? (e.g. are we still waiting for recoil on last shot)
-	if(isDue(clock(), enemies[enemyIndex].lastShot, 1000)) {
+	if(isDue(clock(), enemies[enemyIndex].lastShot, SHOT_RELOAD)) {
 		// find a spare projectile 
 		for(int i=0; i < MAX_SHOTS; i++) {
 			if(!shots[i].valid) {
@@ -233,7 +254,7 @@ void enemyRenderFrame(void){
 	// draw shots 
 	for(int i=0; i < MAX_SHOTS; i++) {
 		if(!shots[i].valid) continue;
-		drawSprite(makeSimpleSprite("dirt.png"), shots[i].coord);
+		drawSprite(makeSimpleSprite("rocket.png"), shots[i].coord);
 	}
 }
 

@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-#define MAX_SHOTS 50
+#define MAX_SHOTS 100
 
 typedef struct {
 	bool valid;
@@ -51,6 +51,7 @@ const double CHAR_BOUNDS;
 
 extern double randomEnemyAngle();
 extern bool onScreen(Coord coord, double threshold);
+extern void fireAngleShot(int enemyIndex, double deg);
 extern void fireShot(int enemyIndex, Coord target);
 extern Coord calcDirOffset(Coord original, Dir dir);
 extern Enemy enemies[MAX_ENEMY];
