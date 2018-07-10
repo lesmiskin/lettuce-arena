@@ -16,44 +16,53 @@
  Enemy enemies[MAX_ENEMY];
 long lastIdleTime;
 int enemyCount = 0;
-const int INITIAL_ENEMIES = 3;
+const int INITIAL_ENEMIES = 50;
 const int IDLE_HZ = 1000 / 4;
-const double ENEMY_SPEED = 2;
+const double ENEMY_SPEED = 1;
 const double CHAR_BOUNDS = 15;
 const double DIR_CHANGE = 250;
 Shot shots[MAX_SHOTS];
 
 const double SHOT_SPEED = 6.0;
 
-Coord calcDirOffset(Coord original, Dir dir) {
-	Coord offset = zeroCoord();
-	switch(dir) {
-		case DIR_NORTH:
-			offset = makeCoord(0, -ENEMY_SPEED);
+// Random 8-way direction.
+double randomEnemyAngle() {
+	// double angle = 270;
+	// return degToRad(angle);
+
+	double deg;
+	switch(randomMq(0, 7)){
+		case 1:
+			deg = 45;
 			break;
-		case DIR_NORTHEAST:
-			offset = makeCoord(ENEMY_SPEED, -ENEMY_SPEED);
+		// down
+		case 2:
+			deg = 90;
 			break;
-		case DIR_EAST:
-			offset = makeCoord(ENEMY_SPEED, 0);
+		case 3:
+			deg = 135;
 			break;
-		case DIR_SOUTHEAST:
-			offset = makeCoord(-ENEMY_SPEED, ENEMY_SPEED);
+		case 4:
+			deg = 180;
 			break;
-		case DIR_SOUTH:
-			offset = makeCoord(0, ENEMY_SPEED);
+		case 5:
+			deg = 225;
 			break;
-		case DIR_SOUTHWEST:
-			offset = makeCoord(-ENEMY_SPEED, ENEMY_SPEED);
+		case 6:
+			deg = 270;
 			break;
-		case DIR_WEST:
-			offset = makeCoord(-ENEMY_SPEED, 0);
+		case 7:
+			deg = 315;
 			break;
-		case DIR_NORTHWEST:
-			offset = makeCoord(-ENEMY_SPEED, -ENEMY_SPEED);
+		// right
+		default:
+			deg = 0;
 			break;
 	}
-	return mergeCoord(original, offset);
+
+	// deg = 45;
+
+	return degToRad(deg);
 }
 
 bool onScreen(Coord coord, double threshold) {
@@ -239,9 +248,9 @@ void spawnEnemy(EnemyType type, Coord coord) {
 		DIR_NORTH,
 		false,
 		0,
-		zeroCoord(),
+		randomEnemyAngle(),
 		clock(),
-		randomMq(250, 1250)
+		500
 	};
 	enemies[enemyCount++] = e;
 }
@@ -252,8 +261,8 @@ void initEnemy(void) {
 		spawnEnemy(
 			(EnemyType)randomMq(0, ENEMY_DRACULA),
 			makeCoord(
-				randomMq(0, screenBounds.x),
-				randomMq(0, screenBounds.y)
+				randomMq(20, screenBounds.x-20),
+				randomMq(20, screenBounds.y-20)
 			)
 		);
 	}

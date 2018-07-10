@@ -11,10 +11,32 @@
 #include "scene.h"
 // #include "hud.h"
 
+// office theme (worker sprites, chairs, desks with computers)
+// office worker sprite.
+// name-tags for players.
+// rockets explode when hitting something.
+
+// that opponent respawns at the edge of the map.
+
+// realistic walking styles:
+// a) walk in a random direction for a random amount of time, then change direction (officespace-style).
+// c) while walking, 50/50 chance to zig-zag on the way.
+// OR
+// a) pick a random place on the map, and walk to it.
+
+// reactions:
+// a) if pickup is available, high chance to walk to it.
+// b) if weapon is available, higher chance to walk to it.
+// c) if detect opponent within X threshold (random), then change direction AWAY from him.
+
+// QUAD DAMAGE powerup spawns infrequently in middle of map.
+// huge gibs fly out when this is used.
+
+
 static const char *GAME_TITLE = "Nova III Arena (version 1.0)";
 const int ANIMATION_HZ = 1000 / 4;		//12fps
-const int RENDER_HZ = 1000 / 30;		//60fps
-const int GAME_HZ = 1000 / 30;			//60fps
+const int RENDER_HZ = 1000 / 60;		//60fps
+const int GAME_HZ = 1000 / 60;			//60fps
 
 bool running = true;
 SDL_Window *window = NULL;

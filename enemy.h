@@ -40,7 +40,7 @@ typedef struct {
 	Dir roamDir;
 	bool isRoaming;
 	long lastShot;
-	Coord idleTarget;
+	double idleTarget;
 	long lastDirTime;
 	int nextDirTime;
 } Enemy;
@@ -49,6 +49,7 @@ extern const double DIR_CHANGE;
 extern const double ENEMY_SPEED;
 const double CHAR_BOUNDS;
 
+extern double randomEnemyAngle();
 extern bool onScreen(Coord coord, double threshold);
 extern void fireShot(int enemyIndex, Coord target);
 extern Coord calcDirOffset(Coord original, Dir dir);

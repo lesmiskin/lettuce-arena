@@ -101,6 +101,14 @@ double getAngle(Coord a, Coord b) {
     return atan2(b.y - a.y, b.x - a.x);
 }
 
+Coord getAngleStep(double angle, double speed, bool negativeMagic) {
+    //Some magic going on here...
+    return makeCoord(
+            (cos(angle) * (negativeMagic ? -speed : speed)),
+            (sin(angle) * (negativeMagic ? -speed : speed))
+    );
+}
+
 Coord getStep(Coord a, Coord b, double speed, bool negativeMagic) {
     //Already there?
     if(a.x == b.x && a.y == b.y) return zeroCoord();
@@ -112,6 +120,14 @@ Coord getStep(Coord a, Coord b, double speed, bool negativeMagic) {
             (cos(angle) * (negativeMagic ? -speed : speed)),
             (sin(angle) * (negativeMagic ? -speed : speed))
     );
+}
+
+double radToDeg(double radians) {
+    return radians * (180.0 / 3.141592);
+}
+
+double degToRad(double degrees) {
+    return degrees * (3.141592 / 180);
 }
 
 bool chance(int probability) {

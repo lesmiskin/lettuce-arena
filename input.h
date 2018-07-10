@@ -3,9 +3,12 @@
 
 #include "common.h"
 
+#define MAX_COMMANDS 20
+
 extern void pollInput(void);
 extern void processSystemCommands(void);
 extern bool checkCommand(int commandFlag);
+extern bool commands[MAX_COMMANDS];
 
 typedef enum {
     CMD_QUIT = 0,

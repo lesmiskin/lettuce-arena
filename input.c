@@ -6,9 +6,7 @@
 // #include "player.h"
 // #include "scene.h"
 
-#define MAX_COMMANDS 20
-
-static bool commands[MAX_COMMANDS];
+bool commands[MAX_COMMANDS];
 
 bool checkCommand(int commandFlag) {
     return commands[commandFlag];
