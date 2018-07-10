@@ -13,8 +13,8 @@
 
 static const char *GAME_TITLE = "Nova III Arena (version 1.0)";
 const int ANIMATION_HZ = 1000 / 4;		//12fps
-const int RENDER_HZ = 1000 / 60;		//60fps
-const int GAME_HZ = 1000 / 60;			//60fps
+const int RENDER_HZ = 1000 / 30;		//60fps
+const int GAME_HZ = 1000 / 30;			//60fps
 
 bool running = true;
 SDL_Window *window = NULL;

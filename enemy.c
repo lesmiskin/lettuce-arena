@@ -1,3 +1,4 @@
+
 #include "enemy.h"
 #include "renderer.h"
 #include "assets.h"
@@ -17,12 +18,12 @@ long lastIdleTime;
 int enemyCount = 0;
 const int INITIAL_ENEMIES = 3;
 const int IDLE_HZ = 1000 / 4;
-const double ENEMY_SPEED = 0.5;
+const double ENEMY_SPEED = 2;
 const double CHAR_BOUNDS = 15;
 const double DIR_CHANGE = 250;
 Shot shots[MAX_SHOTS];
 
-const double SHOT_SPEED = 2.0;
+const double SHOT_SPEED = 6.0;
 
 Coord calcDirOffset(Coord original, Dir dir) {
 	Coord offset = zeroCoord();
@@ -85,7 +86,7 @@ bool wouldTouchEnemy(Coord a, int selfIndex, bool includePlayer) {
 void fireShot(int enemyIndex, Coord target) {
 
 	// can we fire? (e.g. are we still waiting for recoil on last shot)
-	if(isDue(clock(), enemies[enemyIndex].lastShot, 500)) {
+	if(isDue(clock(), enemies[enemyIndex].lastShot, 1000)) {
 		// find a spare projectile 
 		for(int i=0; i < MAX_SHOTS; i++) {
 			if(!shots[i].valid) {
@@ -236,7 +237,11 @@ void spawnEnemy(EnemyType type, Coord coord) {
 		type,
 		clock(),
 		DIR_NORTH,
-		false
+		false,
+		0,
+		zeroCoord(),
+		clock(),
+		randomMq(250, 1250)
 	};
 	enemies[enemyCount++] = e;
 }

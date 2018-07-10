@@ -118,7 +118,7 @@ bool chance(int probability) {
     //Shortcuts for deterministic scenarios (impossible and always)
     if(probability == 0) {
         return false;
-    }else if (probability == 100) {
+    } else if (probability == 100) {
         return true;
     }
 
