@@ -8,7 +8,7 @@
 #include "player.h"
 #include "assets.h"
 #include "enemy.h"
-// #include "scene.h"
+#include "scene.h"
 // #include "hud.h"
 
 static const char *GAME_TITLE = "Nova III Arena (version 1.0)";
@@ -74,8 +74,8 @@ int main()  {
     initAssets();
     initPlayer();
     initEnemy();
+    initScene();
     // initHud();
-    // initScene();
 
 	changeMode(MODE_GAME);
 
@@ -104,7 +104,7 @@ int main()  {
         //Renderer frame
         double renderFPS;
         if(timer(&lastRenderFrameTime, RENDER_HZ)) {
-			// sceneRenderFrame();
+			sceneRenderFrame();
             // hudRenderFrame();
             enemyRenderFrame();
 			playerRenderFrame();

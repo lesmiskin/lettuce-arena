@@ -19,8 +19,29 @@ double getDistance(Coord a, Coord b) {
 
 void aiSmartFrame(int enemyInc) {
 
-	// shoot at the nearest opponent.
-	// walk to the next waypoint.
+	// shoot at the nearest opponent [done]
+
+	// office theme (worker sprites, chairs, desks with computers)
+	// carpet floor sprite
+
+	// realistic walking styles:
+	// a) walk in a random direction for a random amount of time, then change direction (officespace-style).
+	// c) while walking, 50/50 chance to zig-zag on the way.
+	// OR
+	// a) pick a random place on the map, and walk to it.
+
+
+	// reactions:
+	// a) if pickup is available, high chance to walk to it.
+	// b) if weapon is available, higher chance to walk to it.
+	// c) if detect opponent within X threshold (random), then change direction AWAY from him.
+
+	// QUAD DAMAGE powerup spawns infrequently in middle of map.
+	// huge gibs fly out when this is used.
+
+
+
+
 
 	Coord target;
 	double bestDistance = 1000;
