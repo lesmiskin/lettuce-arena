@@ -4,6 +4,7 @@
 #include "common.h"
 
 #define MAX_SHOTS 100
+#define MAX_ENEMY 30
 
 typedef struct {
 	bool valid;
@@ -11,6 +12,7 @@ typedef struct {
     Coord target;
     double angle;
     long lastPuff;
+    int shooter;
 } Shot;
 
 typedef enum {
@@ -19,8 +21,6 @@ typedef enum {
 	ENEMY_WOLFMAN,
 	ENEMY_DRACULA,
 } EnemyType;
-
-#define MAX_ENEMY 30
 
 typedef enum {
 	DIR_NORTH = 0,
@@ -45,6 +45,7 @@ typedef struct {
 	long lastDirTime;
 	int nextDirTime;
 	long lastBreather;
+	int color;
 } Enemy;
 
 extern const double DIR_CHANGE;
@@ -52,12 +53,12 @@ extern const double ENEMY_SPEED;
 extern const double CHAR_BOUNDS;
 extern const double SHOT_RELOAD;
 
+extern void enemyFxFrame();
 extern bool canShoot(int enemyIndex);
 extern bool havingBreather(int enemyInc);
 extern double randomEnemyAngle();
 extern bool onScreen(Coord coord, double threshold);
 extern void fireAngleShot(int enemyIndex, double deg);
-extern void fireShot(int enemyIndex, Coord target);
 extern Coord calcDirOffset(Coord original, Dir dir);
 extern Enemy enemies[MAX_ENEMY];
 extern void enemyGameFrame(void);

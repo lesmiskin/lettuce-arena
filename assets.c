@@ -83,10 +83,43 @@ static void loadImages(void) {
         { "rocket.png" },
         { "puff.png" },
         { "worker.png" },
+        
         { "lem-01.png" },
         { "lem-02.png" },
         { "lem-03.png" },
         { "lem-04.png" },
+        
+        { "lem-pink-01.png" },
+        { "lem-pink-02.png" },
+        { "lem-pink-03.png" },
+        { "lem-pink-04.png" },
+
+        { "lem-orange-01.png" },
+        { "lem-orange-02.png" },
+        { "lem-orange-03.png" },
+        { "lem-orange-04.png" },
+
+        { "lem-red-01.png" },
+        { "lem-red-02.png" },
+        { "lem-red-03.png" },
+        { "lem-red-04.png" },
+
+        { "lem-green-01.png" },
+        { "lem-green-02.png" },
+        { "lem-green-03.png" },
+        { "lem-green-04.png" },
+
+        { "lem-blue-01.png" },
+        { "lem-blue-02.png" },
+        { "lem-blue-03.png" },
+        { "lem-blue-04.png" },
+
+        { "exp-01.png" },
+        { "exp-02.png" },
+        { "exp-03.png" },
+        { "exp-04.png" },
+        { "exp-05.png" },
+        { "exp-06.png" },
     };
 
     //Infer asset path from current directory.

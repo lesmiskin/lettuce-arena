@@ -1,33 +1,46 @@
-
 #include "enemy.h"
 #include "renderer.h"
 #include "assets.h"
 #include "time.h"
 #include "player.h"
 #include "ai.h"
+#include "input.h"
 // #include "hud.h"
 
-//TODO: Enemy movement to be bound to a movementDir? (e.g. 8-way, not x-way)
-//TODO: Enemy standing frames when not moving.
-//TODO: Enemies face in direction they're walking in, when roaming.
-//TODO: Up and down enemy walking graphics.
-
 #define WALK_FRAMES 4
-Enemy enemies[MAX_ENEMY];
+
 long lastIdleTime;
 int enemyCount = 0;
 static const int ANIM_HZ = 1000 / 4;
 const double CHAR_BOUNDS = 15;
 const double DIR_CHANGE = 250;
-Shot shots[MAX_SHOTS];
 
-const int INITIAL_ENEMIES = 1;
+const int INITIAL_ENEMIES = 3;
 const double ENEMY_SPEED = 1;
+Enemy enemies[MAX_ENEMY];
 
 const double SHOT_SPEED = 2.0;
 const double SHOT_RELOAD = 1000;
+Shot shots[MAX_SHOTS];
+
+// ----------
+// Explosions
+// ----------
+#define MAX_EXP 20
+const double BOUND = 20;
+
+typedef struct {
+	bool valid;
+	Coord coord;
+	int animInc;
+} Exp;
+
+Exp explosions[MAX_EXP];
 
 
+// ----------
+// Puffs
+// ----------
 typedef struct {
 	bool valid;
 	Coord coord;
@@ -47,15 +60,11 @@ bool havingBreather(int enemyInc) {
 
 // Random 8-way direction.
 double randomEnemyAngle() {
-	// double angle = 270;
-	// return degToRad(angle);
-
 	double deg;
 	switch(randomMq(0, 7)){
 		case 1:
 			deg = 45;
 			break;
-		// down
 		case 2:
 			deg = 90;
 			break;
@@ -74,13 +83,10 @@ double randomEnemyAngle() {
 		case 7:
 			deg = 315;
 			break;
-		// right
 		default:
 			deg = 0;
 			break;
 	}
-
-	// deg = 45;
 
 	return degToRad(deg);
 }
@@ -112,6 +118,7 @@ bool wouldTouchEnemy(Coord a, int selfIndex, bool includePlayer) {
 	return false;
 }
 
+
 bool canShoot(int enemyIndex) {
 	return isDue(clock(), enemies[enemyIndex].lastShot, SHOT_RELOAD);
 }
@@ -124,7 +131,7 @@ void fireAngleShot(int enemyIndex, double deg) {
 		if(!shots[i].valid) {
 			Coord origin = enemies[enemyIndex].coord;
 			Coord shotStep = getAngleStep(rad, SHOT_SPEED, false);
-			Shot s = { true, origin, shotStep, deg };
+			Shot s = { true, origin, shotStep, deg, 0, enemyIndex };
 			shots[i] = s;
 			break;
 		}
@@ -132,21 +139,16 @@ void fireAngleShot(int enemyIndex, double deg) {
 	enemies[enemyIndex].lastShot = clock();
 }
 
-void fireShot(int enemyIndex, Coord target) {
+void spawnExp(Coord c) {
+	// find a place to put it in our explosion array.
+	for(int i=0; i < MAX_EXP; i++) {
+		if(explosions[i].valid) continue;
 
-	// can we fire? (e.g. are we still waiting for recoil on last shot)
-	if(isDue(clock(), enemies[enemyIndex].lastShot, SHOT_RELOAD)) {
-		// find a spare projectile 
-		for(int i=0; i < MAX_SHOTS; i++) {
-			if(!shots[i].valid) {
-				Coord origin = enemies[enemyIndex].coord;
-				Coord shotStep = getStep(origin, target, SHOT_SPEED, false);
-				Shot s = { true, origin, shotStep, 0, clock() };
-				shots[i] = s;
-				break;
-			}
-		}
-		enemies[enemyIndex].lastShot = clock();
+		// make it
+		Exp e = { true, c, 0 };
+		explosions[i] = e;
+
+		return;
 	}
 }
 
@@ -166,11 +168,30 @@ void enemyGameFrame(void) {
 		shots[i].coord.x += shots[i].target.x;
 		shots[i].coord.y += shots[i].target.y;
 
-		// TODO: turn off shot if hit player.
-
 		// turn off shots out of range.
 		if(!onScreen(shots[i].coord, 0)) 
 			shots[i].valid = false;
+
+		// TODO: replace with HitActor function?
+
+		// did we hit an enemy?
+		for(int e=0; e < MAX_ENEMY; e++) {
+			if(enemies[e].coord.x == 0) continue;
+			if(shots[i].shooter == e) continue;		// don't hit ourselves :p
+
+			if(inBounds(shots[i].coord, makeSquareBounds(enemies[e].coord, BOUND))) {
+				spawnExp(shots[i].coord);
+				shots[i].valid = false;
+				continue;
+			}
+		}
+
+		// did we hit the player?
+		if(inBounds(shots[i].coord, makeSquareBounds(pos, BOUND))) {
+			spawnExp(shots[i].coord);
+			shots[i].valid = false;
+			continue;
+		}
 
 		// spawn a puff
 		if(timer(&shots[i].lastPuff, PUFF_FREQ)) {
@@ -189,6 +210,21 @@ void enemyGameFrame(void) {
 		if(isDue(clock(), puffs[p].spawntime, PUFF_DURATION)) {
 			puffs[p].valid = false;
 		}
+	}
+}
+
+void enemyFxFrame() {
+	// animate explosions at a custom FPS (hence why it's here)
+	for(int i=0; i < MAX_EXP; i++) {
+		if(!explosions[i].valid) continue;
+
+		// finish explosion
+		if(explosions[i].animInc == 3) {
+			explosions[i].valid = false;
+			continue;
+		}
+
+		explosions[i].animInc++;
 	}
 }
 
@@ -250,17 +286,6 @@ void enemyRenderFrame(void){
 
 		// Choose graphic based on type.
 		// switch(enemies[i].type) {
-		// 	case ENEMY_WOLFMAN: {
-		// 		if(isUp) {
-		// 			strcpy(frameFile, "werewolf-walk-up-%02d.png");
-		// 		}else if(isDown) {
-		// 			strcpy(frameFile, "werewolf-walk-down-%02d.png");
-		// 		}else{
-		// 			strcpy(frameFile, "werewolf-walk-%02d.png");
-		// 			flip = enemies[i].coord.x > pos.x ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-		// 		}
-		// 		break;
-		// 	}
 		// 	case ENEMY_DIGGER: {
 		// 		strcpy(frameFile, "digger-walk-%02d.png");
 		// 		flip = enemies[i].coord.x > pos.x ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
@@ -271,26 +296,28 @@ void enemyRenderFrame(void){
 		// 		flip = enemies[i].coord.x > pos.x ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 		// 		break;
 		// 	}
-		// 	case ENEMY_DRACULA: {
-		// 		if(isUp) {
-		// 			strcpy(frameFile, "dracula-walk-up-%02d.png");
-		// 			flip = SDL_FLIP_HORIZONTAL;	//hack
-		// 		}else if(isDown){
-		// 			strcpy(frameFile, "dracula-walk-down-%02d.png");
-		// 			flip = SDL_FLIP_HORIZONTAL;	//hack
-		// 		}else{
-		// 			strcpy(frameFile, "dracula-walk-%02d.png");
-		// 			flip = enemies[i].coord.x > pos.x ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-		// 		}
-		// 		break;
-		// 	}
 		// }
 
 		// sprintf(frameFile, frameFile, enemies[i].animInc);
 
 		// apply the animation frame
 		char frameFile[25];
-		sprintf(frameFile, "lem-0%d.png", enemies[i].animInc);
+
+		// pick the right color
+		switch(enemies[i].color) {
+			case 0:
+				sprintf(frameFile, "lem-orange-0%d.png", enemies[i].animInc);
+				break;
+			case 1:
+				sprintf(frameFile, "lem-green-0%d.png", enemies[i].animInc);
+				break;
+			case 2:
+				sprintf(frameFile, "lem-blue-0%d.png", enemies[i].animInc);
+				break;
+			case 3:
+				sprintf(frameFile, "lem-blue-0%d.png", enemies[i].animInc);
+				break;
+		}
 
 		// are we traveling left or right?
 		double deg = radToDeg(enemies[i].idleTarget);
@@ -313,6 +340,14 @@ void enemyRenderFrame(void){
 		Sprite sprite = makeSimpleSprite("rocket.png");
 		drawSpriteFull(sprite, shots[i].coord, 1, shots[i].angle+90);
 	}
+
+	// draw explosions
+	for(int i=0; i < MAX_EXP; i++) {
+		if(!explosions[i].valid) continue;
+		char file[10];
+		sprintf(file, "exp-0%d.png", explosions[i].animInc+1);
+		drawSprite(makeSimpleSprite(file), explosions[i].coord);
+	}
 }
 
 void spawnEnemy(EnemyType type, Coord coord) {
@@ -329,7 +364,8 @@ void spawnEnemy(EnemyType type, Coord coord) {
 		randomEnemyAngle(),
 		clock(),
 		500,
-		0
+		0,
+		enemyCount
 	};
 	enemies[enemyCount++] = e;
 }

@@ -132,8 +132,7 @@ void aiSmartFrame(int enemyInc) {
 	else if(enemies[enemyInc].coord.y > screenBounds.y-border) 	enemies[enemyInc].idleTarget = avoidBottom();
 	else if(enemies[enemyInc].coord.y < border) 				enemies[enemyInc].idleTarget = avoidTop();
 
-	// else if(!onScreen(enemies[enemyInc].coord, 10)) {
-
+	// else if(!onScreen(enemies[enemyInc].coo
 	// Walk towards homing direction
 	Coord homeStep = getAngleStep(enemies[enemyInc].idleTarget, ENEMY_SPEED, false);
 	enemies[enemyInc].coord.x += homeStep.x;

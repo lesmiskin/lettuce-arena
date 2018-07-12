@@ -10,20 +10,21 @@
 #include "enemy.h"
 #include "scene.h"
 
-// explosions when rockets hit players or bounds.
-// dead players have NO WEAPON TO BEGIN WITH.
 // we all spawn in special SPAWN POINT positions when STARTING THE MAP.
-// dead players RESPAWN.
-// dead players have to GET THEIR WEAPON AGAIN.
-// players flash red when hit.
 
-
-
-
-
+// ability for players to die and RESPAWN.
+// players have to PICK UP the rocket launcher (could be just one in the middle)
 
 // ability for player to shoot.
 // aiming reticle based on current facing direction.
+// polish: two-frame puff, one is darker.
+
+// enemy should FACE the direction they shoot in, when they shoot.
+
+
+
+
+
 
 
 
@@ -32,48 +33,44 @@
 
 // combatants have DIFFERENT COLORS
 // name-tags for players.
-// represetation of rocket launcher (e.g. icon above player, or fresh graphic)
+
 // combatants clip against each other.
 
+// explosions when rockets hit players or bounds.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// corpse with blood (ala gta)
-
-
-
-
-
-
-
-
+// players flash red when hit.
+// represetation of rocket launcher (e.g. icon above player, or fresh graphic)
 // minor: Projectiles and puffs should show ON TOP of combatants.
-// polish: rockets could spin when in motion
-// polish: two-frame puff, one is darker.
-// idle breathing sprite?
-// directional frames (up and down?)
+
+// QUAD DAMAGE powerup spawns infrequently in middle of map.
+// huge gibs fly out when this is used.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// polish: rockets could spin and flame out when in motion
 // big green "YOU" sign (ala neogeo)
+// directional frames (up and down?)
+// corpses with blood (ala gta)
+// idle breathing sprite?
 // chairs and computer desks lying around.
 // office theme (worker sprites, chairs, desks with computers)
 // office worker sprite.
-// rockets explode when hitting something.
-// that opponent respawns at the edge of the map.
 
 // realistic walking styles:
 // a) walk in a random direction for a random amount of time, then change direction (officespace-style).
@@ -86,14 +83,11 @@
 // b) if weapon is available, higher chance to walk to it.
 // c) if detect opponent within X threshold (random), then change direction AWAY from him.
 
-// QUAD DAMAGE powerup spawns infrequently in middle of map.
-// huge gibs fly out when this is used.
-
-
 static const char *GAME_TITLE = "Lettuce Arena v0.1";
-const int ANIMATION_HZ = 1000 / 60;		//12fps
+const int ANIMATION_HZ = 1000 / 8;		//12fps
 const int RENDER_HZ = 1000 / 60;		//60fps
 const int GAME_HZ = 1000 / 60;			//60fps
+const int FX_HZ = 1000 / 12;            //24fps
 
 bool running = true;
 SDL_Window *window = NULL;
@@ -161,6 +155,7 @@ int main()  {
     long lastRenderFrameTime = clock();
     long lastGameFrameTime = lastRenderFrameTime;
     long lastAnimFrameTime = lastRenderFrameTime;
+    long lastFxFrameTime = lastRenderFrameTime;
 
     //Main game loop (realtime)
     while(running){
@@ -180,6 +175,11 @@ int main()  {
            enemyAnimateFrame();
            playerAnimateFrame();
 		}
+
+        //FX animation frame
+        if(timer(&lastFxFrameTime, FX_HZ)) {
+            enemyFxFrame();
+        }
 
         //Renderer frame
         double renderFPS;

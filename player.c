@@ -36,7 +36,7 @@ void playerAnimateFrame(void) {
 void playerRenderFrame(void) {
 	// apply the animation frame
 	char frameFile[25];
-	sprintf(frameFile, "lem-0%d.png", walkInc);
+	sprintf(frameFile, "lem-pink-0%d.png", walkInc);
 
 	// are we traveling left or right?
 	SDL_RendererFlip flip = playerDir ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
