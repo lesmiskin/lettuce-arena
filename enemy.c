@@ -14,7 +14,7 @@ int enemyCount = 0;
 static const int ANIM_HZ = 1000 / 4;
 const double CHAR_BOUNDS = 15;
 
-const int INITIAL_ENEMIES = 3;
+const int INITIAL_ENEMIES = 7;
 const double ENEMY_SPEED = 1;
 Enemy enemies[MAX_ENEMY];
 
@@ -295,8 +295,35 @@ void enemyAnimateFrame(void) {
 }
 
 void enemyRenderFrame(void){
-	//Draw the enemies with the right animation frame.
+	// render corpses
 	for(int i=0; i < MAX_ENEMY; i++) {
+		if(!enemies[i].dead) continue;
+
+		char frameFile[25];
+
+		// pick the right color
+		switch(enemies[i].color) {
+			case 0:
+				sprintf(frameFile, "lem-orange-dead-dark.png");
+				break;
+			case 1:
+				sprintf(frameFile, "lem-green-dead-dark.png");
+				break;
+			case 2:
+				sprintf(frameFile, "lem-blue-dead-dark.png");
+				break;
+			case 3:
+				sprintf(frameFile, "lem-blue-dead-dark.png");
+				break;
+		}
+
+		Sprite sprite = makeFlippedSprite(frameFile, enemies[i].corpseDir);
+		drawSprite(sprite, enemies[i].coord);
+	}
+
+	// draw live enemies
+	for(int i=0; i < MAX_ENEMY; i++) {
+		if(enemies[i].dead) continue;
 		if(enemies[i].coord.x == 0) continue;
 
 		Sprite sprite;
@@ -348,39 +375,22 @@ void enemyRenderFrame(void){
 		// pick the right color
 		switch(enemies[i].color) {
 			case 0:
-				if(enemies[i].dead)
-					sprintf(frameFile, "lem-orange-dead-dark.png");
-				else
-					sprintf(frameFile, "lem-orange-0%d.png", enemies[i].animInc);
+				sprintf(frameFile, "lem-orange-0%d.png", enemies[i].animInc);
 				break;
 			case 1:
-				if(enemies[i].dead)
-					sprintf(frameFile, "lem-green-dead-dark.png");
-				else
-					sprintf(frameFile, "lem-green-0%d.png", enemies[i].animInc);
+				sprintf(frameFile, "lem-green-0%d.png", enemies[i].animInc);
 				break;
 			case 2:
-				if(enemies[i].dead)
-					sprintf(frameFile, "lem-blue-dead-dark.png");
-				else
-					sprintf(frameFile, "lem-blue-0%d.png", enemies[i].animInc);
+				sprintf(frameFile, "lem-blue-0%d.png", enemies[i].animInc);
 				break;
 			case 3:
-				if(enemies[i].dead)
-					sprintf(frameFile, "lem-blue-dead-dark.png");
-				else
-					sprintf(frameFile, "lem-blue-0%d.png", enemies[i].animInc);
+				sprintf(frameFile, "lem-blue-0%d.png", enemies[i].animInc);
 				break;
 		}
 
 		// are we traveling left or right?
 		double deg = radToDeg(enemies[i].idleTarget);
-
-		// random flip if dead, otherwise face based on movement.
-		if(enemies[i].buried)
-			flip = enemies[i].corpseDir;
-		else
-			flip = deg > 90 && deg < 270 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+		flip = deg > 90 && deg < 270 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
 		// draw the sprite
 		sprite = makeFlippedSprite(frameFile, flip);
@@ -429,7 +439,7 @@ void spawnEnemy(EnemyType type, Coord coord) {
 		clock(),
 		500,
 		0,
-		enemyCount,
+		randomMq(0,3),
 		false,
 		0,
 		false
