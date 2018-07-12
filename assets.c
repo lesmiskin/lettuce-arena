@@ -80,7 +80,11 @@ static void loadImages(void) {
         { "enemy.png" },
         { "player.png" },
         { "dirt.png" },
-        { "rocket.png" },
+ 
+        { "rocket-01.png" },
+        { "rocket-02.png" },
+        { "rocket-03.png" },
+        { "rocket-04.png" },
 
         { "puff-01.png" },
         { "puff-02.png" },
@@ -97,11 +101,13 @@ static void loadImages(void) {
         { "lem-pink-02.png" },
         { "lem-pink-03.png" },
         { "lem-pink-04.png" },
+        { "lem-pink-dead-dark.png" },
 
         { "lem-orange-01.png" },
         { "lem-orange-02.png" },
         { "lem-orange-03.png" },
         { "lem-orange-04.png" },
+        { "lem-orange-dead-dark.png" },
 
         { "lem-red-01.png" },
         { "lem-red-02.png" },
@@ -112,11 +118,13 @@ static void loadImages(void) {
         { "lem-green-02.png" },
         { "lem-green-03.png" },
         { "lem-green-04.png" },
+        { "lem-green-dead-dark.png" },
 
         { "lem-blue-01.png" },
         { "lem-blue-02.png" },
         { "lem-blue-03.png" },
         { "lem-blue-04.png" },
+        { "lem-blue-dead-dark.png" },
 
         { "exp-01.png" },
         { "exp-02.png" },

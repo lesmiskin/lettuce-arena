@@ -41,8 +41,10 @@ void shootAtOpponent(int enemyInc) {
 
 	// What enemy are we closest to?
 	for(int i=0; i < MAX_ENEMY; i++) {
-		if(enemies[i].coord.x == 0) continue;
 		if(i == enemyInc) continue;				// don't shoot ourselves! :p
+		if(enemies[i].coord.x == 0) continue;
+		if(enemies[i].dead) continue;			// don't shoot corpses
+
 
 		// find out which enemy we're closest to
 		Coord themPos = enemies[i].coord;

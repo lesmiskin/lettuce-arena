@@ -13,7 +13,6 @@ long lastIdleTime;
 int enemyCount = 0;
 static const int ANIM_HZ = 1000 / 4;
 const double CHAR_BOUNDS = 15;
-const double DIR_CHANGE = 250;
 
 const int INITIAL_ENEMIES = 3;
 const double ENEMY_SPEED = 1;
@@ -21,6 +20,8 @@ Enemy enemies[MAX_ENEMY];
 
 const double SHOT_SPEED = 2.0;
 const double SHOT_RELOAD = 1000;
+const int SHOT_FRAMES = 4;
+long lastShotFrame;
 Shot shots[MAX_SHOTS];
 
 // ----------
@@ -52,8 +53,6 @@ typedef struct {
 const double PUFF_FREQ = 75;
 const double PUFF_DURATION = 750;
 const int PUFF_FADE_TIME = 250;
-// const double PUFF_DURATION = 650;
-// const int PUFF_FADE_TIME = 200;
 const int PUFF_FRAMES = 3;
 long lastExpFrame;
 
@@ -137,7 +136,7 @@ void fireAngleShot(int enemyIndex, double deg) {
 		if(!shots[i].valid) {
 			Coord origin = enemies[enemyIndex].coord;
 			Coord shotStep = getAngleStep(rad, SHOT_SPEED, false);
-			Shot s = { true, origin, shotStep, deg, 0, enemyIndex };
+			Shot s = { true, origin, shotStep, deg, 0, enemyIndex, 0 };
 			shots[i] = s;
 			break;
 		}
@@ -162,15 +161,25 @@ void enemyGameFrame(void) {
 	for(int i=0; i < MAX_ENEMY; i++) {
 		if(enemies[i].coord.x == 0) continue;
 
-		aiSmartFrame(i);
+		// dying
+		if(enemies[i].dead) {
+			if(!enemies[i].buried) {
+				// choose a corpse direction for variety
+				enemies[i].corpseDir = (SDL_RendererFlip)randomMq(0,3);
+				enemies[i].buried = true;
+			}
+			continue;
+		}
 
-		// chase the player
-		// aiChaseFrame(i);
+		// run the AI
+		aiSmartFrame(i);
 	}
 
 	// home shots towards target.
 	for(int i=0; i < MAX_SHOTS; i++) {
 		if(!shots[i].valid) continue;
+
+		// move it
 		shots[i].coord.x += shots[i].target.x;
 		shots[i].coord.y += shots[i].target.y;
 
@@ -184,10 +193,12 @@ void enemyGameFrame(void) {
 		for(int e=0; e < MAX_ENEMY; e++) {
 			if(enemies[e].coord.x == 0) continue;
 			if(shots[i].shooter == e) continue;		// don't hit ourselves :p
+			if(enemies[e].dead) continue;			// don't hit corpses
 
 			if(inBounds(shots[i].coord, makeSquareBounds(enemies[e].coord, BOUND))) {
 				spawnExp(shots[i].coord);
 				shots[i].valid = false;
+				enemies[e].dead = true;		// make dead
 				continue;
 			}
 		}
@@ -220,8 +231,8 @@ void enemyGameFrame(void) {
 }
 
 void enemyFxFrame() {
+	// explosions
     if(timer(&lastExpFrame, 1000/8)) {
-		// explosions
 		for(int i=0; i < MAX_EXP; i++) {
 			if(!explosions[i].valid) continue;
 
@@ -243,6 +254,19 @@ void enemyFxFrame() {
 		// fade out puff anim (note "clever" math at end to do incremental fade)
 	    if(puff.animInc < 2 && isDue(clock(), puff.spawnTime, PUFF_FADE_TIME * (puff.animInc+1)))
 			puffs[i].animInc++;
+	}
+
+	// spin rockets
+    if(timer(&lastShotFrame, 1000/12)) {
+		for(int i=0; i < MAX_SHOTS; i++) {
+			if(!shots[i].valid) continue;
+
+			if(shots[i].animInc < SHOT_FRAMES-1) {
+				shots[i].animInc++;
+			}else{
+				shots[i].animInc = 0;
+			}
+		}
 	}
 }
 
@@ -324,22 +348,39 @@ void enemyRenderFrame(void){
 		// pick the right color
 		switch(enemies[i].color) {
 			case 0:
-				sprintf(frameFile, "lem-orange-0%d.png", enemies[i].animInc);
+				if(enemies[i].dead)
+					sprintf(frameFile, "lem-orange-dead-dark.png");
+				else
+					sprintf(frameFile, "lem-orange-0%d.png", enemies[i].animInc);
 				break;
 			case 1:
-				sprintf(frameFile, "lem-green-0%d.png", enemies[i].animInc);
+				if(enemies[i].dead)
+					sprintf(frameFile, "lem-green-dead-dark.png");
+				else
+					sprintf(frameFile, "lem-green-0%d.png", enemies[i].animInc);
 				break;
 			case 2:
-				sprintf(frameFile, "lem-blue-0%d.png", enemies[i].animInc);
+				if(enemies[i].dead)
+					sprintf(frameFile, "lem-blue-dead-dark.png");
+				else
+					sprintf(frameFile, "lem-blue-0%d.png", enemies[i].animInc);
 				break;
 			case 3:
-				sprintf(frameFile, "lem-blue-0%d.png", enemies[i].animInc);
+				if(enemies[i].dead)
+					sprintf(frameFile, "lem-blue-dead-dark.png");
+				else
+					sprintf(frameFile, "lem-blue-0%d.png", enemies[i].animInc);
 				break;
 		}
 
 		// are we traveling left or right?
 		double deg = radToDeg(enemies[i].idleTarget);
-		flip = deg > 90 && deg < 270 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+
+		// random flip if dead, otherwise face based on movement.
+		if(enemies[i].buried)
+			flip = enemies[i].corpseDir;
+		else
+			flip = deg > 90 && deg < 270 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
 		// draw the sprite
 		sprite = makeFlippedSprite(frameFile, flip);
@@ -359,8 +400,9 @@ void enemyFxRenderFrame() {
 	// draw shots 
 	for(int i=0; i < MAX_SHOTS; i++) {
 		if(!shots[i].valid) continue;
-		Sprite sprite = makeSimpleSprite("rocket.png");
-		drawSpriteFull(sprite, shots[i].coord, 1, shots[i].angle+90);
+		char file[15];
+		sprintf(file, "rocket-0%d.png", shots[i].animInc+1);
+		drawSpriteFull(makeSimpleSprite(file), shots[i].coord, 1, shots[i].angle+90);
 	}
 
 	// draw explosions
@@ -387,7 +429,10 @@ void spawnEnemy(EnemyType type, Coord coord) {
 		clock(),
 		500,
 		0,
-		enemyCount
+		enemyCount,
+		false,
+		0,
+		false
 	};
 	enemies[enemyCount++] = e;
 }

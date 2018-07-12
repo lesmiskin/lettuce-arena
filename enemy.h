@@ -13,6 +13,7 @@ typedef struct {
     double angle;
     long lastPuff;
     int shooter;
+    int animInc;
 } Shot;
 
 typedef enum {
@@ -46,9 +47,11 @@ typedef struct {
 	int nextDirTime;
 	long lastBreather;
 	int color;
+    bool dead;
+    SDL_RendererFlip corpseDir;
+    bool buried;
 } Enemy;
 
-extern const double DIR_CHANGE;
 extern const double ENEMY_SPEED;
 extern const double CHAR_BOUNDS;
 extern const double SHOT_RELOAD;
