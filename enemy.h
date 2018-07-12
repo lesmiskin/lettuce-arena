@@ -53,6 +53,7 @@ extern const double ENEMY_SPEED;
 extern const double CHAR_BOUNDS;
 extern const double SHOT_RELOAD;
 
+extern void enemyFxRenderFrame();
 extern void enemyFxFrame();
 extern bool canShoot(int enemyIndex);
 extern bool havingBreather(int enemyInc);

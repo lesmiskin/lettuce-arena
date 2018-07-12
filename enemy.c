@@ -44,12 +44,18 @@ Exp explosions[MAX_EXP];
 typedef struct {
 	bool valid;
 	Coord coord;
-	long spawntime;
+	long spawnTime;
+	int animInc;
 } Puff;
 
 #define MAX_PUFFS 1000
 const double PUFF_FREQ = 75;
-const double PUFF_DURATION = 350;
+const double PUFF_DURATION = 750;
+const int PUFF_FADE_TIME = 250;
+// const double PUFF_DURATION = 650;
+// const int PUFF_FADE_TIME = 200;
+const int PUFF_FRAMES = 3;
+long lastExpFrame;
 
 Puff puffs[MAX_PUFFS];
 
@@ -197,7 +203,7 @@ void enemyGameFrame(void) {
 		if(timer(&shots[i].lastPuff, PUFF_FREQ)) {
 			for(int p=0; p < MAX_PUFFS; p++){
 				if(puffs[p].valid) continue;
-				Puff puff = { true, shots[i].coord, clock() };
+				Puff puff = { true, shots[i].coord, clock(), 0 };
 				puffs[p] = puff;
 				break;
 			}
@@ -207,24 +213,36 @@ void enemyGameFrame(void) {
 	// make puffs go away after a short time.
 	for(int p=0; p < MAX_PUFFS; p++){
 		if(!puffs[p].valid) continue;
-		if(isDue(clock(), puffs[p].spawntime, PUFF_DURATION)) {
+		if(isDue(clock(), puffs[p].spawnTime, PUFF_DURATION)) {
 			puffs[p].valid = false;
 		}
 	}
 }
 
 void enemyFxFrame() {
-	// animate explosions at a custom FPS (hence why it's here)
-	for(int i=0; i < MAX_EXP; i++) {
-		if(!explosions[i].valid) continue;
+    if(timer(&lastExpFrame, 1000/8)) {
+		// explosions
+		for(int i=0; i < MAX_EXP; i++) {
+			if(!explosions[i].valid) continue;
 
-		// finish explosion
-		if(explosions[i].animInc == 3) {
-			explosions[i].valid = false;
-			continue;
+			// finish explosion
+			if(explosions[i].animInc == 5) {
+				explosions[i].valid = false;
+				continue;
+			}
+
+			explosions[i].animInc++;
 		}
+	}
 
-		explosions[i].animInc++;
+	// puffs
+	for(int i=0; i < MAX_PUFFS; i++) {
+		Puff puff = puffs[i];
+		if(!puff.valid) continue;
+
+		// fade out puff anim (note "clever" math at end to do incremental fade)
+	    if(puff.animInc < 2 && isDue(clock(), puff.spawnTime, PUFF_FADE_TIME * (puff.animInc+1)))
+			puffs[i].animInc++;
 	}
 }
 
@@ -327,11 +345,15 @@ void enemyRenderFrame(void){
 		sprite = makeFlippedSprite(frameFile, flip);
 		drawSprite(sprite, enemies[i].coord);
 	}
+}
 
+void enemyFxRenderFrame() {
 	// draw puffs
 	for(int p=0; p < MAX_PUFFS; p++){
 		if(!puffs[p].valid) continue;
-		drawSprite(makeSimpleSprite("puff.png"), puffs[p].coord);
+		char file[12];
+		sprintf(file, "puff-0%d.png", puffs[p].animInc+1);
+		drawSprite(makeSimpleSprite(file), puffs[p].coord);
 	}
 
 	// draw shots 

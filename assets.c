@@ -81,7 +81,11 @@ static void loadImages(void) {
         { "player.png" },
         { "dirt.png" },
         { "rocket.png" },
-        { "puff.png" },
+
+        { "puff-01.png" },
+        { "puff-02.png" },
+        { "puff-03.png" },
+
         { "worker.png" },
         
         { "lem-01.png" },

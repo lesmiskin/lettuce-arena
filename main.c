@@ -10,6 +10,21 @@
 #include "enemy.h"
 #include "scene.h"
 
+// rocket rotation frames for each dir (but can flip!)
+// two-frame puffs
+// puffs, rockets etc. draw ON TOP OF enemies and players.
+
+
+
+
+
+
+
+
+
+
+
+
 // we all spawn in special SPAWN POINT positions when STARTING THE MAP.
 
 // ability for players to die and RESPAWN.
@@ -164,6 +179,7 @@ int main()  {
             pollInput();
             playerGameFrame();
             enemyGameFrame();
+            enemyFxFrame();
 			// sceneGameFrame();
 			// hudGameFrame();
             processSystemCommands();
@@ -176,11 +192,6 @@ int main()  {
            playerAnimateFrame();
 		}
 
-        //FX animation frame
-        if(timer(&lastFxFrameTime, FX_HZ)) {
-            enemyFxFrame();
-        }
-
         //Renderer frame
         double renderFPS;
         if(timer(&lastRenderFrameTime, RENDER_HZ)) {
@@ -188,6 +199,7 @@ int main()  {
             // hudRenderFrame();
             enemyRenderFrame();
 			playerRenderFrame();
+            enemyFxRenderFrame();
 
             updateCanvas();
         }
