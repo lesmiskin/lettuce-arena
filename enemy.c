@@ -21,7 +21,7 @@ const double CHAR_BOUNDS = 15;
 const double DIR_CHANGE = 250;
 Shot shots[MAX_SHOTS];
 
-const int INITIAL_ENEMIES = 4;
+const int INITIAL_ENEMIES = 1;
 const double ENEMY_SPEED = 1;
 
 const double SHOT_SPEED = 2.0;
@@ -112,23 +112,24 @@ bool wouldTouchEnemy(Coord a, int selfIndex, bool includePlayer) {
 	return false;
 }
 
+bool canShoot(int enemyIndex) {
+	return isDue(clock(), enemies[enemyIndex].lastShot, SHOT_RELOAD);
+}
+
 void fireAngleShot(int enemyIndex, double deg) {
 	double rad = degToRad(deg);
 
-	// can we fire? (e.g. are we still waiting for recoil on last shot)
-	if(isDue(clock(), enemies[enemyIndex].lastShot, SHOT_RELOAD)) {
-		// find a spare projectile 
-		for(int i=0; i < MAX_SHOTS; i++) {
-			if(!shots[i].valid) {
-				Coord origin = enemies[enemyIndex].coord;
-				Coord shotStep = getAngleStep(rad, SHOT_SPEED, false);
-				Shot s = { true, origin, shotStep, deg };
-				shots[i] = s;
-				break;
-			}
+	// find a spare projectile 
+	for(int i=0; i < MAX_SHOTS; i++) {
+		if(!shots[i].valid) {
+			Coord origin = enemies[enemyIndex].coord;
+			Coord shotStep = getAngleStep(rad, SHOT_SPEED, false);
+			Shot s = { true, origin, shotStep, deg };
+			shots[i] = s;
+			break;
 		}
-		enemies[enemyIndex].lastShot = clock();
 	}
+	enemies[enemyIndex].lastShot = clock();
 }
 
 void fireShot(int enemyIndex, Coord target) {

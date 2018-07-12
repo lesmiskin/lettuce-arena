@@ -9,29 +9,31 @@
 #include "assets.h"
 #include "enemy.h"
 #include "scene.h"
-// #include "hud.h"
+
+// explosions when rockets hit players or bounds.
+// dead players have NO WEAPON TO BEGIN WITH.
+// we all spawn in special SPAWN POINT positions when STARTING THE MAP.
+// dead players RESPAWN.
+// dead players have to GET THEIR WEAPON AGAIN.
+// players flash red when hit.
 
 
-// BUG BUG BUG! enemies don't shoot if you're ABOVE THEM!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+// ability for player to shoot.
+// aiming reticle based on current facing direction.
+
+
+
+
+
 
 // combatants have DIFFERENT COLORS
-
-
-
-
-
-
-// combatants clip against each other.
-// aiming reticle based on current facing direction.
-// ability for player to shoot.
-
-
-
-
-
-// EXPLOSIONS when rockets hit combatants, or BORDERS.
-// corpse with blood (ala gta)
 // name-tags for players.
+// represetation of rocket launcher (e.g. icon above player, or fresh graphic)
+// combatants clip against each other.
 
 
 
@@ -50,19 +52,27 @@
 
 
 
+
+
+// corpse with blood (ala gta)
+
+
+
+
+
+
+
+
+// minor: Projectiles and puffs should show ON TOP of combatants.
 // polish: rockets could spin when in motion
 // polish: two-frame puff, one is darker.
 // idle breathing sprite?
 // directional frames (up and down?)
-// minor: Projectiles and puffs should show ON TOP of combatants.
 // big green "YOU" sign (ala neogeo)
-
 // chairs and computer desks lying around.
-
 // office theme (worker sprites, chairs, desks with computers)
 // office worker sprite.
 // rockets explode when hitting something.
-
 // that opponent respawns at the edge of the map.
 
 // realistic walking styles:

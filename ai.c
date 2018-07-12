@@ -32,6 +32,9 @@ bool inRange(double deg, double target) {
 }
 
 void shootAtOpponent(int enemyInc) {
+	// printf("%f", radToDeg(degToRad(270)));
+	// commands[CMD_QUIT] = true;
+
 	Coord target;
 	double bestDistance = 1000;
 	Coord usPos = enemies[enemyInc].coord;
@@ -67,9 +70,9 @@ void shootAtOpponent(int enemyInc) {
 	else if(inRange(deg, DOWN)) 		fireAngleShot(enemyInc, DOWN);
 	else if(inRange(deg, DOWN_LEFT)) 	fireAngleShot(enemyInc, DOWN_LEFT);
 	else if(inRange(deg, LEFT)) 		fireAngleShot(enemyInc, LEFT);
-	else if(inRange(deg, UP_LEFT)) 		fireAngleShot(enemyInc, DOWN);
-	else if(inRange(deg, UP)) 			fireAngleShot(enemyInc, DOWN);
-	else if(inRange(deg, UP_RIGHT)) 	fireAngleShot(enemyInc, DOWN);
+	else if(inRange(deg, UP_LEFT)) 		fireAngleShot(enemyInc, UP_LEFT);
+	else if(inRange(deg, UP)) 			fireAngleShot(enemyInc, UP);
+	else if(inRange(deg, UP_RIGHT)) 	fireAngleShot(enemyInc, UP_RIGHT);
 }
 
 // Note: most sensible to do perpendicular avoidance, lest we wedge into a corner.
@@ -93,8 +96,9 @@ double avoidBottom() {
 void aiSmartFrame(int enemyInc) {
 
 	// shoot opponent, with a little wait between each shot.
-	if(isDue(clock(), enemies[enemyInc].lastShot, randomMq(1, 3) * 1000))
+	if(isDue(clock(), enemies[enemyInc].lastShot, SHOT_RELOAD * randomMq(1, 3))) {
 		shootAtOpponent(enemyInc);
+	}
 
 	// double angle = radToDeg(enemies[enemyInc].idleTarget);
 	// printf("%f\n", enemies[enemyInc].coord.x);

@@ -100,13 +100,19 @@ int randomMq(int min, int max) {
 double getDistance(Coord a, Coord b) {
     // source: http://www.mathwarehouse.com/algebra/distance_formula/index.php
     return sqrt(
-        pow(a.x - b.x, 2) + 
-        pow(a.y - b.y, 2)
+        pow(abs(a.x - b.x), 2) + 
+        pow(abs(a.y - b.y), 2)
     );
 }
 
+const double PI = 3.141592;
+
 double getAngle(Coord a, Coord b) {
-    return atan2(b.y - a.y, b.x - a.x);
+    double result = atan2(b.y - a.y, b.x - a.x);
+
+    // munge the above so we get 0-3.14 range, rather than half of them being negatives :p
+    // source: https://stackoverflow.com/questions/1311049/how-to-map-atan2-to-degrees-0-360
+    return result < 0 ? result + 2*PI : result;
 }
 
 Coord getAngleStep(double angle, double speed, bool negativeMagic) {

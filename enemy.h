@@ -49,8 +49,10 @@ typedef struct {
 
 extern const double DIR_CHANGE;
 extern const double ENEMY_SPEED;
-const double CHAR_BOUNDS;
+extern const double CHAR_BOUNDS;
+extern const double SHOT_RELOAD;
 
+extern bool canShoot(int enemyIndex);
 extern bool havingBreather(int enemyInc);
 extern double randomEnemyAngle();
 extern bool onScreen(Coord coord, double threshold);
