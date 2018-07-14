@@ -11,8 +11,10 @@
 #include "scene.h"
 
 // rocket rotation frames for each dir (but can flip!)
-// two-frame puffs
-// puffs, rockets etc. draw ON TOP OF enemies and players.
+// starry animation when dizzy.
+
+// lemmings respawn after death.
+
 
 
 
@@ -32,7 +34,6 @@
 
 // ability for player to shoot.
 // aiming reticle based on current facing direction.
-// polish: two-frame puff, one is darker.
 
 // enemy should FACE the direction they shoot in, when they shoot.
 
@@ -200,6 +201,7 @@ int main()  {
             enemyRenderFrame();
 			playerRenderFrame();
             enemyFxRenderFrame();
+            enemyDeathRenderFrame();
 
             updateCanvas();
         }

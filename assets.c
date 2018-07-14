@@ -136,6 +136,11 @@ static void loadImages(void) {
         { "lem-blue-stun-01.png" },
         { "lem-blue-stun-02.png" },
 
+        { "stars-01.png" },
+        { "stars-02.png" },
+        { "stars-03.png" },
+        { "stars-04.png" },
+
         { "exp-01.png" },
         { "exp-02.png" },
         { "exp-03.png" },

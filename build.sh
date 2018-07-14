@@ -2,7 +2,7 @@
 # -lm = Link math library. Otherwise compiler compiles to constants and skips it where it can.
 
 # Linux build
-gcc *.c -std=c11 -lm `sdl2-config --cflags --libs` -lSDL2_image -lSDL2_mixer -o output.bin
+gcc -g *.c -std=c11 -lm `sdl2-config --cflags --libs` -lSDL2_image -lSDL2_mixer -o output.bin
 
 # Windows build (after copying resources in /win32)
 #gcc *.c -std=c99 \

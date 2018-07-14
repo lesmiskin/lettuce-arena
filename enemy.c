@@ -14,7 +14,8 @@ int enemyCount = 0;
 static const int ANIM_HZ = 1000 / 4;
 const double CHAR_BOUNDS = 15;
 
-const int DEAD_FRAMES = 2;
+const int DEAD_FRAMES = 4;
+const int STAR_FRAMES = 4;
 const int INITIAL_ENEMIES = 30;
 const double ENEMY_SPEED = 1;
 Enemy enemies[MAX_ENEMY];
@@ -161,15 +162,7 @@ void spawnExp(Coord c) {
 void enemyGameFrame(void) {
 	for(int i=0; i < MAX_ENEMY; i++) {
 		if(enemies[i].coord.x == 0) continue;
-
-		// dying
-		if(enemies[i].dead) {
-			if(enemies[i].deadInc == 0) {
-				// choose a corpse direction for variety
-				enemies[i].corpseDir = (SDL_RendererFlip)randomMq(0,1);
-			}
-			continue;
-		}
+		if(enemies[i].dead) continue;
 
 		// run the AI
 		aiSmartFrame(i);
@@ -199,6 +192,7 @@ void enemyGameFrame(void) {
 				spawnExp(shots[i].coord);
 				shots[i].valid = false;
 				enemies[e].dead = true;		// make dead
+				enemies[e].lastDeathFrame = clock();
 				continue;
 			}
 		}
@@ -230,6 +224,8 @@ void enemyGameFrame(void) {
 	}
 }
 
+long lastDeathFrame;
+
 void enemyFxFrame() {
     if(timer(&lastExpFrame, 1000/8)) {
 		// explosions
@@ -244,15 +240,24 @@ void enemyFxFrame() {
 
 			explosions[i].animInc++;
 		}
+	}
 
-		// animate deaths (want these faster than walking animation)
+	// animate deaths (want these faster than walking animation)
+	if(timer(&lastDeathFrame, 1000/14)) {
 		for(int i=0; i < MAX_ENEMY; i++) {
-			if(!enemies[i].dead || enemies[i].buried) continue;
+			if(!enemies[i].dead) continue;
 
-			if(enemies[i].deadInc < DEAD_FRAMES-1) {
-				enemies[i].deadInc++;
+			// dying
+			if(!enemies[i].buried) {
+				if(enemies[i].deadInc < DEAD_FRAMES-1) {
+					enemies[i].deadInc++;
+				}else{
+					enemies[i].corpseDir = randomMq(0,1);	// left or right
+					enemies[i].buried = true;
+				}
+			// stars rotation
 			}else{
-				enemies[i].buried = true;
+				enemies[i].starInc = enemies[i].starInc == STAR_FRAMES-1 ? 0 : enemies[i].starInc + 1;
 			}
 		}
 	}
@@ -330,18 +335,25 @@ char* getColor(int i) {
 	return string;
 }
 
+SDL_RendererFlip reverseFlip(SDL_RendererFlip flip) {
+	return flip == SDL_FLIP_NONE ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+}
+
 void enemyRenderFrame(void){
 	// render corpses
 	for(int i=0; i < MAX_ENEMY; i++) {
-		if(!enemies[i].dead) continue;
+		if(!enemies[i].buried) continue;
 
 		char frameFile[25];
+		sprintf(frameFile, "lem-%s-stun-02.png", getColor(i));
+		SDL_RendererFlip flip = enemies[i].corpseDir == 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
-		// pick the right colot
-		sprintf(frameFile, "lem-%s-stun-0%d.png", getColor(i), enemies[i].animInc);
+		// sitting lemming
+		drawSprite(makeFlippedSprite(frameFile, flip), enemies[i].coord);
 
-		Sprite sprite = makeFlippedSprite(frameFile, enemies[i].corpseDir);
-		drawSprite(sprite, enemies[i].coord);
+		// stars
+		sprintf(frameFile, "stars-0%d.png", enemies[i].starInc+1);
+		drawSprite(makeFlippedSprite(frameFile, flip), enemies[i].coord);
 	}
 
 	// draw live enemies
@@ -360,6 +372,40 @@ void enemyRenderFrame(void){
 		SDL_RendererFlip flip = deg > 90 && deg < 270 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
 		// draw the sprite
+		Sprite sprite = makeFlippedSprite(frameFile, flip);
+		drawSprite(sprite, enemies[i].coord);
+	}
+}
+
+void enemyDeathRenderFrame() {
+	// render dying enemies above the explosion
+	for(int i=0; i < MAX_ENEMY; i++) {
+		if(!enemies[i].dead || enemies[i].buried) continue;
+
+		char frameFile[25];
+		SDL_RendererFlip flip = SDL_FLIP_NONE;
+		int animFrame = 0;
+
+		// flip second frame for "animation"
+		switch(enemies[i].deadInc) {
+			case 0:
+				flip = SDL_FLIP_HORIZONTAL;
+				animFrame = 0;
+				break;
+			case 1:
+				animFrame = 0;
+				break;
+			case 2:
+				flip = SDL_FLIP_HORIZONTAL;
+				animFrame = 0;
+				break;
+			case 3:
+				animFrame = 1;
+				break;
+		}
+
+		sprintf(frameFile, "lem-%s-stun-0%d.png", getColor(i), animFrame+1);
+
 		Sprite sprite = makeFlippedSprite(frameFile, flip);
 		drawSprite(sprite, enemies[i].coord);
 	}
@@ -410,6 +456,8 @@ void spawnEnemy(EnemyType type, Coord coord) {
 		false,
 		0,
 		false,
+		0,
+		0,
 		0
 	};
 	enemies[enemyCount++] = e;

@@ -4,7 +4,7 @@
 #include "common.h"
 
 #define MAX_SHOTS 100
-#define MAX_ENEMY 5
+#define MAX_ENEMY 30
 
 typedef struct {
 	bool valid;
@@ -51,12 +51,15 @@ typedef struct {
     SDL_RendererFlip corpseDir;
     bool buried;
     int deadInc;
+    long lastDeathFrame;
+    int starInc;
 } Enemy;
 
 extern const double ENEMY_SPEED;
 extern const double CHAR_BOUNDS;
 extern const double SHOT_RELOAD;
 
+extern void enemyDeathRenderFrame();
 extern void enemyFxRenderFrame();
 extern void enemyFxFrame();
 extern bool canShoot(int enemyIndex);
