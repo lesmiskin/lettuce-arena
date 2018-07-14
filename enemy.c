@@ -14,7 +14,8 @@ int enemyCount = 0;
 static const int ANIM_HZ = 1000 / 4;
 const double CHAR_BOUNDS = 15;
 
-const int INITIAL_ENEMIES = 7;
+const int DEAD_FRAMES = 2;
+const int INITIAL_ENEMIES = 30;
 const double ENEMY_SPEED = 1;
 Enemy enemies[MAX_ENEMY];
 
@@ -163,10 +164,9 @@ void enemyGameFrame(void) {
 
 		// dying
 		if(enemies[i].dead) {
-			if(!enemies[i].buried) {
+			if(enemies[i].deadInc == 0) {
 				// choose a corpse direction for variety
-				enemies[i].corpseDir = (SDL_RendererFlip)randomMq(0,3);
-				enemies[i].buried = true;
+				enemies[i].corpseDir = (SDL_RendererFlip)randomMq(0,1);
 			}
 			continue;
 		}
@@ -231,8 +231,8 @@ void enemyGameFrame(void) {
 }
 
 void enemyFxFrame() {
-	// explosions
     if(timer(&lastExpFrame, 1000/8)) {
+		// explosions
 		for(int i=0; i < MAX_EXP; i++) {
 			if(!explosions[i].valid) continue;
 
@@ -243,6 +243,17 @@ void enemyFxFrame() {
 			}
 
 			explosions[i].animInc++;
+		}
+
+		// animate deaths (want these faster than walking animation)
+		for(int i=0; i < MAX_ENEMY; i++) {
+			if(!enemies[i].dead || enemies[i].buried) continue;
+
+			if(enemies[i].deadInc < DEAD_FRAMES-1) {
+				enemies[i].deadInc++;
+			}else{
+				enemies[i].buried = true;
+			}
 		}
 	}
 
@@ -276,6 +287,7 @@ void enemyAnimateFrame(void) {
 	//Animate the enemies
 	for(int i=0; i < MAX_ENEMY; i++) {
 		if(enemies[i].coord.x == 0) continue;
+		if(enemies[i].dead) continue;
 
 		// tell lemmings to stand still when taking a breather.
 		if(havingBreather(i)) {
@@ -294,6 +306,30 @@ void enemyAnimateFrame(void) {
 	}
 }
 
+char* getColor(int i) {
+	char* string = malloc(sizeof(char) * 6);
+
+	switch(enemies[i].color) {
+		case 0:
+			strcpy(string, "orange");
+			break;
+		case 1:
+			strcpy(string, "green");
+			break;
+		case 2:
+			strcpy(string, "blue");
+			break;
+		case 3:
+			strcpy(string, "red");
+			break;
+		case 4:
+			strcpy(string, "pink");
+			break;
+	}
+
+	return string;
+}
+
 void enemyRenderFrame(void){
 	// render corpses
 	for(int i=0; i < MAX_ENEMY; i++) {
@@ -301,21 +337,8 @@ void enemyRenderFrame(void){
 
 		char frameFile[25];
 
-		// pick the right color
-		switch(enemies[i].color) {
-			case 0:
-				sprintf(frameFile, "lem-orange-dead-dark.png");
-				break;
-			case 1:
-				sprintf(frameFile, "lem-green-dead-dark.png");
-				break;
-			case 2:
-				sprintf(frameFile, "lem-blue-dead-dark.png");
-				break;
-			case 3:
-				sprintf(frameFile, "lem-blue-dead-dark.png");
-				break;
-		}
+		// pick the right colot
+		sprintf(frameFile, "lem-%s-stun-0%d.png", getColor(i), enemies[i].animInc);
 
 		Sprite sprite = makeFlippedSprite(frameFile, enemies[i].corpseDir);
 		drawSprite(sprite, enemies[i].coord);
@@ -326,74 +349,18 @@ void enemyRenderFrame(void){
 		if(enemies[i].dead) continue;
 		if(enemies[i].coord.x == 0) continue;
 
-		Sprite sprite;
-		SDL_RendererFlip flip = SDL_FLIP_NONE;
-		bool isUp = false;
-		bool isDown = false;
-
-		if(enemies[i].isRoaming) {
-			//Flip in the direction we're roaming (default case takes care of left-facing)
-			switch(enemies[i].roamDir) {
-				case DIR_SOUTH:
-					isDown = true;
-					break;
-				case DIR_SOUTHWEST:
-				case DIR_WEST:
-				case DIR_NORTHWEST:
-					flip = SDL_FLIP_HORIZONTAL;
-					break;
-				case DIR_NORTH:
-					isUp = true;
-					break;
-			}
-		}else{
-			isUp = enemies[i].coord.y > pos.y;
-			isDown = enemies[i].coord.y < pos.y;
-		}
-
-		// char frameFile[25];
-
-		// Choose graphic based on type.
-		// switch(enemies[i].type) {
-		// 	case ENEMY_DIGGER: {
-		// 		strcpy(frameFile, "digger-walk-%02d.png");
-		// 		flip = enemies[i].coord.x > pos.x ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-		// 		break;
-		// 	}
-		// 	case ENEMY_CTHULU: {
-		// 		strcpy(frameFile, "cthulu-walk-%02d.png");
-		// 		flip = enemies[i].coord.x > pos.x ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-		// 		break;
-		// 	}
-		// }
-
-		// sprintf(frameFile, frameFile, enemies[i].animInc);
-
 		// apply the animation frame
 		char frameFile[25];
 
 		// pick the right color
-		switch(enemies[i].color) {
-			case 0:
-				sprintf(frameFile, "lem-orange-0%d.png", enemies[i].animInc);
-				break;
-			case 1:
-				sprintf(frameFile, "lem-green-0%d.png", enemies[i].animInc);
-				break;
-			case 2:
-				sprintf(frameFile, "lem-blue-0%d.png", enemies[i].animInc);
-				break;
-			case 3:
-				sprintf(frameFile, "lem-blue-0%d.png", enemies[i].animInc);
-				break;
-		}
+		sprintf(frameFile, "lem-%s-0%d.png", getColor(i), enemies[i].animInc);
 
 		// are we traveling left or right?
 		double deg = radToDeg(enemies[i].idleTarget);
-		flip = deg > 90 && deg < 270 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+		SDL_RendererFlip flip = deg > 90 && deg < 270 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
 		// draw the sprite
-		sprite = makeFlippedSprite(frameFile, flip);
+		Sprite sprite = makeFlippedSprite(frameFile, flip);
 		drawSprite(sprite, enemies[i].coord);
 	}
 }
@@ -439,10 +406,11 @@ void spawnEnemy(EnemyType type, Coord coord) {
 		clock(),
 		500,
 		0,
-		randomMq(0,3),
+		randomMq(0,4),
 		false,
 		0,
-		false
+		false,
+		0
 	};
 	enemies[enemyCount++] = e;
 }

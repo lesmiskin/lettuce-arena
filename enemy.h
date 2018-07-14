@@ -50,6 +50,7 @@ typedef struct {
     bool dead;
     SDL_RendererFlip corpseDir;
     bool buried;
+    int deadInc;
 } Enemy;
 
 extern const double ENEMY_SPEED;
