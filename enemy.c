@@ -20,7 +20,7 @@ const int INITIAL_ENEMIES = 30;
 const double ENEMY_SPEED = 1;
 Enemy enemies[MAX_ENEMY];
 
-const double SHOT_SPEED = 2.0;
+const double SHOT_SPEED = 1.75;
 const double SHOT_RELOAD = 1000;
 const int SHOT_FRAMES = 4;
 long lastShotFrame;
@@ -225,9 +225,10 @@ void enemyGameFrame(void) {
 }
 
 long lastDeathFrame;
+long lastStarFrame;
 
 void enemyFxFrame() {
-    if(timer(&lastExpFrame, 1000/8)) {
+    if(timer(&lastExpFrame, 1000/12)) {
 		// explosions
 		for(int i=0; i < MAX_EXP; i++) {
 			if(!explosions[i].valid) continue;
@@ -242,22 +243,24 @@ void enemyFxFrame() {
 		}
 	}
 
+    if(timer(&lastStarFrame, 1000/15)) {
+		// spinning stars
+		for(int i=0; i < MAX_ENEMY; i++) {
+			if(!enemies[i].buried) continue;
+
+			enemies[i].starInc = enemies[i].starInc == STAR_FRAMES-1 ? 0 : enemies[i].starInc + 1;
+		}
+    }
+
 	// animate deaths (want these faster than walking animation)
-	if(timer(&lastDeathFrame, 1000/14)) {
+	if(timer(&lastDeathFrame, 1000/12)) {
 		for(int i=0; i < MAX_ENEMY; i++) {
 			if(!enemies[i].dead) continue;
+			if(enemies[i].buried) continue;
 
-			// dying
-			if(!enemies[i].buried) {
-				if(enemies[i].deadInc < DEAD_FRAMES-1) {
-					enemies[i].deadInc++;
-				}else{
-					enemies[i].corpseDir = randomMq(0,1);	// left or right
-					enemies[i].buried = true;
-				}
-			// stars rotation
-			}else{
-				enemies[i].starInc = enemies[i].starInc == STAR_FRAMES-1 ? 0 : enemies[i].starInc + 1;
+			if(enemies[i].deadInc < DEAD_FRAMES-1) {
+				enemies[i].deadInc++;
+				// NB: stopping is done on render frame, otherwise blip occurs.
 			}
 		}
 	}
@@ -385,29 +388,35 @@ void enemyDeathRenderFrame() {
 		char frameFile[25];
 		SDL_RendererFlip flip = SDL_FLIP_NONE;
 		int animFrame = 0;
+		int ypos = 0;
 
 		// flip second frame for "animation"
 		switch(enemies[i].deadInc) {
 			case 0:
-				flip = SDL_FLIP_HORIZONTAL;
+				// flip = SDL_FLIP_HORIZONTAL;
 				animFrame = 0;
+				ypos = -1;
 				break;
 			case 1:
 				animFrame = 0;
+				ypos = -3;
 				break;
 			case 2:
-				flip = SDL_FLIP_HORIZONTAL;
+				// flip = SDL_FLIP_HORIZONTAL;
 				animFrame = 0;
+				ypos = -1;
 				break;
 			case 3:
 				animFrame = 1;
+				enemies[i].corpseDir = randomMq(0,1);	// left or right
+				enemies[i].buried = true;
 				break;
 		}
 
 		sprintf(frameFile, "lem-%s-stun-0%d.png", getColor(i), animFrame+1);
 
 		Sprite sprite = makeFlippedSprite(frameFile, flip);
-		drawSprite(sprite, enemies[i].coord);
+		drawSprite(sprite, deriveCoord(enemies[i].coord, 0, ypos));
 	}
 }
 

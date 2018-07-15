@@ -4,7 +4,7 @@
 #include "common.h"
 
 #define MAX_SHOTS 100
-#define MAX_ENEMY 30
+#define MAX_ENEMY 15
 
 typedef struct {
 	bool valid;
