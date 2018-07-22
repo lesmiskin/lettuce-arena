@@ -161,7 +161,7 @@ void spawnExp(Coord c) {
 
 void enemyGameFrame(void) {
 	for(int i=0; i < MAX_ENEMY; i++) {
-		if(enemies[i].coord.x == 0) continue;
+		if(!enemies[i].valid) continue;
 		if(enemies[i].dead) continue;
 
 		// run the AI
@@ -294,7 +294,7 @@ void enemyAnimateFrame(void) {
 
 	//Animate the enemies
 	for(int i=0; i < MAX_ENEMY; i++) {
-		if(enemies[i].coord.x == 0) continue;
+		if(!enemies[i].valid) continue;
 		if(enemies[i].dead) continue;
 
 		// tell lemmings to stand still when taking a breather.
@@ -362,7 +362,7 @@ void enemyRenderFrame(void){
 	// draw live enemies
 	for(int i=0; i < MAX_ENEMY; i++) {
 		if(enemies[i].dead) continue;
-		if(enemies[i].coord.x == 0) continue;
+		if(!enemies[i].valid) continue;
 
 		// apply the animation frame
 		char frameFile[25];
@@ -446,16 +446,13 @@ void enemyFxRenderFrame() {
 	}
 }
 
-void spawnEnemy(EnemyType type, Coord coord) {
+void spawnEnemy(Coord coord) {
 	if(enemyCount == MAX_ENEMY) return;
 
 	Enemy e = {
+		true,
 		coord,
 		randomMq(1, 4),
-		type,
-		clock(),
-		DIR_NORTH,
-		false,
 		0,
 		randomEnemyAngle(),
 		clock(),
@@ -476,7 +473,6 @@ void initEnemy(void) {
 	//Make the enemies
 	for(int i=0; i < INITIAL_ENEMIES; i++) {
 		spawnEnemy(
-			(EnemyType)randomMq(0, ENEMY_DRACULA),
 			makeCoord(
 				randomMq(20, screenBounds.x-20),
 				randomMq(20, screenBounds.y-20)
