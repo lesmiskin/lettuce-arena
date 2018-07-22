@@ -45,7 +45,6 @@ void shootAtOpponent(int enemyInc) {
 		if(enemies[i].coord.x == 0) continue;
 		if(enemies[i].dead) continue;			// don't shoot corpses
 
-
 		// find out which enemy we're closest to
 		Coord themPos = enemies[i].coord;
 		double distance = getDistance(usPos, themPos);

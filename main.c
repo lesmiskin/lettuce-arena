@@ -10,31 +10,27 @@
 #include "enemy.h"
 #include "scene.h"
 
-// rocket rotation frames for each dir (but can flip!)
-// starry animation when dizzy.
-
+// rocket angle sprites should have animations.
+// flash and remove when dizzy.
 // lemmings respawn after death.
 
+// all players spawn at spawn points on map launch.
+// spawn points are random.
+// nice neo-geo "YOU ARE HERE" signal.
+
+// players can die and respawn.
+
+// health bars?
 
 
 
-
-
-
-
-
-
-
-
-
-// we all spawn in special SPAWN POINT positions when STARTING THE MAP.
-
-// ability for players to die and RESPAWN.
 // players have to PICK UP the rocket launcher (could be just one in the middle)
-
 // ability for player to shoot.
 // aiming reticle based on current facing direction.
 
+// visual queue for what weapon you have.
+
+// minor
 // enemy should FACE the direction they shoot in, when they shoot.
 
 

@@ -81,6 +81,15 @@ static void loadImages(void) {
         { "player.png" },
         { "dirt.png" },
  
+        { "rocket-n.png" },
+        { "rocket-s.png" },
+        { "rocket-e.png" },
+        { "rocket-w.png" },
+        { "rocket-ne.png" },
+        { "rocket-se.png" },
+        { "rocket-nw.png" },
+        { "rocket-sw.png" },
+
         { "rocket-01.png" },
         { "rocket-02.png" },
         { "rocket-03.png" },

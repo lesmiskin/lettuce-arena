@@ -16,7 +16,7 @@ const double CHAR_BOUNDS = 15;
 
 const int DEAD_FRAMES = 4;
 const int STAR_FRAMES = 4;
-const int INITIAL_ENEMIES = 30;
+const int INITIAL_ENEMIES = 7;
 const double ENEMY_SPEED = 1;
 Enemy enemies[MAX_ENEMY];
 
@@ -433,8 +433,61 @@ void enemyFxRenderFrame() {
 	for(int i=0; i < MAX_SHOTS; i++) {
 		if(!shots[i].valid) continue;
 		char file[15];
-		sprintf(file, "rocket-0%d.png", shots[i].animInc+1);
-		drawSpriteFull(makeSimpleSprite(file), shots[i].coord, 1, shots[i].angle+90);
+
+		switch((int)shots[i].angle+90) {
+			case 360:
+				sprintf(file, "rocket-n.png");
+				drawSprite(makeSimpleSprite(file), shots[i].coord);
+				break;
+			case 90:
+				sprintf(file, "rocket-e.png");
+				drawSprite(makeSimpleSprite(file), shots[i].coord);
+				break;
+			case 180:
+				sprintf(file, "rocket-s.png");
+				drawSprite(makeSimpleSprite(file), shots[i].coord);
+				break;
+			case 270:
+				sprintf(file, "rocket-w.png");
+				drawSprite(makeSimpleSprite(file), shots[i].coord);
+				break;
+
+			// TODO: these angles are kind of weird. figure out why this is :p
+
+			case 405:
+				sprintf(file, "rocket-ne.png");
+				drawSprite(makeSimpleSprite(file), shots[i].coord);
+				break;
+			case 135:
+				sprintf(file, "rocket-se.png");
+				drawSprite(makeSimpleSprite(file), shots[i].coord);
+				break;
+			case 225:
+				sprintf(file, "rocket-sw.png");
+				drawSprite(makeSimpleSprite(file), shots[i].coord);
+				break;
+			case 305:
+				sprintf(file, "rocket-nw.png");
+				drawSprite(makeSimpleSprite(file), shots[i].coord);
+				break;
+		}
+
+		printf("%f\n", shots[i].angle+90);
+
+		// if(shots[i].angle+90 == 0) {
+		// 	sprintf(file, "rocket-n.png");
+		// 	drawSprite(makeSimpleSprite(file), shots[i].coord);
+		// }
+		// if( == 90) {
+		// }
+
+		// switch((int)shots[i].angle) {
+		// 	case 90:
+		// 	default:
+		// 		sprintf(file, "puff-01.png");
+		// }
+
+		// drawSpriteFull(makeSimpleSprite(file), shots[i].coord, 1, shots[i].angle+90);
 	}
 
 	// draw explosions
