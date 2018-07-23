@@ -20,8 +20,10 @@ typedef struct {
     SDL_RendererFlip corpseDir;
     bool buried;
     int deadInc;
-    long lastDeathFrame;
     int starInc;
+    long buriedTime;
+    // he's buried.
+    // now that he's buried, vanish him after a while.
 } Enemy;
 
 typedef struct {
@@ -51,7 +53,6 @@ extern void enemyGameFrame(void);
 extern void enemyRenderFrame(void);
 extern void initEnemy(void);
 extern void enemyAnimateFrame(void);
-extern void spawnEnemy(Coord coord);
 extern Shot shots[MAX_SHOTS];
 extern bool wouldTouchEnemy(Coord a, int selfIndex, bool includePlayer);
 

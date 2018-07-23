@@ -10,15 +10,81 @@
 #include "enemy.h"
 #include "scene.h"
 
+// set spawn points.
+// subtle tile for spawn point (QII style)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// spawn points have a funny tile (e.g. quake 2 teleporter)
+// player spawns at a spawn point too.
+// just four spots.
+
+// introduce some walls for strategy (simple...)
+// players WILL NOT shoot 
+
+    // . . . .         . . . .
+    // .                     .
+    // .                     .
+    // .                     .
+
+    // .                     .
+    // .                     .
+    // .                     .
+    // . . . .         . . . .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// add splash damage
+// lemmings get pushed around by this
+// 1px health bars
+
+// health packs
+
+// ability to scroll, and enter different areas
+
+
+
+// lemmings should flash quickly when stunned.
+// funny quake-style animation when spawning (blue particles).
+
+
+
+// nice neo-geo "YOU ARE HERE" signal.
+
+// player can die and respawn.
+// player can shoot.
+
 // rocket angle sprites should have animations.
-// flash and remove when dizzy.
-// lemmings respawn after death.
 
 // all players spawn at spawn points on map launch.
 // spawn points are random.
-// nice neo-geo "YOU ARE HERE" signal.
 
-// players can die and respawn.
 
 // health bars?
 

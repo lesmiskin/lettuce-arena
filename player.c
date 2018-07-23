@@ -15,7 +15,7 @@ double MOVE_INC = 1;
 
 bool playerDir = true;		// facing right
 int walkInc = STAND;		// standing frame.
-Coord pos = { 25, 50 };
+Coord pos = { 20, 20 };
 double health = 100;
 bool walking = false;
 long plastIdleTime;
@@ -74,7 +74,5 @@ void playerGameFrame(void) {
 }
 
 void initPlayer() {
-	pos.x = 25;
-	pos.y = 50;
 	health = 100;
 }

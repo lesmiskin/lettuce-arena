@@ -10,13 +10,12 @@
 #define WALK_FRAMES 4
 
 long lastIdleTime;
-int enemyCount = 0;
 static const int ANIM_HZ = 1000 / 4;
 const double CHAR_BOUNDS = 15;
 
 const int DEAD_FRAMES = 4;
 const int STAR_FRAMES = 4;
-const int INITIAL_ENEMIES = 7;
+const int INITIAL_ENEMIES = 3;
 const double ENEMY_SPEED = 1;
 Enemy enemies[MAX_ENEMY];
 
@@ -60,6 +59,43 @@ long lastExpFrame;
 
 Puff puffs[MAX_PUFFS];
 
+#define MAX_SPAWNS 4
+Coord spawns[MAX_SPAWNS];
+
+void spawnEnemy(Coord point, int color) {
+	// pop them in in a valid place in the array.
+	for(int i=0; i < MAX_ENEMY; i++) {
+		if(enemies[i].valid) continue;
+
+		Enemy e = {
+			true,
+			point,
+			randomMq(1, 4),
+			0,
+			randomEnemyAngle(),
+			clock(),
+			500,
+			0,
+			color,
+			false,
+			0,
+			false,
+			0,
+			0,
+			0
+		};
+
+		enemies[i] = e;
+		break;
+	}
+}
+
+void respawn(int color) {
+	spawnEnemy(
+		spawns[randomMq(0,3)],
+		color
+	);
+}
 
 bool havingBreather(int enemyInc) {
 	return enemies[enemyInc].lastBreather > 0;
@@ -162,6 +198,16 @@ void spawnExp(Coord c) {
 void enemyGameFrame(void) {
 	for(int i=0; i < MAX_ENEMY; i++) {
 		if(!enemies[i].valid) continue;
+
+		// hide corpses after a while.
+		if(enemies[i].buried) {
+			if(isDue(clock(), enemies[i].buriedTime, 1000)) {
+				enemies[i].valid = false;
+				respawn(enemies[i].color);
+				continue;
+			}
+		}
+
 		if(enemies[i].dead) continue;
 
 		// run the AI
@@ -192,7 +238,6 @@ void enemyGameFrame(void) {
 				spawnExp(shots[i].coord);
 				shots[i].valid = false;
 				enemies[e].dead = true;		// make dead
-				enemies[e].lastDeathFrame = clock();
 				continue;
 			}
 		}
@@ -345,7 +390,8 @@ SDL_RendererFlip reverseFlip(SDL_RendererFlip flip) {
 void enemyRenderFrame(void){
 	// render corpses
 	for(int i=0; i < MAX_ENEMY; i++) {
-		if(!enemies[i].buried) continue;
+		// if we're not buried.
+		if(!enemies[i].valid || !enemies[i].dead || !enemies[i].buried) continue;
 
 		char frameFile[25];
 		sprintf(frameFile, "lem-%s-stun-02.png", getColor(i));
@@ -410,6 +456,7 @@ void enemyDeathRenderFrame() {
 				animFrame = 1;
 				enemies[i].corpseDir = randomMq(0,1);	// left or right
 				enemies[i].buried = true;
+				enemies[i].buriedTime = clock();
 				break;
 		}
 
@@ -472,21 +519,6 @@ void enemyFxRenderFrame() {
 				break;
 		}
 
-		printf("%f\n", shots[i].angle+90);
-
-		// if(shots[i].angle+90 == 0) {
-		// 	sprintf(file, "rocket-n.png");
-		// 	drawSprite(makeSimpleSprite(file), shots[i].coord);
-		// }
-		// if( == 90) {
-		// }
-
-		// switch((int)shots[i].angle) {
-		// 	case 90:
-		// 	default:
-		// 		sprintf(file, "puff-01.png");
-		// }
-
 		// drawSpriteFull(makeSimpleSprite(file), shots[i].coord, 1, shots[i].angle+90);
 	}
 
@@ -499,37 +531,19 @@ void enemyFxRenderFrame() {
 	}
 }
 
-void spawnEnemy(Coord coord) {
-	if(enemyCount == MAX_ENEMY) return;
-
-	Enemy e = {
-		true,
-		coord,
-		randomMq(1, 4),
-		0,
-		randomEnemyAngle(),
-		clock(),
-		500,
-		0,
-		randomMq(0,4),
-		false,
-		0,
-		false,
-		0,
-		0,
-		0
-	};
-	enemies[enemyCount++] = e;
-}
-
 void initEnemy(void) {
-	//Make the enemies
+	spawns[0] = makeCoord(20, 20);
+	spawns[1] = makeCoord(300, 220);
+	spawns[2] = makeCoord(20, 220);
+	spawns[3] = makeCoord(300, 20);
+
+	// Coord point = spawns[randomMq(0, MAX_SPAWNS)];
+
+	// Make the enemies
 	for(int i=0; i < INITIAL_ENEMIES; i++) {
 		spawnEnemy(
-			makeCoord(
-				randomMq(20, screenBounds.x-20),
-				randomMq(20, screenBounds.y-20)
-			)
+			spawns[i+1],			// hit spawns in sequence, so we don't telefrag.
+			randomMq(1, 4)
 		);
 	}
 }
