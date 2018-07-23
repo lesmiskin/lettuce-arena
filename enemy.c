@@ -59,10 +59,41 @@ long lastExpFrame;
 
 Puff puffs[MAX_PUFFS];
 
+
+// ----------
+// Particles
+// ----------
+const int PARTICLE_DENSITY = 20;
+const double PARTICLE_SPEED = 1.5;
+const int PARTICLE_TIME = 250;
+const int CORPSE_WAIT = 1000;
+
+#define MAX_PARTICLES 20
+
+typedef struct {
+	bool valid;
+	Coord coord;
+	long spawnTime;
+	double angle;
+} Particle;
+
+Particle particles[MAX_PARTICLES];
+
+void newTele(Coord c) {
+	for(int i=0; i < PARTICLE_DENSITY; i++) {
+		Particle p = { true, c, clock(), randomMq(0, 360) };
+		particles[i] = p;
+	}
+}
+
+
 #define MAX_SPAWNS 4
 Coord spawns[MAX_SPAWNS];
 
 void spawnEnemy(Coord point, int color) {
+
+	newTele(point);
+
 	// pop them in in a valid place in the array.
 	for(int i=0; i < MAX_ENEMY; i++) {
 		if(enemies[i].valid) continue;
@@ -196,12 +227,21 @@ void spawnExp(Coord c) {
 }
 
 void enemyGameFrame(void) {
+	// particles - stopping them.
+	for(int i=0; i < MAX_PARTICLES; i++) {
+		if(!particles[i].valid) continue;
+		if(isDue(clock(), particles[i].spawnTime, PARTICLE_TIME)) {
+			particles[i].valid = false;
+			continue;
+		}
+	}
+
 	for(int i=0; i < MAX_ENEMY; i++) {
 		if(!enemies[i].valid) continue;
 
 		// hide corpses after a while.
 		if(enemies[i].buried) {
-			if(isDue(clock(), enemies[i].buriedTime, 1000)) {
+			if(isDue(clock(), enemies[i].buriedTime, CORPSE_WAIT)) {
 				enemies[i].valid = false;
 				respawn(enemies[i].color);
 				continue;
@@ -273,6 +313,13 @@ long lastDeathFrame;
 long lastStarFrame;
 
 void enemyFxFrame() {
+
+	// animate the particles.
+	for(int i=0; i < MAX_PARTICLES; i++) {
+		Coord step = getAngleStep(particles[i].angle, PARTICLE_SPEED, false);
+		particles[i].coord = deriveCoord(particles[i].coord, step.x, step.y);
+	}
+
     if(timer(&lastExpFrame, 1000/12)) {
 		// explosions
 		for(int i=0; i < MAX_EXP; i++) {
@@ -388,6 +435,13 @@ SDL_RendererFlip reverseFlip(SDL_RendererFlip flip) {
 }
 
 void enemyRenderFrame(void){
+
+	// teleportations
+	for(int i=0; i < MAX_PARTICLES; i++) {
+		if(!particles[i].valid) continue;
+		drawSprite(makeSimpleSprite("tele-0.png"), particles[i].coord);
+	}
+
 	// render corpses
 	for(int i=0; i < MAX_ENEMY; i++) {
 		// if we're not buried.

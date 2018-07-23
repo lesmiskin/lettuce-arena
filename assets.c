@@ -77,9 +77,10 @@ void shutdownAssets(void) {
 static void loadImages(void) {
     //Define assets to be loaded.
     AssetDef definitions[] = {
-        { "enemy.png" },
-        { "player.png" },
-        { "dirt.png" },
+
+        { "tele-0.png" },
+        { "tele-1.png" },
+        { "tele-2.png" },
  
         { "rocket-n.png" },
         { "rocket-s.png" },
@@ -99,13 +100,6 @@ static void loadImages(void) {
         { "puff-02.png" },
         { "puff-03.png" },
 
-        { "worker.png" },
-        
-        { "lem-01.png" },
-        { "lem-02.png" },
-        { "lem-03.png" },
-        { "lem-04.png" },
-        
         { "lem-pink-01.png" },
         { "lem-pink-02.png" },
         { "lem-pink-03.png" },
