@@ -10,16 +10,19 @@
 #include "enemy.h"
 #include "scene.h"
 
-// set spawn points.
-// subtle tile for spawn point (QII style)
+// spawning animation.
+// they flash out of existence.
+
+// up and down directional frames.
 
 
 
 
 
-
-
-
+// nice neo-geo "YOU ARE HERE" signal.
+// player death and respawn.
+// simple walls for strategy.
+// enemies don't shoot if wall is in the way.
 
 
 
@@ -31,9 +34,6 @@
 // player spawns at a spawn point too.
 // just four spots.
 
-// introduce some walls for strategy (simple...)
-// players WILL NOT shoot 
-
     // . . . .         . . . .
     // .                     .
     // .                     .
@@ -43,82 +43,26 @@
     // .                     .
     // .                     .
     // . . . .         . . . .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // add splash damage
 // lemmings get pushed around by this
+
 // 1px health bars
-
 // health packs
-
-// ability to scroll, and enter different areas
-
+// players red when hit.
 
 
-// lemmings should flash quickly when stunned.
-// funny quake-style animation when spawning (blue particles).
-
-
-
-// nice neo-geo "YOU ARE HERE" signal.
-
-// player can die and respawn.
 // player can shoot.
-
-// rocket angle sprites should have animations.
-
-// all players spawn at spawn points on map launch.
-// spawn points are random.
-
-
-// health bars?
-
-
-
-// players have to PICK UP the rocket launcher (could be just one in the middle)
-// ability for player to shoot.
 // aiming reticle based on current facing direction.
 
+// rocket angle sprites should have animations.
+// ability to scroll, and enter different areas
 // visual queue for what weapon you have.
-
-// minor
 // enemy should FACE the direction they shoot in, when they shoot.
-
-
-
-
-
-
-
-
-
-
-
-// combatants have DIFFERENT COLORS
-// name-tags for players.
-
 // combatants clip against each other.
 
-// explosions when rockets hit players or bounds.
-
-// players flash red when hit.
-// represetation of rocket launcher (e.g. icon above player, or fresh graphic)
-// minor: Projectiles and puffs should show ON TOP of combatants.
+// name-tags for players.
 
 // QUAD DAMAGE powerup spawns infrequently in middle of map.
 // huge gibs fly out when this is used.
@@ -141,11 +85,6 @@
 
 
 
-// polish: rockets could spin and flame out when in motion
-// big green "YOU" sign (ala neogeo)
-// directional frames (up and down?)
-// corpses with blood (ala gta)
-// idle breathing sprite?
 // chairs and computer desks lying around.
 // office theme (worker sprites, chairs, desks with computers)
 // office worker sprite.
