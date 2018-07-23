@@ -3,8 +3,8 @@
 
 #include "common.h"
 
-#define MAX_SHOTS 100
-#define MAX_ENEMY 15
+#define MAX_SHOTS 50
+#define MAX_ENEMY 8
 
 typedef struct {
 	bool valid;

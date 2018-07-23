@@ -24,6 +24,8 @@ const double SHOT_RELOAD = 1000;
 const int SHOT_FRAMES = 4;
 long lastShotFrame;
 Shot shots[MAX_SHOTS];
+const int CORPSE_WAIT = 1000;
+
 
 // ----------
 // Explosions
@@ -50,7 +52,7 @@ typedef struct {
 	int animInc;
 } Puff;
 
-#define MAX_PUFFS 1000
+#define MAX_PUFFS 100
 const double PUFF_FREQ = 75;
 const double PUFF_DURATION = 750;
 const int PUFF_FADE_TIME = 250;
@@ -63,28 +65,50 @@ Puff puffs[MAX_PUFFS];
 // ----------
 // Particles
 // ----------
-const int PARTICLE_DENSITY = 20;
-const double PARTICLE_SPEED = 1.5;
+const double PARTICLE_SPEED = 1.2;
 const int PARTICLE_TIME = 250;
-const int CORPSE_WAIT = 1000;
 
-#define MAX_PARTICLES 20
+#define PARTICLE_DENSITY 20
+#define MAX_TELE 4
 
 typedef struct {
 	bool valid;
 	Coord coord;
-	long spawnTime;
-	double angle;
+	Coord step;
 } Particle;
 
-Particle particles[MAX_PARTICLES];
+typedef struct {
+	bool valid;
+	Particle* particles;
+	long spawnTime;
+} Tele;
+
+Tele teleporters[MAX_TELE];
+
 
 void newTele(Coord c) {
-	for(int i=0; i < PARTICLE_DENSITY; i++) {
-		Particle p = { true, c, clock(), randomMq(0, 360) };
-		particles[i] = p;
+
+	for(int i=0; i < MAX_TELE; i++) {
+		if(teleporters[i].valid) continue;
+
+		Particle *points = malloc(sizeof(Particle) * PARTICLE_DENSITY);
+
+		// make points
+		for(int j=0; j < PARTICLE_DENSITY; j++) {
+			// calculate step here since much faster.
+			double angle = randomMq(0, 360);
+			Coord step = getAngleStep(angle, PARTICLE_SPEED, false);
+
+			Particle p = { true, c, step };
+			points[j] = p;
+		}
+
+		Tele t = { true, points, clock() };
+		teleporters[i] = t;
+		break;
 	}
 }
+
 
 
 #define MAX_SPAWNS 4
@@ -227,12 +251,18 @@ void spawnExp(Coord c) {
 }
 
 void enemyGameFrame(void) {
-	// particles - stopping them.
-	for(int i=0; i < MAX_PARTICLES; i++) {
-		if(!particles[i].valid) continue;
-		if(isDue(clock(), particles[i].spawnTime, PARTICLE_TIME)) {
-			particles[i].valid = false;
+	// particles - moving them, and stopping them.
+	for(int i=0; i < MAX_TELE; i++) {
+		if(!teleporters[i].valid) continue;
+
+		if(isDue(clock(), teleporters[i].spawnTime, PARTICLE_TIME)) {
+			teleporters[i].valid = false;
 			continue;
+		}
+
+		for(int j=0; j < PARTICLE_DENSITY; j++) {
+			Particle p = teleporters[i].particles[j];
+			teleporters[i].particles[j].coord = deriveCoord(p.coord, p.step.x, p.step.y);
 		}
 	}
 
@@ -313,12 +343,6 @@ long lastDeathFrame;
 long lastStarFrame;
 
 void enemyFxFrame() {
-
-	// animate the particles.
-	for(int i=0; i < MAX_PARTICLES; i++) {
-		Coord step = getAngleStep(particles[i].angle, PARTICLE_SPEED, false);
-		particles[i].coord = deriveCoord(particles[i].coord, step.x, step.y);
-	}
 
     if(timer(&lastExpFrame, 1000/12)) {
 		// explosions
@@ -435,12 +459,6 @@ SDL_RendererFlip reverseFlip(SDL_RendererFlip flip) {
 }
 
 void enemyRenderFrame(void){
-
-	// teleportations
-	for(int i=0; i < MAX_PARTICLES; i++) {
-		if(!particles[i].valid) continue;
-		drawSprite(makeSimpleSprite("tele-0.png"), particles[i].coord);
-	}
 
 	// render corpses
 	for(int i=0; i < MAX_ENEMY; i++) {
@@ -583,9 +601,22 @@ void enemyFxRenderFrame() {
 		sprintf(file, "exp-0%d.png", explosions[i].animInc+1);
 		drawSprite(makeSimpleSprite(file), explosions[i].coord);
 	}
+
+	// teleportations
+	for(int i=0; i < MAX_TELE; i++) {
+		if(!teleporters[i].valid) continue;
+
+		for(int j=0; j < PARTICLE_DENSITY; j++) {
+			drawSprite(makeSimpleSprite("tele-0.png"), teleporters[i].particles[j].coord);
+		}
+	}
 }
 
 void initEnemy(void) {
+	for(int i=0; i < MAX_SHOTS; i++) 	shots[i].valid = false;
+	for(int i=0; i < MAX_ENEMY; i++) 	enemies[i].valid = false;
+	for(int i=0; i < MAX_TELE; i++) 	teleporters[i].valid = false;
+
 	spawns[0] = makeCoord(20, 20);
 	spawns[1] = makeCoord(300, 220);
 	spawns[2] = makeCoord(20, 220);
