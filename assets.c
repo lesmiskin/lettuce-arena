@@ -78,6 +78,9 @@ static void loadImages(void) {
     //Define assets to be loaded.
     AssetDef definitions[] = {
 
+        { "w_rock-0.png" },
+        { "w_rock-1.png" },
+
         { "tele-0.png" },
         { "tele-1.png" },
         { "tele-2.png" },

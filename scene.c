@@ -2,11 +2,23 @@
 #include "renderer.h"
 #include "common.h"
 #include "assets.h"
-// #include "hud.h"
+#include <time.h>
 
 const int TILE_SIZE_X = 2;
 const int TILE_SIZE_Y = 2;
 static Sprite ground;
+
+
+// ----------
+// Weapons
+// ----------
+const int WEAP_ROCKET = 0;
+Weapon weapons[MAX_WEAPONS];
+
+const double WEAP_RESPAWN_TIME = 1000;
+long lastFlash;
+bool flash;
+
 
 static void makeGroundTexture() {
 	//Init the SDL texture
@@ -45,10 +57,30 @@ void sceneGameFrame() {
 }
 
 void sceneRenderFrame() {
-//	drawSprite(ground, makeCoord(320, 240));
+	// Draw weapons
+	for(int i=0; i < MAX_WEAPONS; i++) {
+		if(!weapons[i].valid || weapons[i].pickedUp) continue;
+		if(timer(&lastFlash, 500)) flash = !flash;
+
+		char file[12];
+		sprintf(file, "w_rock-%d.png", flash);
+		drawSprite(makeSimpleSprite(file), weapons[i].coord);
+	}
 }
 
 //Should happen each time the scene is shown.
 void initScene() {
+	Weapon rock = { true, false, 0, makeCoord(100, 100), WEAP_ROCKET };
+	weapons[0] = rock;
+
+	Weapon rock2 = { true, false, 0, makeCoord(200, 100), WEAP_ROCKET };
+	weapons[1] = rock2;
+
+	Weapon rock3 = { true, false, 0, makeCoord(100, 200), WEAP_ROCKET };
+	weapons[2] = rock3;
+
+	Weapon rock4 = { true, false, 0, makeCoord(200, 200), WEAP_ROCKET };
+	weapons[3] = rock4;
+
 //	makeGroundTexture();
 }

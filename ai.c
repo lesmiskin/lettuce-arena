@@ -97,7 +97,7 @@ double avoidBottom() {
 void aiSmartFrame(int enemyInc) {
 
 	// shoot opponent, with a little wait between each shot.
-	if(isDue(clock(), enemies[enemyInc].lastShot, SHOT_RELOAD * randomMq(1, 3))) {
+	if(canShoot(enemyInc) && isDue(clock(), enemies[enemyInc].lastShot, SHOT_RELOAD * randomMq(1, 3))) {
 		shootAtOpponent(enemyInc);
 	}
 

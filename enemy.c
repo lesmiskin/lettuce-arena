@@ -5,40 +5,48 @@
 #include "player.h"
 #include "ai.h"
 #include "input.h"
-// #include "hud.h"
+#include "scene.h"
 
-#define WALK_FRAMES 4
-
-long lastIdleTime;
 static const int ANIM_HZ = 1000 / 4;
-const double CHAR_BOUNDS = 15;
 
-const int DEAD_FRAMES = 4;
-const int STAR_FRAMES = 4;
+
+// ----------
+// Enemies
+// ----------
+#define WALK_FRAMES 4
+long lastIdleTime;
 const int INITIAL_ENEMIES = 3;
 const double ENEMY_SPEED = 1;
+const double CHAR_BOUNDS = 15;
+const int CORPSE_WAIT = 1000;
+const int DEAD_FRAMES = 4;
+const int STAR_FRAMES = 4;
+long lastDeathFrame;
+long lastStarFrame;
 Enemy enemies[MAX_ENEMY];
 
+
+// ----------
+// Shots
+// ----------
 const double SHOT_SPEED = 1.75;
 const double SHOT_RELOAD = 1000;
 const int SHOT_FRAMES = 4;
 long lastShotFrame;
 Shot shots[MAX_SHOTS];
-const int CORPSE_WAIT = 1000;
 
 
 // ----------
 // Explosions
 // ----------
-#define MAX_EXP 20
-const double BOUND = 20;
-
 typedef struct {
 	bool valid;
 	Coord coord;
 	int animInc;
 } Exp;
 
+#define MAX_EXP 20
+const double BOUND = 20;
 Exp explosions[MAX_EXP];
 
 
@@ -58,106 +66,78 @@ const double PUFF_DURATION = 750;
 const int PUFF_FADE_TIME = 250;
 const int PUFF_FRAMES = 3;
 long lastExpFrame;
-
 Puff puffs[MAX_PUFFS];
 
 
 // ----------
 // Particles
 // ----------
-const double PARTICLE_SPEED = 1.2;
-const int PARTICLE_TIME = 250;
-
-#define PARTICLE_DENSITY 20
-#define MAX_TELE 4
-
 typedef struct {
 	bool valid;
 	Coord coord;
 	Coord step;
 } Particle;
 
+#define PARTICLE_DENSITY 20
+#define MAX_TELE 4
+const double PARTICLE_SPEED = 1.2;
+const int PARTICLE_TIME = 250;
+
+
+// ----------
+// Teleporters
+// ----------
 typedef struct {
 	bool valid;
 	Particle* particles;
 	long spawnTime;
 } Tele;
 
-Tele teleporters[MAX_TELE];
-
-
-void newTele(Coord c) {
-
-	for(int i=0; i < MAX_TELE; i++) {
-		if(teleporters[i].valid) continue;
-
-		Particle *points = malloc(sizeof(Particle) * PARTICLE_DENSITY);
-
-		// make points
-		for(int j=0; j < PARTICLE_DENSITY; j++) {
-			// calculate step here since much faster.
-			double angle = randomMq(0, 360);
-			Coord step = getAngleStep(angle, PARTICLE_SPEED, false);
-
-			Particle p = { true, c, step };
-			points[j] = p;
-		}
-
-		Tele t = { true, points, clock() };
-		teleporters[i] = t;
-		break;
-	}
-}
-
-
-
 #define MAX_SPAWNS 4
+Tele teleporters[MAX_TELE];
 Coord spawns[MAX_SPAWNS];
 
-void spawnEnemy(Coord point, int color) {
 
-	newTele(point);
 
-	// pop them in in a valid place in the array.
-	for(int i=0; i < MAX_ENEMY; i++) {
-		if(enemies[i].valid) continue;
+// ----------
+// Helpers
+// ----------
+char* getColor(int i) {
+	char* string = malloc(sizeof(char) * 6);
 
-		Enemy e = {
-			true,
-			point,
-			randomMq(1, 4),
-			0,
-			randomEnemyAngle(),
-			clock(),
-			500,
-			0,
-			color,
-			false,
-			0,
-			false,
-			0,
-			0,
-			0
-		};
-
-		enemies[i] = e;
-		break;
+	switch(enemies[i].color) {
+		case 0:
+			strcpy(string, "orange");
+			break;
+		case 1:
+			strcpy(string, "green");
+			break;
+		case 2:
+			strcpy(string, "blue");
+			break;
+		case 3:
+			strcpy(string, "red");
+			break;
+		case 4:
+			strcpy(string, "pink");
+			break;
 	}
+
+	return string;
 }
 
-void respawn(int color) {
-	spawnEnemy(
-		spawns[randomMq(0,3)],
-		color
-	);
+bool onScreen(Coord coord, double threshold) {
+	return inBounds(coord, makeRect(
+			0 + threshold,
+			0 + threshold,
+			screenBounds.x - (threshold),
+			screenBounds.y - (threshold)
+	));
 }
 
-bool havingBreather(int enemyInc) {
-	return enemies[enemyInc].lastBreather > 0;
-}
-
-// Random 8-way direction.
 double randomEnemyAngle() {
+	// Random 8-way direction.
+
 	double deg;
 	switch(randomMq(0, 7)){
 		case 1:
@@ -189,13 +169,84 @@ double randomEnemyAngle() {
 	return degToRad(deg);
 }
 
-bool onScreen(Coord coord, double threshold) {
-	return inBounds(coord, makeRect(
-			0 + threshold,
-			0 + threshold,
-			screenBounds.x - (threshold),
-			screenBounds.y - (threshold)
-	));
+
+void spawnTele(Coord c) {
+
+	for(int i=0; i < MAX_TELE; i++) {
+		if(teleporters[i].valid) continue;
+
+		Particle *points = malloc(sizeof(Particle) * PARTICLE_DENSITY);
+
+		// make points
+		for(int j=0; j < PARTICLE_DENSITY; j++) {
+			// calculate step here since much faster.
+			double angle = randomMq(0, 360);
+			Coord step = getAngleStep(angle, PARTICLE_SPEED, false);
+
+			Particle p = { true, c, step };
+			points[j] = p;
+		}
+
+		Tele t = { true, points, clock() };
+		teleporters[i] = t;
+		break;
+	}
+}
+
+void spawnExp(Coord c) {
+	// find a place to put it in our explosion array.
+	for(int i=0; i < MAX_EXP; i++) {
+		if(explosions[i].valid) continue;
+
+		// make it
+		Exp e = { true, c, 0 };
+		explosions[i] = e;
+
+		return;
+	}
+}
+
+void spawnEnemy(Coord point, int color) {
+
+	spawnTele(point);
+
+	// pop them in in a valid place in the array.
+	for(int i=0; i < MAX_ENEMY; i++) {
+		if(enemies[i].valid) continue;
+
+		Enemy e = {
+			true,
+			point,
+			randomMq(1, 4),
+			0,
+			randomEnemyAngle(),
+			clock(),
+			500,
+			0,
+			color,
+			false,
+			0,
+			false,
+			0,
+			0,
+			0,
+			false
+		};
+
+		enemies[i] = e;
+		break;
+	}
+}
+
+void respawn(int color) {
+	spawnEnemy(
+		spawns[randomMq(0,3)],
+		color
+	);
+}
+
+bool havingBreather(int enemyInc) {
+	return enemies[enemyInc].lastBreather > 0;
 }
 
 bool wouldTouchEnemy(Coord a, int selfIndex, bool includePlayer) {
@@ -216,9 +267,8 @@ bool wouldTouchEnemy(Coord a, int selfIndex, bool includePlayer) {
 	return false;
 }
 
-
 bool canShoot(int enemyIndex) {
-	return isDue(clock(), enemies[enemyIndex].lastShot, SHOT_RELOAD);
+	return enemies[enemyIndex].hasRock && isDue(clock(), enemies[enemyIndex].lastShot, SHOT_RELOAD);
 }
 
 void fireAngleShot(int enemyIndex, double deg) {
@@ -237,19 +287,10 @@ void fireAngleShot(int enemyIndex, double deg) {
 	enemies[enemyIndex].lastShot = clock();
 }
 
-void spawnExp(Coord c) {
-	// find a place to put it in our explosion array.
-	for(int i=0; i < MAX_EXP; i++) {
-		if(explosions[i].valid) continue;
 
-		// make it
-		Exp e = { true, c, 0 };
-		explosions[i] = e;
-
-		return;
-	}
-}
-
+// ----------
+// Logic
+// ----------
 void enemyGameFrame(void) {
 	// particles - moving them, and stopping them.
 	for(int i=0; i < MAX_TELE; i++) {
@@ -337,11 +378,26 @@ void enemyGameFrame(void) {
 			puffs[p].valid = false;
 		}
 	}
+
+	// did we pick up a weapon?
+	for(int i=0; i < MAX_ENEMY; i++) {
+		if(!enemies[i].valid) continue;
+
+		for(int j=0; j < MAX_WEAPONS; j++) {
+			if(!weapons[j].valid || weapons[j].pickedUp) continue;
+
+			if(inBounds(enemies[i].coord, makeSquareBounds(weapons[j].coord, 10))) {
+				enemies[i].hasRock = true;
+				weapons[j].pickedUp = true;
+			}
+		}
+	}
 }
 
-long lastDeathFrame;
-long lastStarFrame;
 
+// ----------
+// Animation
+// ----------
 void enemyFxFrame() {
 
     if(timer(&lastExpFrame, 1000/12)) {
@@ -430,34 +486,9 @@ void enemyAnimateFrame(void) {
 	}
 }
 
-char* getColor(int i) {
-	char* string = malloc(sizeof(char) * 6);
-
-	switch(enemies[i].color) {
-		case 0:
-			strcpy(string, "orange");
-			break;
-		case 1:
-			strcpy(string, "green");
-			break;
-		case 2:
-			strcpy(string, "blue");
-			break;
-		case 3:
-			strcpy(string, "red");
-			break;
-		case 4:
-			strcpy(string, "pink");
-			break;
-	}
-
-	return string;
-}
-
-SDL_RendererFlip reverseFlip(SDL_RendererFlip flip) {
-	return flip == SDL_FLIP_NONE ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-}
-
+// ----------
+// Rendering
+// ----------
 void enemyRenderFrame(void){
 
 	// render corpses
@@ -611,6 +642,7 @@ void enemyFxRenderFrame() {
 		}
 	}
 }
+
 
 void initEnemy(void) {
 	for(int i=0; i < MAX_SHOTS; i++) 	shots[i].valid = false;

@@ -11,4 +11,16 @@ extern void sceneAnimateFrame(void);
 extern void sceneGameFrame();
 extern void initScene();
 
+typedef struct {
+	bool valid;
+	bool pickedUp;
+	long lastPickup;
+	Coord coord;
+	int type;
+} Weapon;
+
+#define MAX_WEAPONS 4
+extern const int WEAP_ROCKET;
+extern Weapon weapons[MAX_WEAPONS];
+
 #endif

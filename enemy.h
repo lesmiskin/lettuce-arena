@@ -22,6 +22,7 @@ typedef struct {
     int deadInc;
     int starInc;
     long buriedTime;
+    bool hasRock;
     // he's buried.
     // now that he's buried, vanish him after a while.
 } Enemy;

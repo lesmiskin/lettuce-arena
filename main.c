@@ -10,17 +10,34 @@
 #include "enemy.h"
 #include "scene.h"
 
-// spawning animation.
-// they flash out of existence.
+// flash out of existence.
 
-// up and down directional frames.
-
-
+// start with nothing.
+// pick up the rocket launcher.
 
 
 
-// nice neo-geo "YOU ARE HERE" signal.
-// player death and respawn.
+
+
+// spawn points have a funny tile (e.g. quake 2 teleporter)
+// player spawns at a random spawn point too!
+// simple icon to identify the player.
+
+// weapon overlay bobs up and down.
+// teleport pixels should randomise colors between 0 and 2.
+
+
+
+
+
+
+
+
+
+
+
+
+
 // simple walls for strategy.
 // enemies don't shoot if wall is in the way.
 
@@ -30,60 +47,49 @@
 
 
 
-// spawn points have a funny tile (e.g. quake 2 teleporter)
-// player spawns at a spawn point too.
+
+
+
+// player death and respawn.
+// up and down directional frames.
+// nice neo-geo "YOU ARE HERE" signal.
 // just four spots.
-
-    // . . . .         . . . .
-    // .                     .
-    // .                     .
-    // .                     .
-
-    // .                     .
-    // .                     .
-    // .                     .
-    // . . . .         . . . .
-
-
 // add splash damage
 // lemmings get pushed around by this
-
 // 1px health bars
 // health packs
 // players red when hit.
-
+// rocket angle sprites should have animations.
 
 // player can shoot.
 // aiming reticle based on current facing direction.
 
-// rocket angle sprites should have animations.
 // ability to scroll, and enter different areas
-// visual queue for what weapon you have.
 // enemy should FACE the direction they shoot in, when they shoot.
 // combatants clip against each other.
-
 // name-tags for players.
+
+// score readout.
+// hold TAB for scores and names.
+
+
+
+    // . . . .         . . . .
+    // .                     .
+    // .                     .
+    // .                     .
+
+    // .                     .
+    // .                     .
+    // .                     .
+    // . . . .         . . . .
+
+
+
+
 
 // QUAD DAMAGE powerup spawns infrequently in middle of map.
 // huge gibs fly out when this is used.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // chairs and computer desks lying around.
 // office theme (worker sprites, chairs, desks with computers)
