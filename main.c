@@ -10,17 +10,16 @@
 #include "enemy.h"
 #include "scene.h"
 
-// flash out of existence.
+// flash out of existence when dizzy.
 
 
 
 
+// weapon overlay on lemmings.
 
 // spawn points have a funny tile (e.g. quake 2 teleporter)
 // player spawns at a random spawn point too!
-// simple icon to identify the player.
 
-// weapon overlay bobs up and down.
 // teleport pixels should randomise colors between 0 and 2.
 
 

@@ -527,6 +527,14 @@ void enemyRenderFrame(void){
 		// draw the sprite
 		Sprite sprite = makeFlippedSprite(frameFile, flip);
 		drawSprite(sprite, enemies[i].coord);
+
+		// draw weapon overlay
+		if(enemies[i].hasRock) {
+			int yoff = enemies[i].animInc % 2 ? 0 : -2;
+			int xoff = 0;//enemies[i].animInc % -2 ? 1 : 0;
+			drawSprite(makeFlippedSprite("w_rock-0.png", flip), deriveCoord(enemies[i].coord, flip ? -3+xoff : 3+xoff, 1+yoff));
+			// drawSprite(makeFlippedSprite("w_rock3-0.png", flip), deriveCoord(enemies[i].coord, flip ? -3+xoff : 3+xoff, 1+yoff));
+		}
 	}
 }
 
@@ -643,7 +651,6 @@ void enemyFxRenderFrame() {
 		}
 	}
 }
-
 
 void initEnemy(void) {
 	for(int i=0; i < MAX_SHOTS; i++) 	shots[i].valid = false;
