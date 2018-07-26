@@ -12,13 +12,27 @@
 
 // flash out of existence when dizzy.
 
+// enemy should FACE the direction they shoot in, when they shoot.
+// shooting animation (pushes back 2px, muzzle flash)
+
+// weapon ROTATES based on angle of enemy.
 
 
 
-// weapon overlay on lemmings.
+// player included in random spawn points.
 
-// spawn points have a funny tile (e.g. quake 2 teleporter)
-// player spawns at a random spawn point too!
+
+
+
+
+
+
+
+
+
+
+
+
 
 // teleport pixels should randomise colors between 0 and 2.
 
@@ -34,6 +48,7 @@
 
 
 
+// spawn points have a funny tile (e.g. quake 2 teleporter)
 // simple walls for strategy.
 // enemies don't shoot if wall is in the way.
 
@@ -48,8 +63,6 @@
 
 // player death and respawn.
 // up and down directional frames.
-// nice neo-geo "YOU ARE HERE" signal.
-// just four spots.
 // add splash damage
 // lemmings get pushed around by this
 // 1px health bars
@@ -61,7 +74,6 @@
 // aiming reticle based on current facing direction.
 
 // ability to scroll, and enter different areas
-// enemy should FACE the direction they shoot in, when they shoot.
 // combatants clip against each other.
 // name-tags for players.
 

@@ -531,9 +531,10 @@ void enemyRenderFrame(void){
 		// draw weapon overlay
 		if(enemies[i].hasRock) {
 			int yoff = enemies[i].animInc % 2 ? 0 : -2;
-			int xoff = 0;//enemies[i].animInc % -2 ? 1 : 0;
-			drawSprite(makeFlippedSprite("w_rock-0.png", flip), deriveCoord(enemies[i].coord, flip ? -3+xoff : 3+xoff, 1+yoff));
-			// drawSprite(makeFlippedSprite("w_rock3-0.png", flip), deriveCoord(enemies[i].coord, flip ? -3+xoff : 3+xoff, 1+yoff));
+			drawSprite(makeFlippedSprite("w_rock-0.png", flip), deriveCoord(enemies[i].coord, flip ? -3 : 3, 1+yoff));
+
+			// WIP: Rotating weapon sprite based on where enemy is walking (could easily change this to switch)
+//			drawSpriteFull(makeSimpleSprite("w_rock-0.png"), deriveCoord(enemies[i].coord, flip ? -3 : 3, 1+yoff), 1, radToDeg(enemies[i].idleTarget) - 180);
 		}
 	}
 }
