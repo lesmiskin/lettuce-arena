@@ -531,7 +531,56 @@ void enemyRenderFrame(void){
 		// draw weapon overlay
 		if(enemies[i].hasRock) {
 			int yoff = enemies[i].animInc % 2 ? 0 : -2;
-			drawSprite(makeFlippedSprite("w_rock-0.png", flip), deriveCoord(enemies[i].coord, flip ? -3 : 3, 1+yoff));
+
+			char file[20];
+			Coord derive;
+
+			switch((int)radToDeg(enemies[i].idleTarget)+90) {
+				case 360:
+					sprintf(file, "w_rock-n.png");
+					derive = makeCoord(1, 0);
+					drawSprite(makeSimpleSprite(file), deriveCoord(enemies[i].coord, derive.x, derive.y));
+					break;
+				case 90:
+					sprintf(file, "w_rock-e.png");
+					derive = makeCoord(3, 1);
+					drawSprite(makeSimpleSprite(file), deriveCoord(enemies[i].coord, derive.x, derive.y));
+					break;
+				case 180:
+					sprintf(file, "w_rock-s.png");
+					derive = makeCoord(-5, 5);
+					drawSprite(makeSimpleSprite(file), deriveCoord(enemies[i].coord, derive.x, derive.y));
+					break;
+				case 270:
+					sprintf(file, "w_rock-w.png");
+					derive = makeCoord(-3, 1);
+					drawSprite(makeSimpleSprite(file), deriveCoord(enemies[i].coord, derive.x, derive.y));
+					break;
+
+				case 405://ne
+					sprintf(file, "w_rock-e.png");		// DONE!
+					derive = makeCoord(4, -1);
+					drawSpriteFull(makeSimpleSprite(file), deriveCoord(enemies[i].coord, derive.x, derive.y), 1, radToDeg(enemies[i].idleTarget));
+					break;
+				case 135://se
+					sprintf(file, "w_rock-e.png");		// DONE!
+					derive = makeCoord(2, 5);
+					drawSpriteFull(makeSimpleSprite(file), deriveCoord(enemies[i].coord, derive.x, derive.y), 1, radToDeg(enemies[i].idleTarget));
+					break;
+				case 225://sw
+					sprintf(file, "w_rock-w.png");		// DONE!
+					derive = makeCoord(-2, 5);
+					drawSpriteFull(makeSimpleSprite(file), deriveCoord(enemies[i].coord, derive.x, derive.y), 1, 315);
+					break;
+				default:
+				case 305://nw
+					sprintf(file, "w_rock-w.png");		// DONE!
+					derive = makeCoord(-4, -1);
+					drawSpriteFull(makeSimpleSprite(file), deriveCoord(enemies[i].coord, derive.x, derive.y), 1, 45);
+					break;
+			}
+
+//			drawSprite(makeFlippedSprite("w_rock-0.png", flip), deriveCoord(enemies[i].coord, flip ? -3 : 3, 1+yoff));
 
 			// WIP: Rotating weapon sprite based on where enemy is walking (could easily change this to switch)
 //			drawSpriteFull(makeSimpleSprite("w_rock-0.png"), deriveCoord(enemies[i].coord, flip ? -3 : 3, 1+yoff), 1, radToDeg(enemies[i].idleTarget) - 180);
