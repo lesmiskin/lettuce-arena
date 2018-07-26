@@ -9,6 +9,6 @@ extern void playerShadowFrame(void);
 extern void initPlayer();
 extern Coord pos;
 extern void playerAnimateFrame(void);
-extern double health;
+extern int health;
 
 #endif

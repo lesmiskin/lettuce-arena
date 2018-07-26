@@ -16,7 +16,7 @@ double MOVE_INC = 1;
 bool playerDir = true;		// facing right
 int walkInc = STAND;		// standing frame.
 Coord pos = { 20, 20 };
-double health = 100;
+int health = 100;
 bool walking = false;
 long plastIdleTime;
 static const int PANIM_HZ = 1000 / 4;

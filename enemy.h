@@ -23,6 +23,7 @@ typedef struct {
     int starInc;
     long buriedTime;
     bool hasRock;
+    int health;
     // he's buried.
     // now that he's buried, vanish him after a while.
 } Enemy;
@@ -36,6 +37,9 @@ typedef struct {
     int shooter;
     int animInc;
 } Shot;
+
+extern const double MIN_DIR_CHANGE;
+extern const double MAX_DIR_CHANGE;
 
 extern const double ENEMY_SPEED;
 extern const double CHAR_BOUNDS;

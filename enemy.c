@@ -15,6 +15,8 @@ static const int ANIM_HZ = 1000 / 4;
 // ----------
 #define WALK_FRAMES 4
 long lastIdleTime;
+const double MIN_DIR_CHANGE = 500;
+const double MAX_DIR_CHANGE = 3000;
 const int INITIAL_ENEMIES = 3;
 const double ENEMY_SPEED = 1;
 const double CHAR_BOUNDS = 15;
@@ -32,6 +34,7 @@ Enemy enemies[MAX_ENEMY];
 const double SHOT_SPEED = 1.75;
 const double SHOT_RELOAD = 1000;
 const int SHOT_FRAMES = 4;
+const int DAMAGE = 25;
 long lastShotFrame;
 Shot shots[MAX_SHOTS];
 
@@ -138,6 +141,9 @@ bool onScreen(Coord coord, double threshold) {
 double randomEnemyAngle() {
 	// Random 8-way direction.
 
+	// return degToRad(chance(50) ? 0 : 180);
+	// return degToRad(chance(50) ? 90 : 135);
+
 	double deg;
 	switch(randomMq(0, 7)){
 		case 1:
@@ -230,7 +236,8 @@ void spawnEnemy(Coord point, int color) {
 			0,
 			0,
 			0,
-			false
+			false,
+			100
 		};
 
 		enemies[i] = e;
@@ -273,6 +280,11 @@ bool canShoot(int enemyIndex) {
 
 void fireAngleShot(int enemyIndex, double deg) {
 	double rad = degToRad(deg);
+
+	// turn enemy TOWARDS where he's shooting
+	enemies[enemyIndex].idleTarget = degToRad(deg);
+	enemies[enemyIndex].lastDirTime = clock();
+	enemies[enemyIndex].nextDirTime = 350;		// quick dir change so we don't collide.
 
 	// find a spare projectile 
 	for(int i=0; i < MAX_SHOTS; i++) {
@@ -348,7 +360,9 @@ void enemyGameFrame(void) {
 			if(inBounds(shots[i].coord, makeSquareBounds(enemies[e].coord, BOUND))) {
 				spawnExp(shots[i].coord);
 				shots[i].valid = false;
-				enemies[e].dead = true;		// make dead
+				enemies[e].health -= DAMAGE;
+				if(enemies[e].health <=0)
+					enemies[e].dead = true;		// make dead
 				continue;
 			}
 		}
@@ -357,6 +371,9 @@ void enemyGameFrame(void) {
 		if(inBounds(shots[i].coord, makeSquareBounds(pos, BOUND))) {
 			spawnExp(shots[i].coord);
 			shots[i].valid = false;
+			// health -= DAMAGE;
+			// if(health <=0)
+			// 	dead = true;		// make dead
 			continue;
 		}
 
@@ -525,65 +542,94 @@ void enemyRenderFrame(void){
 		SDL_RendererFlip flip = deg > 90 && deg < 270 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
 		// draw the sprite
-		Sprite sprite = makeFlippedSprite(frameFile, flip);
-		drawSprite(sprite, enemies[i].coord);
+		Sprite lem = makeFlippedSprite(frameFile, flip);
+		drawSprite(lem, enemies[i].coord);
 
 		// draw weapon overlay
 		if(enemies[i].hasRock) {
-			int yoff = enemies[i].animInc % 2 ? 0 : -2;
-
 			char file[20];
 			Coord derive;
+			double angle = 0;
+			int xoff, yoff;
 
+			// weapon rotation and position.
 			switch((int)radToDeg(enemies[i].idleTarget)+90) {
 				case 360:
 					sprintf(file, "w_rock-n.png");
-					derive = makeCoord(1, 0);
-					drawSprite(makeSimpleSprite(file), deriveCoord(enemies[i].coord, derive.x, derive.y));
+					derive = makeCoord(1, -5);
 					break;
 				case 90:
 					sprintf(file, "w_rock-e.png");
 					derive = makeCoord(3, 1);
-					drawSprite(makeSimpleSprite(file), deriveCoord(enemies[i].coord, derive.x, derive.y));
-					break;
-				case 180:
-					sprintf(file, "w_rock-s.png");
-					derive = makeCoord(-5, 5);
-					drawSprite(makeSimpleSprite(file), deriveCoord(enemies[i].coord, derive.x, derive.y));
 					break;
 				case 270:
 					sprintf(file, "w_rock-w.png");
 					derive = makeCoord(-3, 1);
-					drawSprite(makeSimpleSprite(file), deriveCoord(enemies[i].coord, derive.x, derive.y));
+					break;
+				case 180:
+					sprintf(file, "w_rock-s.png");
+					derive = makeCoord(-5, 5);
 					break;
 
 				case 405://ne
-					sprintf(file, "w_rock-e.png");		// DONE!
+					sprintf(file, "w_rock-e.png");
 					derive = makeCoord(4, -1);
-					drawSpriteFull(makeSimpleSprite(file), deriveCoord(enemies[i].coord, derive.x, derive.y), 1, radToDeg(enemies[i].idleTarget));
+					angle = radToDeg(enemies[i].idleTarget);
 					break;
 				case 135://se
-					sprintf(file, "w_rock-e.png");		// DONE!
+					sprintf(file, "w_rock-e.png");
 					derive = makeCoord(2, 5);
-					drawSpriteFull(makeSimpleSprite(file), deriveCoord(enemies[i].coord, derive.x, derive.y), 1, radToDeg(enemies[i].idleTarget));
+					angle = radToDeg(enemies[i].idleTarget);
 					break;
 				case 225://sw
-					sprintf(file, "w_rock-w.png");		// DONE!
+					sprintf(file, "w_rock-w.png");
 					derive = makeCoord(-2, 5);
-					drawSpriteFull(makeSimpleSprite(file), deriveCoord(enemies[i].coord, derive.x, derive.y), 1, 315);
+					angle = 315;
 					break;
 				default:
 				case 305://nw
-					sprintf(file, "w_rock-w.png");		// DONE!
+					sprintf(file, "w_rock-w.png");
 					derive = makeCoord(-4, -1);
-					drawSpriteFull(makeSimpleSprite(file), deriveCoord(enemies[i].coord, derive.x, derive.y), 1, 45);
+					angle = 45;
 					break;
 			}
 
-//			drawSprite(makeFlippedSprite("w_rock-0.png", flip), deriveCoord(enemies[i].coord, flip ? -3 : 3, 1+yoff));
+			// weapon bob cycle.
+			switch((int)radToDeg(enemies[i].idleTarget)+90) {
+				// n/s bobbing
+				case 360:
+				case 180:
+					if(enemies[i].animInc == 1) { xoff = -1; yoff = 1; }	// backstep
+					if(enemies[i].animInc == 2) { xoff = 0;  yoff = 0; }	// up
+					if(enemies[i].animInc == 3) { xoff = 1;  yoff = 1; }	// forwardstep
+					if(enemies[i].animInc == 4) { xoff = 0;  yoff = 0; }	// up
+					break;
 
-			// WIP: Rotating weapon sprite based on where enemy is walking (could easily change this to switch)
-//			drawSpriteFull(makeSimpleSprite("w_rock-0.png"), deriveCoord(enemies[i].coord, flip ? -3 : 3, 1+yoff), 1, radToDeg(enemies[i].idleTarget) - 180);
+				// east bobbing
+				case 90:
+				case 405://ne
+				case 135://se
+					if(enemies[i].animInc == 1) { xoff = 1; yoff = 2; }	// backstep
+					if(enemies[i].animInc == 2) { xoff = 0;  yoff = 0; }	// up
+					if(enemies[i].animInc == 3) { xoff = -1;  yoff = 2; }	// forwardstep
+					if(enemies[i].animInc == 4) { xoff = 0;  yoff = 0; }	// up
+					break;
+
+				// west bobbing
+				case 270:
+				case 225://sw
+				case 305://nw
+				default:
+					if(enemies[i].animInc == 1) { xoff = -1; yoff = 2; }	// backstep
+					if(enemies[i].animInc == 2) { xoff = 0;  yoff = 0; }	// up
+					if(enemies[i].animInc == 3) { xoff = 1;  yoff = 2; }	// forwardstep
+					if(enemies[i].animInc == 4) { xoff = 0;  yoff = 0; }	// up
+					break;
+			}
+
+			// draw lemming and weapon combo
+			Coord wc = deriveCoord(enemies[i].coord, derive.x+xoff, derive.y+yoff);
+			drawSpriteFull(makeSimpleSprite(file), wc, 1, angle);
 		}
 	}
 }

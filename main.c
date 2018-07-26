@@ -10,16 +10,22 @@
 #include "enemy.h"
 #include "scene.h"
 
+// heath bars 
+// name tags
+
+// clip characters ala catacomb.
+
+// player health and death.
+// player included in random spawn points.
+
+// player can pick up weapon.
+// player can shoot.
+
 // flash out of existence when dizzy.
 
-// enemy should FACE the direction they shoot in, when they shoot.
-// shooting animation (pushes back 2px, muzzle flash)
+// shooting animation (muzzle flash)
+// up/dow walking sprites.
 
-// weapon ROTATES based on angle of enemy.
-
-
-
-// player included in random spawn points.
 
 
 
@@ -213,9 +219,9 @@ int main()  {
         if(timer(&lastRenderFrameTime, RENDER_HZ)) {
 			sceneRenderFrame();
             // hudRenderFrame();
+            enemyFxRenderFrame();
             enemyRenderFrame();
 			playerRenderFrame();
-            enemyFxRenderFrame();
             enemyDeathRenderFrame();
 
             updateCanvas();

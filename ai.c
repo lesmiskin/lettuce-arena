@@ -21,9 +21,6 @@ const double UP_LEFT = 215;
 const double UP = 270;
 const double UP_RIGHT = 315;
 
-const double MIN_DIR_CHANGE = 500;
-const double MAX_DIR_CHANGE = 3000;
-
 const int BREATHER_CHANCE = 20;
 
 const double SPREAD = 5;	// how wide the targetting range is from the exact angle.
@@ -99,6 +96,21 @@ double avoidBottom() {
 
 void aiSmartFrame(int enemyInc) {
 
+	// avoid other enemies (not working :p)
+	// for(int i=0; i < MAX_ENEMY; i++) {
+	// 	if(i == enemyInc || !enemies[i].valid || enemies[i].dead) continue;
+	// 	Rect r = makeRect(enemies[i].coord.x, enemies[i].coord.y, 100, 100);
+	// 	// printf("%f, %f, %d, %d, %f, %f, %f, %f\n", r.x, r.y, r.width, r.height, pos.x, pos.y, enemies[enemyInc].coord.x, enemies[enemyInc].coord.y);
+	// 	// 	commands[CMD_QUIT] = true;
+	// 	// 	return;
+
+	// 	// if we're in enemy bounds, stop moving in that direction.
+	// 	if(inBounds(enemies[enemyInc].coord, r)) {
+	// 		commands[CMD_QUIT] = true;
+	// 		return;
+	// 	}
+	// }
+
 	// searching for rocket launcher.
 	if(!enemies[enemyInc].hasRock) {
 
@@ -169,7 +181,6 @@ void aiSmartFrame(int enemyInc) {
 	else if(enemies[enemyInc].coord.y > screenBounds.y-border) 	enemies[enemyInc].idleTarget = avoidBottom();
 	else if(enemies[enemyInc].coord.y < border) 				enemies[enemyInc].idleTarget = avoidTop();
 
-	// else if(!onScreen(enemies[enemyInc].coo
 	// Walk towards homing direction
 	Coord homeStep = getAngleStep(enemies[enemyInc].idleTarget, ENEMY_SPEED, false);
 	enemies[enemyInc].coord.x += homeStep.x;
