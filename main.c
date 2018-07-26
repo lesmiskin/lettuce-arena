@@ -10,82 +10,62 @@
 #include "enemy.h"
 #include "scene.h"
 
-// heath bars 
-// name tags
-
-// clip characters ala catacomb.
-
-// player health and death.
-// player included in random spawn points.
-
-// player can pick up weapon.
-// player can shoot.
-
+// teleport pixels should randomise colors between 0 and 2.
 // flash out of existence when dizzy.
 
-// shooting animation (muzzle flash)
-// up/dow walking sprites.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// teleport pixels should randomise colors between 0 and 2.
-
-
-
-
-
-
-
-
-
-
-
-
-
 // spawn points have a funny tile (e.g. quake 2 teleporter)
-// simple walls for strategy.
-// enemies don't shoot if wall is in the way.
 
-
-
-
-
-
-
-
-
-
-// player death and respawn.
-// up and down directional frames.
-// add splash damage
-// lemmings get pushed around by this
-// 1px health bars
 // health packs
-// players red when hit.
-// rocket angle sprites should have animations.
 
+// up/dow walking sprites.
+// spinning rockets again.
+
+// pain feedback (bump back, flash red)
+// dedicated rocket angle sprites
+// shooting animation.
+
+// persistent score area.
+
+// player participates in spawn point musical chairs
 // player can shoot.
-// aiming reticle based on current facing direction.
+// player has health and can die.
+
+// character clipping
+// splash damage?
+// lemmings get pushed around by this
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ability to scroll, and enter different areas
-// combatants clip against each other.
-// name-tags for players.
+// stop enemy cheating with angular motion towards weapons (should walk diag, then adjust / swap with straght, then diag)
 
-// score readout.
-// hold TAB for scores and names.
-
+// simple walls for strategy.
+// enemies don't shoot if wall is in the way.
 
 
     // . . . .         . . . .

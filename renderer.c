@@ -35,7 +35,7 @@ Sprite makeSimpleSprite(char *textureName) {
 	return makeSprite(texture, zeroCoord(), SDL_FLIP_NONE);
 }
 
-void drawSpriteFull(Sprite sprite, Coord origin, double scale, double angle) {
+void drawSpriteFull(Sprite sprite, Coord origin, double scalex, double scaley, double angle) {
     //Ensure we're always calling this with an initialised sprite_t.
     assert(sprite.texture != NULL);
 
@@ -51,8 +51,8 @@ void drawSpriteFull(Sprite sprite, Coord origin, double scale, double angle) {
     SDL_Rect destination  = {
         (origin.x + offsetX),
         (origin.y + offsetY),
-        sprite.size.x,
-        sprite.size.y
+        sprite.size.x * scalex,
+        sprite.size.y * scaley
     };
 
     //Rotation
@@ -66,7 +66,7 @@ void drawSpriteFull(Sprite sprite, Coord origin, double scale, double angle) {
 }
 
 void drawSprite(Sprite sprite, Coord origin) {
-    drawSpriteFull(sprite, origin, 1, 0);
+    drawSpriteFull(sprite, origin, 1, 1, 0);
 }
 
 void initRenderer(void) {

@@ -629,8 +629,18 @@ void enemyRenderFrame(void){
 
 			// draw lemming and weapon combo
 			Coord wc = deriveCoord(enemies[i].coord, derive.x+xoff, derive.y+yoff);
-			drawSpriteFull(makeSimpleSprite(file), wc, 1, angle);
+			drawSpriteFull(makeSimpleSprite(file), wc, 1, 1, angle);
 		}
+
+		// draw health bar
+		char healthFile[12] = "health-?.png";
+		if     (enemies[i].health <= 33) healthFile[7] = 'r';
+		else if(enemies[i].health <= 66) healthFile[7] = 'y';
+		else                             healthFile[7] = 'g';
+
+		Coord h = deriveCoord(enemies[i].coord, -4, -10);
+		int barWidth = (int)(((double)enemies[i].health / 100.0) * 8.0);
+		drawSpriteFull(makeSimpleSprite(healthFile), h, barWidth, 1, 0);
 	}
 }
 
