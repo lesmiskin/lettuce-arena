@@ -78,6 +78,10 @@ static void loadImages(void) {
     //Define assets to be loaded.
     AssetDef definitions[] = {
 
+        { "w_rock2-0.png" },
+        { "w_rock3-0.png" },
+        { "w_rock3-1.png" },
+        { "w_rock3-2.png" },
         { "w_rock-0.png" },
         { "w_rock-1.png" },
 
@@ -153,6 +157,16 @@ static void loadImages(void) {
         { "exp-04.png" },
         { "exp-05.png" },
         { "exp-06.png" },
+
+        { "arrow.png" },
+        { "p1.png" },
+        { "p1-arrow.png" },
+
+        { "ground-big.png" },
+        { "ground.png" },
+        { "ground2.png" },
+        { "ground3.png" },
+        { "ground4.png" },
     };
 
     //Infer asset path from current directory.

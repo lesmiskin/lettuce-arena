@@ -5,6 +5,7 @@
 #include "renderer.h"
 #include "ai.h"
 #include "input.h"
+#include "scene.h"
 
 // ai which does the following.
 // moves in an X/Y position to...
@@ -95,6 +96,22 @@ double avoidBottom() {
 }
 
 void aiSmartFrame(int enemyInc) {
+
+	// searching for rocket launcher.
+	if(!enemies[enemyInc].hasRock) {
+		for(int i=0; i < MAX_WEAPONS; i++) {
+			if(!weapons[i].valid || weapons[i].pickedUp) continue;
+			// angle to weapon?
+			double angle = getAngle(enemies[enemyInc].coord, weapons[i].coord);
+			enemies[enemyInc].idleTarget = angle;		// face direction we're walking ih.
+
+			// home on it.
+			Coord homeStep = getAngleStep(angle, ENEMY_SPEED, false);
+			enemies[enemyInc].coord.x += homeStep.x;
+			enemies[enemyInc].coord.y += homeStep.y;
+			return;
+		}
+	}
 
 	// shoot opponent, with a little wait between each shot.
 	if(canShoot(enemyInc) && isDue(clock(), enemies[enemyInc].lastShot, SHOT_RELOAD * randomMq(1, 3))) {

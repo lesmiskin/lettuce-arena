@@ -44,6 +44,11 @@ void playerRenderFrame(void) {
 	// draw the sprite
 	Sprite sprite = makeFlippedSprite(frameFile, flip);
 	drawSprite(sprite, pos);
+
+	Sprite arrow = makeFlippedSprite(frameFile, flip);
+	// drawSprite(makeSimpleSprite("arrow.png"), deriveCoord(pos, -1, -13));
+	drawSprite(makeSimpleSprite("p1.png"), deriveCoord(pos, -1, -13));
+	// drawSprite(makeSimpleSprite("p1-arrow.png"), deriveCoord(pos, -1, -13));
 }
 
 const double BORDER = 10;

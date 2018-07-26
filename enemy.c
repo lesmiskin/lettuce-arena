@@ -389,6 +389,7 @@ void enemyGameFrame(void) {
 			if(inBounds(enemies[i].coord, makeSquareBounds(weapons[j].coord, 10))) {
 				enemies[i].hasRock = true;
 				weapons[j].pickedUp = true;
+				weapons[j].lastPickup = clock();
 			}
 		}
 	}

@@ -12,9 +12,6 @@
 
 // flash out of existence.
 
-// start with nothing.
-// pick up the rocket launcher.
-
 
 
 
@@ -188,7 +185,7 @@ int main()  {
             playerGameFrame();
             enemyGameFrame();
             enemyFxFrame();
-			// sceneGameFrame();
+			sceneGameFrame();
 			// hudGameFrame();
             processSystemCommands();
         }
