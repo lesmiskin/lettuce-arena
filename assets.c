@@ -80,10 +80,12 @@ static void loadImages(void) {
 
         { "w_rock2-0.png" },
         { "w_rock3-0.png" },
+        { "w_rock3-0-fire.png" },
         { "w_rock3-1.png" },
         { "w_rock3-2.png" },
         { "w_rock-0.png" },
         { "w_rock-1.png" },
+        { "w_rock-0-fire.png" },
 
         { "tele-0.png" },
         { "tele-1.png" },
