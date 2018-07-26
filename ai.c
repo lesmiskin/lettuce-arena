@@ -95,22 +95,41 @@ double avoidBottom() {
 	return degToRad(UP);
 }
 
+// TODO: Would be nice to have a "find closest" function.
+
 void aiSmartFrame(int enemyInc) {
 
 	// searching for rocket launcher.
 	if(!enemies[enemyInc].hasRock) {
+
+		// target nearest weapon.
+		Coord target;
+		double bestDistance = 1000;
+		Coord usPos = enemies[enemyInc].coord;
+
+		// What enemy are we closest to?
 		for(int i=0; i < MAX_WEAPONS; i++) {
 			if(!weapons[i].valid || weapons[i].pickedUp) continue;
-			// angle to weapon?
-			double angle = getAngle(enemies[enemyInc].coord, weapons[i].coord);
-			enemies[enemyInc].idleTarget = angle;		// face direction we're walking ih.
 
-			// home on it.
-			Coord homeStep = getAngleStep(angle, ENEMY_SPEED, false);
-			enemies[enemyInc].coord.x += homeStep.x;
-			enemies[enemyInc].coord.y += homeStep.y;
-			return;
+			// find out which enemy we're closest to
+			Coord themPos = weapons[i].coord;
+			double distance = getDistance(usPos, themPos);
+
+			// we're the shortest so far!
+			if(distance < bestDistance) {
+				target = themPos;
+				bestDistance = distance;
+			}
 		}
+
+		double angle = getAngle(usPos, target);
+
+		// home on it.
+		enemies[enemyInc].idleTarget = angle;		// face direction we're walking ih.
+		Coord homeStep = getAngleStep(angle, ENEMY_SPEED, false);
+		enemies[enemyInc].coord.x += homeStep.x;
+		enemies[enemyInc].coord.y += homeStep.y;
+		return;
 	}
 
 	// shoot opponent, with a little wait between each shot.
