@@ -81,6 +81,8 @@ static void loadImages(void) {
         { "health-r.png" },
         { "health-g.png" },
         { "health-y.png" },
+        { "dark-red.png" },
+        { "black.png" },
 
         { "w_rock-n.png" },
         { "w_rock-s.png" },

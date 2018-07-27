@@ -10,27 +10,30 @@
 #include "enemy.h"
 #include "scene.h"
 
-// flash out of existence when dizzy.
+
+// pain feedback (bump back, flash red)
 // up/down walking sprites.
 // spinning rockets again.
+// shooting animation.
+
+
+
+// player has health and can die.
+// player participates in spawn point musical chairs
+// player can shoot.
+
+
+
+// character clipping
+// smoother death jumping.
+// splash damage?
+
 
 
 
 // initial pistol weapon
-
-
-
 // can pick up machinegun
-// pain feedback (bump back, flash red)
-// dedicated vweap_rocket angle sprites
-// shooting animation.
 // spawn points have a funny tile (e.g. quake 2 teleporter)
-// player participates in spawn point musical chairs
-// player can shoot.
-// player has health and can die.
-// character clipping
-// splash damage?
-// lemmings get pushed around by this
 
 
 

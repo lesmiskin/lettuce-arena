@@ -20,7 +20,8 @@ const double MAX_DIR_CHANGE = 3000;
 const int INITIAL_ENEMIES = 3;
 const double ENEMY_SPEED = 1;
 const double CHAR_BOUNDS = 15;
-const int CORPSE_WAIT = 1000;
+const int BLINK_DELAY = 1500;
+const int STUN_WAIT = 2000;
 const int DEAD_FRAMES = 4;
 const int STAR_FRAMES = 4;
 long lastDeathFrame;
@@ -238,7 +239,8 @@ void spawnEnemy(Coord point, int color) {
 			0,
 			0,
 			false,
-			100
+			100,
+			0
 		};
 
 		enemies[i] = e;
@@ -275,29 +277,35 @@ bool wouldTouchEnemy(Coord a, int selfIndex, bool includePlayer) {
 	return false;
 }
 
-bool canShoot(int enemyIndex) {
-	return enemies[enemyIndex].hasRock && isDue(clock(), enemies[enemyIndex].lastShot, SHOT_RELOAD);
+bool canShoot(int e) {
+	Enemy en = enemies[e];
+	return en.ammo > 0 && en.hasRock && isDue(clock(), en.lastShot, SHOT_RELOAD);
 }
 
-void fireAngleShot(int enemyIndex, double deg) {
+void fireAngleShot(int e, double deg) {
 	double rad = degToRad(deg);
 
 	// turn enemy TOWARDS where he's shooting
-	enemies[enemyIndex].idleTarget = degToRad(deg);
-	enemies[enemyIndex].lastDirTime = clock();
-	enemies[enemyIndex].nextDirTime = 350;		// quick dir change so we don't collide.
+	enemies[e].idleTarget = degToRad(deg);
+	enemies[e].lastDirTime = clock();
+	enemies[e].nextDirTime = 350;		// quick dir change so we don't collide.
 
 	// find a spare projectile 
 	for(int i=0; i < MAX_SHOTS; i++) {
-		if(!shots[i].valid) {
-			Coord origin = enemies[enemyIndex].coord;
-			Coord shotStep = getAngleStep(rad, SHOT_SPEED, false);
-			Shot s = { true, origin, shotStep, deg, 0, enemyIndex, 0 };
-			shots[i] = s;
-			break;
-		}
+		if(shots[i].valid) continue;
+
+		Coord origin = enemies[e].coord;
+		Coord shotStep = getAngleStep(rad, SHOT_SPEED, false);
+		Shot s = { true, origin, shotStep, deg, 0, e, 0 };
+		shots[i] = s;
+		break;
 	}
-	enemies[enemyIndex].lastShot = clock();
+
+	enemies[e].ammo--;
+	enemies[e].lastShot = clock();
+
+	// drop weapon if run out of ammo.
+	if(enemies[e].ammo == 0) enemies[e].hasRock = false;
 }
 
 
@@ -324,8 +332,8 @@ void enemyGameFrame(void) {
 		if(!enemies[i].valid) continue;
 
 		// hide corpses after a while.
-		if(enemies[i].buried) {
-			if(isDue(clock(), enemies[i].buriedTime, CORPSE_WAIT)) {
+		if(enemies[i].stunned) {
+			if(isDue(clock(), enemies[i].stunnedTime, STUN_WAIT)) {
 				enemies[i].valid = false;
 				respawn(enemies[i].color);
 				continue;
@@ -406,6 +414,7 @@ void enemyGameFrame(void) {
 
 			if(inBounds(enemies[i].coord, makeSquareBounds(weapons[j].coord, 10))) {
 				enemies[i].hasRock = true;
+				enemies[i].ammo = 5;
 				weapons[j].pickedUp = true;
 				weapons[j].lastPickup = clock();
 			}
@@ -437,7 +446,7 @@ void enemyFxFrame() {
     if(timer(&lastStarFrame, 1000/15)) {
 		// spinning stars
 		for(int i=0; i < MAX_ENEMY; i++) {
-			if(!enemies[i].buried) continue;
+			if(!enemies[i].stunned) continue;
 
 			enemies[i].starInc = enemies[i].starInc == STAR_FRAMES-1 ? 0 : enemies[i].starInc + 1;
 		}
@@ -447,7 +456,7 @@ void enemyFxFrame() {
 	if(timer(&lastDeathFrame, 1000/12)) {
 		for(int i=0; i < MAX_ENEMY; i++) {
 			if(!enemies[i].dead) continue;
-			if(enemies[i].buried) continue;
+			if(enemies[i].stunned) continue;
 
 			if(enemies[i].deadInc < DEAD_FRAMES-1) {
 				enemies[i].deadInc++;
@@ -481,26 +490,23 @@ void enemyFxFrame() {
 }
 
 void enemyAnimateFrame(void) {
-	if(!timer(&lastIdleTime, ANIM_HZ)) return;
-
 	//Animate the enemies
-	for(int i=0; i < MAX_ENEMY; i++) {
-		if(!enemies[i].valid) continue;
-		if(enemies[i].dead) continue;
+	if(timer(&lastIdleTime, ANIM_HZ)) {
+		for(int i=0; i < MAX_ENEMY; i++) {
+			if(!enemies[i].valid || enemies[i].dead) continue;
 
-		// tell lemmings to stand still when taking a breather.
-		if(havingBreather(i)) {
-			enemies[i].animInc = 2;
-			continue;
-		}
+			// tell lemmings to stand still when taking a breather.
+			if(havingBreather(i)) {
+				enemies[i].animInc = 2;
+				continue;
+			}
 
-		//Slight hack - we want to move the enemies in sync with their animation.
-
-		//Increment animations.
-		if(enemies[i].animInc < 4) {
-			enemies[i].animInc++;
-		}else{
-			enemies[i].animInc = 1;
+			//Increment animations.
+			if(enemies[i].animInc < 4) {
+				enemies[i].animInc++;
+			}else{
+				enemies[i].animInc = 1;
+			}
 		}
 	}
 }
@@ -512,19 +518,24 @@ void enemyRenderFrame(void){
 
 	// render corpses
 	for(int i=0; i < MAX_ENEMY; i++) {
-		// if we're not buried.
-		if(!enemies[i].valid || !enemies[i].dead || !enemies[i].buried) continue;
+		Enemy en = enemies[i];
+
+		// only do this if we ARE stunned.
+		if(!en.valid || !en.dead || !en.stunned) continue;
 
 		char frameFile[25];
 		sprintf(frameFile, "lem-%s-stun-02.png", getColor(i));
-		SDL_RendererFlip flip = enemies[i].corpseDir == 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+		SDL_RendererFlip flip = en.corpseDir == 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+
+		// blink out of existence.
+		if(isDue(clock(), en.stunnedTime, BLINK_DELAY) && en.starInc % 2) continue;
 
 		// sitting lemming
-		drawSprite(makeFlippedSprite(frameFile, flip), enemies[i].coord);
+		drawSprite(makeFlippedSprite(frameFile, flip), en.coord);
 
 		// stars
-		sprintf(frameFile, "stars-0%d.png", enemies[i].starInc+1);
-		drawSprite(makeFlippedSprite(frameFile, flip), enemies[i].coord);
+		sprintf(frameFile, "stars-0%d.png", en.starInc+1);
+		drawSprite(makeFlippedSprite(frameFile, flip), en.coord);
 	}
 
 	// draw live enemies
@@ -631,12 +642,13 @@ void enemyRenderFrame(void){
 
 		// draw health bar
 		char healthFile[] = "health-r.png";	// need enough chars for NULL terminator!!
-		if     (enemies[i].health <= 33) healthFile[7] = 'r';
-		else if(enemies[i].health <= 66) healthFile[7] = 'y';
-		else                             healthFile[7] = 'g';
+		if     (enemies[i].health <= 50) healthFile[7] = 'y';
+		else  							 healthFile[7] = 'g';
 
 		Coord h = deriveCoord(enemies[i].coord, -4, -12);
 		int barWidth = (int)(((double)enemies[i].health / 100.0) * 8.0);
+		drawSpriteFull(makeSimpleSprite("black.png"), deriveCoord(h, 0, -1), 10, 3, 0);
+		drawSpriteFull(makeSimpleSprite("health-r.png"), h, 8, 1, 0);
 		drawSpriteFull(makeSimpleSprite(healthFile), h, barWidth, 1, 0);
 	}
 }
@@ -644,17 +656,15 @@ void enemyRenderFrame(void){
 void enemyDeathRenderFrame() {
 	// render dying enemies above the explosion
 	for(int i=0; i < MAX_ENEMY; i++) {
-		if(!enemies[i].dead || enemies[i].buried) continue;
+		if(!enemies[i].dead || enemies[i].stunned) continue;
 
 		char frameFile[25];
-		SDL_RendererFlip flip = SDL_FLIP_NONE;
 		int animFrame = 0;
 		int ypos = 0;
 
-		// flip second frame for "animation"
+		// bouncing
 		switch(enemies[i].deadInc) {
 			case 0:
-				// flip = SDL_FLIP_HORIZONTAL;
 				animFrame = 0;
 				ypos = -1;
 				break;
@@ -663,22 +673,23 @@ void enemyDeathRenderFrame() {
 				ypos = -3;
 				break;
 			case 2:
-				// flip = SDL_FLIP_HORIZONTAL;
 				animFrame = 0;
 				ypos = -1;
 				break;
 			case 3:
 				animFrame = 1;
-				enemies[i].corpseDir = randomMq(0,1);	// left or right
-				enemies[i].buried = true;
-				enemies[i].buriedTime = clock();
+
+				// crappy dupe calc for corpse dir.
+				double deg = radToDeg(enemies[i].idleTarget);
+				enemies[i].corpseDir = deg > 90 && deg < 270 ? 0 : 1;
+
+				enemies[i].stunned = true;
+				enemies[i].stunnedTime = clock();
 				break;
 		}
 
 		sprintf(frameFile, "lem-%s-stun-0%d.png", getColor(i), animFrame+1);
-
-		Sprite sprite = makeFlippedSprite(frameFile, flip);
-		drawSprite(sprite, deriveCoord(enemies[i].coord, 0, ypos));
+		drawSprite(makeSimpleSprite(frameFile), deriveCoord(enemies[i].coord, 0, ypos));
 	}
 }
 

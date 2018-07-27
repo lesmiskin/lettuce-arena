@@ -18,12 +18,13 @@ typedef struct {
 	int color;
     bool dead;
     SDL_RendererFlip corpseDir;
-    bool buried;
+    bool stunned;
     int deadInc;
     int starInc;
-    long buriedTime;
+    long stunnedTime;
     bool hasRock;
     int health;
+    int ammo;
     // he's buried.
     // now that he's buried, vanish him after a while.
 } Enemy;
@@ -52,7 +53,7 @@ extern bool canShoot(int enemyIndex);
 extern bool havingBreather(int enemyInc);
 extern double randomEnemyAngle();
 extern bool onScreen(Coord coord, double threshold);
-extern void fireAngleShot(int enemyIndex, double deg);
+extern void fireAngleShot(int e, double deg);
 extern Enemy enemies[MAX_ENEMY];
 extern void enemyGameFrame(void);
 extern void enemyRenderFrame(void);
