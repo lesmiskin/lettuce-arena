@@ -10,27 +10,25 @@
 #include "enemy.h"
 #include "scene.h"
 
-// initial pistol weapon
-// can pick up machinegun
-
 // flash out of existence when dizzy.
-// up/dow walking sprites.
+// up/down walking sprites.
 // spinning rockets again.
 
-// teleport pixels should randomise colors between 0 and 2.
-// spawn points have a funny tile (e.g. quake 2 teleporter)
 
 
+// initial pistol weapon
+
+
+
+// can pick up machinegun
 // pain feedback (bump back, flash red)
 // dedicated vweap_rocket angle sprites
 // shooting animation.
-
+// spawn points have a funny tile (e.g. quake 2 teleporter)
 // player participates in spawn point musical chairs
 // player can shoot.
 // player has health and can die.
-
 // character clipping
-
 // splash damage?
 // lemmings get pushed around by this
 

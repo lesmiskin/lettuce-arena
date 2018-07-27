@@ -79,6 +79,7 @@ typedef struct {
 	bool valid;
 	Coord coord;
 	Coord step;
+	int color;
 } Particle;
 
 #define PARTICLE_DENSITY 20
@@ -189,7 +190,7 @@ void spawnTele(Coord c) {
 			double angle = randomMq(0, 360);
 			Coord step = getAngleStep(angle, PARTICLE_SPEED, false);
 
-			Particle p = { true, c, step };
+			Particle p = { true, c, step, randomMq(0,2) };
 			points[j] = p;
 		}
 
@@ -636,7 +637,7 @@ void enemyRenderFrame(void){
 
 		Coord h = deriveCoord(enemies[i].coord, -4, -12);
 		int barWidth = (int)(((double)enemies[i].health / 100.0) * 8.0);
-		drawSpriteFull(makeSimpleSprite(healthFile), h, barWidth, 2, 0);
+		drawSpriteFull(makeSimpleSprite(healthFile), h, barWidth, 1, 0);
 	}
 }
 
@@ -749,7 +750,9 @@ void enemyFxRenderFrame() {
 		if(!teleporters[i].valid) continue;
 
 		for(int j=0; j < PARTICLE_DENSITY; j++) {
-			drawSprite(makeSimpleSprite("tele-0.png"), teleporters[i].particles[j].coord);
+			char file[11];
+			sprintf(file, "tele-%d.png", teleporters[i].particles[j].color);
+			drawSprite(makeSimpleSprite(file), teleporters[i].particles[j].coord);
 		}
 	}
 }
