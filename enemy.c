@@ -547,7 +547,7 @@ void enemyRenderFrame(void){
 
 		// draw weapon overlay
 		if(enemies[i].hasRock) {
-			char file[20];
+			char file[13];
 			Coord derive;
 			double angle = 0;
 			int xoff, yoff;
@@ -568,29 +568,25 @@ void enemyRenderFrame(void){
 					break;
 				case 180:
 					sprintf(file, "w_rock-s.png");
-					derive = makeCoord(-5, 5);
+					derive = makeCoord(-4, 5);
 					break;
 
 				case 405://ne
-					sprintf(file, "w_rock-e.png");
-					derive = makeCoord(4, -1);
-					angle = radToDeg(enemies[i].idleTarget);
+					sprintf(file, "w_rock-ne.png");
+					derive = makeCoord(4, -3);
 					break;
 				case 135://se
-					sprintf(file, "w_rock-e.png");
-					derive = makeCoord(2, 5);
-					angle = radToDeg(enemies[i].idleTarget);
+					sprintf(file, "w_rock-se.png");
+					derive = makeCoord(2, 3);
 					break;
 				case 225://sw
-					sprintf(file, "w_rock-w.png");
-					derive = makeCoord(-2, 5);
-					angle = 315;
+					sprintf(file, "w_rock-sw.png");
+					derive = makeCoord(-2, 3);
 					break;
 				default:
 				case 305://nw
-					sprintf(file, "w_rock-w.png");
-					derive = makeCoord(-4, -1);
-					angle = 45;
+					sprintf(file, "w_rock-nw.png");
+					derive = makeCoord(-4, -3);
 					break;
 			}
 
@@ -629,18 +625,18 @@ void enemyRenderFrame(void){
 
 			// draw lemming and weapon combo
 			Coord wc = deriveCoord(enemies[i].coord, derive.x+xoff, derive.y+yoff);
-			drawSpriteFull(makeSimpleSprite(file), wc, 1, 1, angle);
+			drawSprite(makeSimpleSprite(file), wc);
 		}
 
 		// draw health bar
-		char healthFile[12] = "health-?.png";
+		char healthFile[] = "health-r.png";	// need enough chars for NULL terminator!!
 		if     (enemies[i].health <= 33) healthFile[7] = 'r';
 		else if(enemies[i].health <= 66) healthFile[7] = 'y';
 		else                             healthFile[7] = 'g';
 
-		Coord h = deriveCoord(enemies[i].coord, -4, -10);
+		Coord h = deriveCoord(enemies[i].coord, -4, -12);
 		int barWidth = (int)(((double)enemies[i].health / 100.0) * 8.0);
-		drawSpriteFull(makeSimpleSprite(healthFile), h, barWidth, 1, 0);
+		drawSpriteFull(makeSimpleSprite(healthFile), h, barWidth, 2, 0);
 	}
 }
 

@@ -87,6 +87,11 @@ static void loadImages(void) {
         { "w_rock-e.png" },
         { "w_rock-w.png" },
 
+        { "w_rock-ne.png" },
+        { "w_rock-nw.png" },
+        { "w_rock-se.png" },
+        { "w_rock-sw.png" },
+
         { "w_rock2-0.png" },
         { "w_rock3-0.png" },
         { "w_rock3-0-fire.png" },

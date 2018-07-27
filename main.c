@@ -10,27 +10,27 @@
 #include "enemy.h"
 #include "scene.h"
 
-// teleport pixels should randomise colors between 0 and 2.
+// initial pistol weapon
+// can pick up machinegun
+
 // flash out of existence when dizzy.
-
-// spawn points have a funny tile (e.g. quake 2 teleporter)
-
-// health packs
-
 // up/dow walking sprites.
 // spinning rockets again.
 
-// pain feedback (bump back, flash red)
-// dedicated rocket angle sprites
-// shooting animation.
+// teleport pixels should randomise colors between 0 and 2.
+// spawn points have a funny tile (e.g. quake 2 teleporter)
 
-// persistent score area.
+
+// pain feedback (bump back, flash red)
+// dedicated vweap_rocket angle sprites
+// shooting animation.
 
 // player participates in spawn point musical chairs
 // player can shoot.
 // player has health and can die.
 
 // character clipping
+
 // splash damage?
 // lemmings get pushed around by this
 
@@ -61,6 +61,20 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+// health packs
+// persistent score area.
+
 // ability to scroll, and enter different areas
 // stop enemy cheating with angular motion towards weapons (should walk diag, then adjust / swap with straght, then diag)
 
@@ -77,10 +91,6 @@
     // .                     .
     // .                     .
     // . . . .         . . . .
-
-
-
-
 
 // QUAD DAMAGE powerup spawns infrequently in middle of map.
 // huge gibs fly out when this is used.
