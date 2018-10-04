@@ -214,7 +214,6 @@ int main()  {
 		if(timer(&lastAnimFrameTime, ANIMATION_HZ)) {
 			// sceneAnimateFrame();
            lemAnimateFrame();
-           playerAnimateFrame();
 		}
 
         //Renderer frame
@@ -226,7 +225,6 @@ int main()  {
             enemyRenderFrame();
             lemRenderFrame();
             fxRenderFrame();
-			playerRenderFrame();
             enemyDeathRenderFrame();
 
             updateCanvas();
