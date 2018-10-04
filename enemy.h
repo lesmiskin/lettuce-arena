@@ -11,10 +11,10 @@ typedef struct {
 	Coord coord;
 	int animInc;
 	long lastShot;
-	double idleTarget;
-	long lastDirTime;
-	int nextDirTime;
-	long lastBreather;
+	double idleTarget;				// ai
+	long lastDirTime;				// ai
+	int nextDirTime;				// ai
+	long lastBreather;				// ai
 	int color;
     bool dead;
     SDL_RendererFlip corpseDir;
@@ -50,7 +50,7 @@ extern void enemyDeathRenderFrame();
 extern void enemyFxRenderFrame();
 extern void enemyFxFrame();
 extern bool canShoot(int enemyIndex);
-extern bool havingBreather(int enemyInc);
+// extern bool havingBreather(int enemyInc);
 extern double randomEnemyAngle();
 extern bool onScreen(Coord coord, double threshold);
 extern void fireAngleShot(int e, double deg);

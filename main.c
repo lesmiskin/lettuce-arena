@@ -9,28 +9,38 @@
 #include "assets.h"
 #include "enemy.h"
 #include "scene.h"
+#include "lem.h"
+#include "fx.h"
+
+// [easy] health packs
+// [easy] spinning rocket sprites.
+// [easy] 1-frame large muzzleflash.
+// [easy] up/down walking sprites.
+
+// character clipping.
+// chaingun
+// player participation
+// tab scoreboard
+
+
+// player can pick up rocket too.
+
+
+
+
+
 
 
 // pain feedback (bump back, flash red)
 // up/down walking sprites.
 // spinning rockets again.
 // shooting animation.
-
-
-
 // player has health and can die.
 // player participates in spawn point musical chairs
 // player can shoot.
-
-
-
 // character clipping
 // smoother death jumping.
 // splash damage?
-
-
-
-
 // initial pistol weapon
 // can pick up machinegun
 // spawn points have a funny tile (e.g. quake 2 teleporter)
@@ -193,6 +203,8 @@ int main()  {
             playerGameFrame();
             enemyGameFrame();
             enemyFxFrame();
+            lemGameFrame();
+            fxGameFrame();
 			sceneGameFrame();
 			// hudGameFrame();
             processSystemCommands();
@@ -201,7 +213,7 @@ int main()  {
 		//Animation frame
 		if(timer(&lastAnimFrameTime, ANIMATION_HZ)) {
 			// sceneAnimateFrame();
-           enemyAnimateFrame();
+           lemAnimateFrame();
            playerAnimateFrame();
 		}
 
@@ -212,6 +224,8 @@ int main()  {
             // hudRenderFrame();
             enemyFxRenderFrame();
             enemyRenderFrame();
+            lemRenderFrame();
+            fxRenderFrame();
 			playerRenderFrame();
             enemyDeathRenderFrame();
 

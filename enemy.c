@@ -6,6 +6,8 @@
 #include "ai.h"
 #include "input.h"
 #include "scene.h"
+#include "fx.h"
+#include "lem.h"
 
 static const int ANIM_HZ = 1000 / 4;
 
@@ -73,33 +75,7 @@ long lastExpFrame;
 Puff puffs[MAX_PUFFS];
 
 
-// ----------
-// Particles
-// ----------
-typedef struct {
-	bool valid;
-	Coord coord;
-	Coord step;
-	int color;
-} Particle;
-
-#define PARTICLE_DENSITY 20
-#define MAX_TELE 4
-const double PARTICLE_SPEED = 1.2;
-const int PARTICLE_TIME = 250;
-
-
-// ----------
-// Teleporters
-// ----------
-typedef struct {
-	bool valid;
-	Particle* particles;
-	long spawnTime;
-} Tele;
-
 #define MAX_SPAWNS 4
-Tele teleporters[MAX_TELE];
 Coord spawns[MAX_SPAWNS];
 
 
@@ -178,29 +154,6 @@ double randomEnemyAngle() {
 }
 
 
-void spawnTele(Coord c) {
-
-	for(int i=0; i < MAX_TELE; i++) {
-		if(teleporters[i].valid) continue;
-
-		Particle *points = malloc(sizeof(Particle) * PARTICLE_DENSITY);
-
-		// make points
-		for(int j=0; j < PARTICLE_DENSITY; j++) {
-			// calculate step here since much faster.
-			double angle = randomMq(0, 360);
-			Coord step = getAngleStep(angle, PARTICLE_SPEED, false);
-
-			Particle p = { true, c, step, randomMq(0,2) };
-			points[j] = p;
-		}
-
-		Tele t = { true, points, clock() };
-		teleporters[i] = t;
-		break;
-	}
-}
-
 void spawnExp(Coord c) {
 	// find a place to put it in our explosion array.
 	for(int i=0; i < MAX_EXP; i++) {
@@ -215,37 +168,13 @@ void spawnExp(Coord c) {
 }
 
 void spawnEnemy(Coord point, int color) {
+	// spawn them.
+	int lindex = spawnLem(point, color, false);
 
-	spawnTele(point);
-
-	// pop them in in a valid place in the array.
-	for(int i=0; i < MAX_ENEMY; i++) {
-		if(enemies[i].valid) continue;
-
-		Enemy e = {
-			true,
-			point,
-			randomMq(1, 4),
-			0,
-			randomEnemyAngle(),
-			clock(),
-			500,
-			0,
-			color,
-			false,
-			0,
-			false,
-			0,
-			0,
-			0,
-			false,
-			100,
-			0
-		};
-
-		enemies[i] = e;
-		break;
-	}
+	// set enemy-specific properties.
+	lemmings[lindex].en_idleTarget = randomEnemyAngle();
+	lemmings[lindex].en_lastDirTime = clock();
+	lemmings[lindex].en_nextDirTime = 500;
 }
 
 void respawn(int color) {
@@ -255,9 +184,9 @@ void respawn(int color) {
 	);
 }
 
-bool havingBreather(int enemyInc) {
-	return enemies[enemyInc].lastBreather > 0;
-}
+// bool havingBreather(int enemyInc) {
+// 	return enemies[enemyInc].lastBreather > 0;
+// }
 
 bool wouldTouchEnemy(Coord a, int selfIndex, bool includePlayer) {
 	//Check player
@@ -313,21 +242,6 @@ void fireAngleShot(int e, double deg) {
 // Logic
 // ----------
 void enemyGameFrame(void) {
-	// particles - moving them, and stopping them.
-	for(int i=0; i < MAX_TELE; i++) {
-		if(!teleporters[i].valid) continue;
-
-		if(isDue(clock(), teleporters[i].spawnTime, PARTICLE_TIME)) {
-			teleporters[i].valid = false;
-			continue;
-		}
-
-		for(int j=0; j < PARTICLE_DENSITY; j++) {
-			Particle p = teleporters[i].particles[j];
-			teleporters[i].particles[j].coord = deriveCoord(p.coord, p.step.x, p.step.y);
-		}
-	}
-
 	for(int i=0; i < MAX_ENEMY; i++) {
 		if(!enemies[i].valid) continue;
 
@@ -362,6 +276,8 @@ void enemyGameFrame(void) {
 
 		// did we hit an enemy?
 		for(int e=0; e < MAX_ENEMY; e++) {
+			return;
+
 			if(enemies[e].coord.x == 0) continue;
 			if(shots[i].shooter == e) continue;		// don't hit ourselves :p
 			if(enemies[e].dead) continue;			// don't hit corpses
@@ -496,10 +412,10 @@ void enemyAnimateFrame(void) {
 			if(!enemies[i].valid || enemies[i].dead) continue;
 
 			// tell lemmings to stand still when taking a breather.
-			if(havingBreather(i)) {
-				enemies[i].animInc = 2;
-				continue;
-			}
+			// if(havingBreather(i)) {
+			// 	enemies[i].animInc = 2;
+			// 	continue;
+			// }
 
 			//Increment animations.
 			if(enemies[i].animInc < 4) {
@@ -515,7 +431,7 @@ void enemyAnimateFrame(void) {
 // Rendering
 // ----------
 void enemyRenderFrame(void){
-
+return;
 	// render corpses
 	for(int i=0; i < MAX_ENEMY; i++) {
 		Enemy en = enemies[i];
@@ -755,23 +671,11 @@ void enemyFxRenderFrame() {
 		sprintf(file, "exp-0%d.png", explosions[i].animInc+1);
 		drawSprite(makeSimpleSprite(file), explosions[i].coord);
 	}
-
-	// teleportations
-	for(int i=0; i < MAX_TELE; i++) {
-		if(!teleporters[i].valid) continue;
-
-		for(int j=0; j < PARTICLE_DENSITY; j++) {
-			char file[11];
-			sprintf(file, "tele-%d.png", teleporters[i].particles[j].color);
-			drawSprite(makeSimpleSprite(file), teleporters[i].particles[j].coord);
-		}
-	}
 }
 
 void initEnemy(void) {
 	for(int i=0; i < MAX_SHOTS; i++) 	shots[i].valid = false;
 	for(int i=0; i < MAX_ENEMY; i++) 	enemies[i].valid = false;
-	for(int i=0; i < MAX_TELE; i++) 	teleporters[i].valid = false;
 
 	spawns[0] = makeCoord(20, 20);
 	spawns[1] = makeCoord(300, 220);
