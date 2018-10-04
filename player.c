@@ -58,25 +58,54 @@ const double BORDER = 10;
 void playerGameFrame(void) {
 	playerWalking = false;
 
+	bool isRight = checkCommand(CMD_PLAYER_RIGHT);
+	bool isLeft = checkCommand(CMD_PLAYER_LEFT);
+	bool isDown = checkCommand(CMD_PLAYER_DOWN);
+	bool isUp = checkCommand(CMD_PLAYER_UP);
+
 	//NB: We still turn the player sprite where we can, even if we're hard
 	// up against a screen bound.
-	if (checkCommand(CMD_PLAYER_LEFT)) {
+	if (isLeft) {
 		if(pos.x > BORDER) pos.x -= MOVE_INC;
 		playerDir = false;
 		playerWalking = true;
 	}
-	if (checkCommand(CMD_PLAYER_RIGHT)) {
+	if (isRight) {
 		if(pos.x < screenBounds.x-BORDER) pos.x += MOVE_INC;
 		playerDir = true;
 		playerWalking = true;
 	}
-	if (checkCommand(CMD_PLAYER_UP) && pos.y > BORDER) {
+	if (isUp && pos.y > BORDER) {
 		pos.y -= MOVE_INC;
 		playerWalking = true;
 	}
-	if (checkCommand(CMD_PLAYER_DOWN) && pos.y < screenBounds.y-BORDER) {
+	if (isDown && pos.y < screenBounds.y-BORDER) {
 		pos.y += MOVE_INC;
 		playerWalking = true;
+	}
+
+	// Calculate what heading dir we're walking in (so we know what dir to
+	// point our carry weapon in, among other reasons)
+	if(playerWalking) {
+		int dir;
+		if (isLeft && isUp) 
+			dir = 305; //nw
+		else if (isRight && isUp) 
+			dir = 405; //ne
+		else if (isLeft && isDown) 
+			dir = 225; //sw
+		else if (isRight && isDown) 
+			dir = 135; //se
+		else if (isLeft) 
+			dir = 270; //w
+		else if (isRight) 
+			dir = 90; //e
+		else if (isUp) 
+			dir = 360; //n
+		else if (isDown) 
+			dir = 180; //s
+
+		lemmings[playerIndex].en_idleTarget = degToRad(dir-90);
 	}
 
 	// apply position to the player lemming.
