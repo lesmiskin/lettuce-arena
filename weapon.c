@@ -7,7 +7,7 @@
 const double SHOT_SPEED = 1.75;
 const int SHOT_FRAMES = 4;
 const int DAMAGE = 25;
-const double SHOT_RELOAD = 1000;
+const double SHOT_RELOAD = 500;
 long lastShotFrame;
 
 Shot shots[MAX_SHOTS];
@@ -101,11 +101,14 @@ void weaponRenderFrame() {
 }
 
 void shoot(int i, double deg) {
+	// only shoot if we have ammo.
+	if(lemmings[i].ammo == 0 || !isDue(clock(), lemmings[i].lastShot, SHOT_RELOAD)) return;
+
 	double rad = degToRad(deg);
 
 	// turn enemy TOWARDS where he's shooting
 	if(lemmings[i].isEnemy){
-		lemmings[i].en_idleTarget = degToRad(deg);
+		lemmings[i].angle = degToRad(deg);
 		lemmings[i].en_lastDirTime = clock();
 		lemmings[i].en_nextDirTime = 350;		// quick dir change so we don't collide.
 	}

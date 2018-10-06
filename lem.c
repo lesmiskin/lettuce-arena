@@ -145,7 +145,7 @@ void weaponCarryFrame(int i) {
 	int xoff, yoff;
 
 	// weapon rotation and position.
-	switch((int)radToDeg(lemmings[i].en_idleTarget)+90) {
+	switch((int)radToDeg(lemmings[i].angle)+90) {
 		case 360:
 			sprintf(file, "w_rock-n.png");
 			derive = makeCoord(1, -5);
@@ -183,7 +183,7 @@ void weaponCarryFrame(int i) {
 	}
 
 	// weapon bob cycle.
-	switch((int)radToDeg(lemmings[i].en_idleTarget)+90) {
+	switch((int)radToDeg(lemmings[i].angle)+90) {
 		// n/s bobbing
 		case 360:
 		case 180:
@@ -232,9 +232,9 @@ void lemRenderFrame() {
 		if(!lem.valid) continue;
 
 		// are we traveling left or right?
-		double deg = radToDeg(lem.en_idleTarget);
+		double deg = radToDeg(lem.angle);
 		SDL_RendererFlip flip = deg > 90 && deg < 270 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-//		printf(lemmings[0].en_idleTarget);
+//		printf(lemmings[0].angle);
 
 		// Set animation frame on sprite file.
 		char frameFile[25];

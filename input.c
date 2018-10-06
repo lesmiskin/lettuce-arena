@@ -2,6 +2,8 @@
 
 #include "common.h"
 #include "input.h"
+#include "lem.h"
+#include "weapon.h"
 // #include "enemy.h"
 // #include "player.h"
 // #include "scene.h"
@@ -26,15 +28,12 @@ void pollInput(void) {
 			case SDL_QUIT:
 				commands[CMD_QUIT] = true;
 				break;
-				//Presses
+			//Presses
 			case SDL_KEYDOWN: {
 				//Ignore held keys.
 				if (event.key.repeat) break;
 
 				SDL_Keycode keypress = event.key.keysym.scancode;
-
-				// if (keypress == SDL_SCANCODE_SPACE)
-				// 	shoot(0, );
 
 				//Exit to title.
 				if (keypress == SDL_SCANCODE_ESCAPE)
@@ -53,6 +52,9 @@ void pollInput(void) {
 		commands[CMD_PLAYER_UP] = true;
 	else if(keysHeld[SDL_SCANCODE_DOWN])
 		commands[CMD_PLAYER_DOWN] = true;
+
+	if(keysHeld[SDL_SCANCODE_SPACE])
+		commands[CMD_SHOOT] = true;
 }
 
 void processSystemCommands(void) {

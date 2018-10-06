@@ -4,6 +4,7 @@
 #include "assets.h"
 #include "input.h"
 #include "renderer.h"
+#include "weapon.h"
 
 const double MOVE_INC = 1;
 const double BORDER = 10;
@@ -12,8 +13,7 @@ bool playerWalking = false;
 static int playerIndex;
 Coord pos = { 20, 20 };
 
-void playerGameFrame(void) {
-	playerWalking = false;
+void walk() {
 
 	bool isRight = checkCommand(CMD_PLAYER_RIGHT);
 	bool isLeft = checkCommand(CMD_PLAYER_LEFT);
@@ -55,11 +55,21 @@ void playerGameFrame(void) {
 		else if (isDown) 
 			dir = 180; //s
 
-		lemmings[playerIndex].en_idleTarget = degToRad(dir-90);
+		lemmings[playerIndex].angle = degToRad(dir-90);
 	}
 
 	// apply position to the player lemming.
 	lemmings[playerIndex].coord = pos;
+}
+
+void playerGameFrame(void) {
+	playerWalking = false;
+
+	// Shooting
+	if(commands[CMD_SHOOT])
+		shoot(0, radToDeg(lemmings[0].angle));
+
+	walk();
 }
 
 void initPlayer() {

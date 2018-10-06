@@ -157,7 +157,7 @@ void aiSmartFrame(int enemyInc) {
 		double angle = getAngle(usPos, target);
 
 		// home on it.
-		lemmings[enemyInc].en_idleTarget = angle;		// face direction we're walking ih.
+		lemmings[enemyInc].angle = angle;		// face direction we're walking ih.
 		Coord homeStep = getAngleStep(angle, LEM_SPEED, false);
 		lemmings[enemyInc].coord.x += homeStep.x;
 		lemmings[enemyInc].coord.y += homeStep.y;
@@ -169,7 +169,7 @@ void aiSmartFrame(int enemyInc) {
 		shootAtOpponent(enemyInc);
 	}
 
-	// double angle = radToDeg(lemmings[enemyInc].en_idleTarget);
+	// double angle = radToDeg(lemmings[enemyInc].angle);
 	// printf("%f\n", lemmings[enemyInc].coord.x);
 
 	bool takingBreather = havingBreather(enemyInc);
@@ -181,7 +181,7 @@ void aiSmartFrame(int enemyInc) {
 			lemmings[enemyInc].en_lastBreather = clock();
 		}
 		lemmings[enemyInc].en_nextDirTime = randomMq(MIN_DIR_CHANGE, MAX_DIR_CHANGE);
-		lemmings[enemyInc].en_idleTarget = randomAngle();
+		lemmings[enemyInc].angle = randomAngle();
 	}
 
 	// stop the breather
@@ -196,15 +196,15 @@ void aiSmartFrame(int enemyInc) {
 	int border = 10;
 
 	// border avoidance (might be nice to restore onScreen once reliable approach found)
-	if(lemmings[enemyInc].coord.x > screenBounds.x-border) 		lemmings[enemyInc].en_idleTarget = avoidRight();
-	else if(lemmings[enemyInc].coord.x < border) 				lemmings[enemyInc].en_idleTarget = avoidLeft();
-	else if(lemmings[enemyInc].coord.y > screenBounds.y-border) 	lemmings[enemyInc].en_idleTarget = avoidBottom();
-	else if(lemmings[enemyInc].coord.y < border) 				lemmings[enemyInc].en_idleTarget = avoidTop();
+	if(lemmings[enemyInc].coord.x > screenBounds.x-border) 		lemmings[enemyInc].angle = avoidRight();
+	else if(lemmings[enemyInc].coord.x < border) 				lemmings[enemyInc].angle = avoidLeft();
+	else if(lemmings[enemyInc].coord.y > screenBounds.y-border) 	lemmings[enemyInc].angle = avoidBottom();
+	else if(lemmings[enemyInc].coord.y < border) 				lemmings[enemyInc].angle = avoidTop();
 
 	// Walk towards homing direction
-	Coord homeStep = getAngleStep(lemmings[enemyInc].en_idleTarget, LEM_SPEED, false);
+	Coord homeStep = getAngleStep(lemmings[enemyInc].angle, LEM_SPEED, false);
 	lemmings[enemyInc].coord.x += homeStep.x;
 	lemmings[enemyInc].coord.y += homeStep.y;
 
-	// printf("%f - %f\n", lemmings[0].en_idleTarget.x, lemmings[0].en_idleTarget.y);
+	// printf("%f - %f\n", lemmings[0].angle.x, lemmings[0].angle.y);
 }

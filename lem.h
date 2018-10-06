@@ -28,7 +28,7 @@ typedef struct {
     long stunnedTime;
 
     // enemy properties
-    double en_idleTarget;
+    double angle;
     long en_lastDirTime;
     int en_nextDirTime;
     long en_lastBreather;

@@ -15,7 +15,8 @@ typedef enum {
 	CMD_PLAYER_LEFT = 5,
 	CMD_PLAYER_RIGHT = 6,
 	CMD_PLAYER_DOWN = 7,
-	CMD_PLAYER_UP = 8
+	CMD_PLAYER_UP = 8,
+	CMD_SHOOT = 16
 } Command;
 
 #endif
