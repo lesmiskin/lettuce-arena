@@ -3,6 +3,7 @@
 #include "assets.h"
 #include "weapon.h"
 #include "renderer.h"
+#include "fx.h"
 
 const double SHOT_SPEED = 1.75;
 const int SHOT_FRAMES = 4;
@@ -44,7 +45,7 @@ void weaponGameFrame() {
 			if(lemmings[e].dead) continue;			// don't hit corpses
 
 			if(inBounds(shots[i].coord, makeSquareBounds(lemmings[e].coord, LEM_BOUND))) {
-				// spawnExp(shots[i].coord);
+				spawnExp(shots[i].coord);
 				shots[i].valid = false;
 				lemmings[e].health -= DAMAGE;
 				if(lemmings[e].health <=0)

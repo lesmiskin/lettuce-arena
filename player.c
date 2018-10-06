@@ -11,9 +11,10 @@ const double BORDER = 10;
 
 bool playerWalking = false;
 static int playerIndex;
-Coord pos = { 20, 20 };
 
 void walk() {
+
+	Coord pos = lemmings[PLAYER_INDEX].coord;
 
 	bool isRight = checkCommand(CMD_PLAYER_RIGHT);
 	bool isLeft = checkCommand(CMD_PLAYER_LEFT);

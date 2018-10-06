@@ -40,7 +40,7 @@ int spawnLem(Coord coord, int color, bool isPlayer) {
 		true,
 		coord,
 		color,
-		100,
+		1,				// health
 		1, 				// animInc
 		false,			// isWalking
 
@@ -70,6 +70,17 @@ int spawnLem(Coord coord, int color, bool isPlayer) {
 	return insertIndex;		// pass back index, so client can set further attributes.
 }
 
+void respawn(int i) {
+	// take out of main rotation.
+	lemmings[i].valid = false;
+
+	spawnLem(
+		spawns[randomMq(0,3)],
+		lemmings[i].color,
+		lemmings[i].isPlayer
+	);
+}
+
 void updateWalk(int i) {
 	// Lemming has stopped.
 	if(!lemmings[i].isWalking) {
@@ -90,6 +101,11 @@ void lemGameFrame() {
 
 	for(int i=0; i < MAX_LEM; i++) {
 		if(!lemmings[i].valid) continue;
+
+		// Respawn if dead
+		if(lemmings[i].dead) {
+			respawn(i);
+		}
 
 		// Run enemy AI
 		if(!lemmings[i].isPlayer){
@@ -115,7 +131,7 @@ void lemGameFrame() {
 
 			if(inBounds(lemmings[i].coord, makeSquareBounds(weapons[j].coord, 10))) {
 				lemmings[i].hasRock = true;
-				lemmings[i].ammo = 5;
+				lemmings[i].ammo += 5;
 				weapons[j].pickedUp = true;
 				weapons[j].lastPickup = clock();
 			}

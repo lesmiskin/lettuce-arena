@@ -7,5 +7,6 @@
 extern void spawnTele(Coord c);
 extern void fxGameFrame();
 extern void fxRenderFrame();
+extern void spawnExp(Coord c);
 
 #endif

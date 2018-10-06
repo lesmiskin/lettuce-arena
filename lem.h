@@ -39,6 +39,7 @@ typedef struct {
 
 extern const int PLAYER_INDEX;
 
+extern void respawn(int color);
 extern Lem lemmings[MAX_LEM];
 extern void lemGameFrame();
 extern void lemRenderFrame();
@@ -48,6 +49,7 @@ extern bool havingBreather(int i);
 extern bool canShoot(int i);
 extern const double LEM_SPEED;
 extern const double LEM_BOUND;
+extern void respawn(int i);
 
 extern Coord spawns[MAX_SPAWNS];
 

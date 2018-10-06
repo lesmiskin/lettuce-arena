@@ -4,6 +4,21 @@
 #include "scene.h"
 #include "renderer.h"
 
+// ----------
+// Explosions
+// ----------
+typedef struct {
+	bool valid;
+	Coord coord;
+	int animInc;
+} Exp;
+
+#define MAX_EXP 20
+const double BOUND = 20;
+Exp explosions[MAX_EXP];
+long lastExpFrame;
+
+
 typedef struct {
 	bool valid;
 	Coord coord;
@@ -26,6 +41,21 @@ const int PARTICLE_TIME = 250;
 Tele teleporters[MAX_TELE];
 
 void fxGameFrame() {
+	// explosions
+    if(timer(&lastExpFrame, 1000/12)) {
+		for(int i=0; i < MAX_EXP; i++) {
+			if(!explosions[i].valid) continue;
+
+			// finish explosion
+			if(explosions[i].animInc == 5) {
+				explosions[i].valid = false;
+				continue;
+			}
+
+			explosions[i].animInc++;
+		}
+	}
+
 	// particles - moving them, and stopping them.
 	for(int i=0; i < MAX_TELE; i++) {
 		if(!teleporters[i].valid) continue;
@@ -43,6 +73,14 @@ void fxGameFrame() {
 }
 
 void fxRenderFrame() {
+	// draw explosions
+	for(int i=0; i < MAX_EXP; i++) {
+		if(!explosions[i].valid) continue;
+		char file[10];
+		sprintf(file, "exp-0%d.png", explosions[i].animInc+1);
+		drawSprite(makeSimpleSprite(file), explosions[i].coord);
+	}
+
 	// teleportations
 	for(int i=0; i < MAX_TELE; i++) {
 		if(!teleporters[i].valid) continue;
@@ -78,3 +116,15 @@ void spawnTele(Coord c) {
 	}
 }
 
+void spawnExp(Coord c) {
+	// find a place to put it in our explosion array.
+	for(int i=0; i < MAX_EXP; i++) {
+		if(explosions[i].valid) continue;
+
+		// make it
+		Exp e = { true, c, 0 };
+		explosions[i] = e;
+
+		return;
+	}
+}
