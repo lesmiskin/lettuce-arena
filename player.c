@@ -3,7 +3,6 @@
 #include "player.h"
 #include "assets.h"
 #include "input.h"
-#include "enemy.h"
 #include "renderer.h"
 
 const double MOVE_INC = 1;

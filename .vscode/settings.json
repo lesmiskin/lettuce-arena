@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "lem.h": "c"
+        "lem.h": "c",
+        "input.h": "c"
     }
 }

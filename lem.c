@@ -7,11 +7,16 @@
 #include "fx.h"
 #include "mysdl.h"
 #include "player.h"
+#include "weapon.h"
+
+Coord spawns[MAX_SPAWNS];
 
 Lem lemmings[MAX_LEM];
 const int PLAYER_INDEX = 0;
 static long lastIdleTime;
 static const int ANIM_HZ = 1000 / 4;
+const double LEM_SPEED = 1;
+const double LEM_BOUND = 15;
 
 int spawnLem(Coord coord, int color, bool isPlayer) {
 	spawnTele(coord);
@@ -31,6 +36,7 @@ int spawnLem(Coord coord, int color, bool isPlayer) {
 	// Set up the LEM object with all his properties.
 	Lem l = {
 		isPlayer,
+		!isPlayer,
 		true,
 		coord,
 		color,
@@ -212,6 +218,11 @@ void weaponCarryFrame(int i) {
 	// draw weapon
 	Coord wc = deriveCoord(lemmings[i].coord, derive.x+xoff, derive.y+yoff);
 	drawSprite(makeSimpleSprite(file), wc);
+}
+
+bool canShoot(int i) {
+	Lem l = lemmings[i];
+	return l.ammo > 0 && l.hasRock && isDue(clock(), l.lastShot, SHOT_RELOAD);
 }
 
 void lemRenderFrame() {

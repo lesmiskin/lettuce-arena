@@ -1,17 +1,19 @@
-#include "enemy.h"
 #include "lem.h"
 #include "time.h"
-#include "enemy.h"
 #include "player.h"
 #include "renderer.h"
 #include "ai.h"
 #include "input.h"
 #include "scene.h"
+#include "weapon.h"
 
 // ai which does the following.
 // moves in an X/Y position to...
 // --- get a line of shooting sight with the player.
 // --- stands there and shoots until i die.
+
+const double MIN_DIR_CHANGE = 500;
+const double MAX_DIR_CHANGE = 3000;
 
 const double RIGHT = 0;
 const double DOWN_RIGHT = 45;
@@ -26,6 +28,43 @@ const int BREATHER_CHANCE = 20;
 
 const double SPREAD = 5;	// how wide the targetting range is from the exact angle.
 
+double randomAngle() {
+	// Random 8-way direction.
+
+	// return degToRad(chance(50) ? 0 : 180);
+	// return degToRad(chance(50) ? 90 : 135);
+
+	double deg;
+	switch(randomMq(0, 7)){
+		case 1:
+			deg = 45;
+			break;
+		case 2:
+			deg = 90;
+			break;
+		case 3:
+			deg = 135;
+			break;
+		case 4:
+			deg = 180;
+			break;
+		case 5:
+			deg = 225;
+			break;
+		case 6:
+			deg = 270;
+			break;
+		case 7:
+			deg = 315;
+			break;
+		default:
+			deg = 0;
+			break;
+	}
+
+	return degToRad(deg);
+}
+
 bool inRange(double deg, double target) {
 	return deg >= target-SPREAD && deg <= target+SPREAD; 
 }
@@ -39,7 +78,7 @@ void shootAtOpponent(int enemyInc) {
 	Coord usPos = lemmings[enemyInc].coord;
 
 	// What enemy are we closest to?
-	for(int i=0; i < MAX_ENEMY; i++) {
+	for(int i=0; i < MAX_LEM; i++) {
 		if(i == enemyInc) continue;				// don't shoot ourselves! :p
 		if(lemmings[i].coord.x == 0) continue;
 		if(lemmings[i].dead) continue;			// don't shoot corpses
@@ -55,24 +94,19 @@ void shootAtOpponent(int enemyInc) {
 		}
 	}
 
-	// Throw player in the mix.
-	if(getDistance(usPos, pos) < bestDistance) {
-		target = pos;
-	}
-
 	// calculate the ANGLE between us and the opponent.
 	double rad = getAngle(usPos, target);
 	double deg = radToDeg(rad);
 
 	// if the opponent is in range on any of the 8 directions, shoot him.
-	     if(inRange(deg, RIGHT)) 		fireAngleShot(enemyInc, RIGHT);
-	else if(inRange(deg, DOWN_RIGHT)) 	fireAngleShot(enemyInc, DOWN_RIGHT);
-	else if(inRange(deg, DOWN)) 		fireAngleShot(enemyInc, DOWN);
-	else if(inRange(deg, DOWN_LEFT)) 	fireAngleShot(enemyInc, DOWN_LEFT);
-	else if(inRange(deg, LEFT)) 		fireAngleShot(enemyInc, LEFT);
-	else if(inRange(deg, UP_LEFT)) 		fireAngleShot(enemyInc, UP_LEFT);
-	else if(inRange(deg, UP)) 			fireAngleShot(enemyInc, UP);
-	else if(inRange(deg, UP_RIGHT)) 	fireAngleShot(enemyInc, UP_RIGHT);
+	     if(inRange(deg, RIGHT)) 		shoot(enemyInc, RIGHT);
+	else if(inRange(deg, DOWN_RIGHT)) 	shoot(enemyInc, DOWN_RIGHT);
+	else if(inRange(deg, DOWN)) 		shoot(enemyInc, DOWN);
+	else if(inRange(deg, DOWN_LEFT)) 	shoot(enemyInc, DOWN_LEFT);
+	else if(inRange(deg, LEFT)) 		shoot(enemyInc, LEFT);
+	else if(inRange(deg, UP_LEFT)) 		shoot(enemyInc, UP_LEFT);
+	else if(inRange(deg, UP)) 			shoot(enemyInc, UP);
+	else if(inRange(deg, UP_RIGHT)) 	shoot(enemyInc, UP_RIGHT);
 }
 
 // Note: most sensible to do perpendicular avoidance, lest we wedge into a corner.
@@ -96,21 +130,6 @@ double avoidBottom() {
 // TODO: Would be nice to have a "find closest" function.
 
 void aiSmartFrame(int enemyInc) {
-
-	// avoid other enemies (not working :p)
-	// for(int i=0; i < MAX_ENEMY; i++) {
-	// 	if(i == enemyInc || !lemmings[i].valid || lemmings[i].dead) continue;
-	// 	Rect r = makeRect(lemmings[i].coord.x, lemmings[i].coord.y, 100, 100);
-	// 	// printf("%f, %f, %d, %d, %f, %f, %f, %f\n", r.x, r.y, r.width, r.height, pos.x, pos.y, lemmings[enemyInc].coord.x, lemmings[enemyInc].coord.y);
-	// 	// 	commands[CMD_QUIT] = true;
-	// 	// 	return;
-
-	// 	// if we're in enemy bounds, stop moving in that direction.
-	// 	if(inBounds(lemmings[enemyInc].coord, r)) {
-	// 		commands[CMD_QUIT] = true;
-	// 		return;
-	// 	}
-	// }
 
 	// searching for rocket launcher.
 	if(!lemmings[enemyInc].hasRock) {
@@ -139,7 +158,7 @@ void aiSmartFrame(int enemyInc) {
 
 		// home on it.
 		lemmings[enemyInc].en_idleTarget = angle;		// face direction we're walking ih.
-		Coord homeStep = getAngleStep(angle, ENEMY_SPEED, false);
+		Coord homeStep = getAngleStep(angle, LEM_SPEED, false);
 		lemmings[enemyInc].coord.x += homeStep.x;
 		lemmings[enemyInc].coord.y += homeStep.y;
 		return;
@@ -162,7 +181,7 @@ void aiSmartFrame(int enemyInc) {
 			lemmings[enemyInc].en_lastBreather = clock();
 		}
 		lemmings[enemyInc].en_nextDirTime = randomMq(MIN_DIR_CHANGE, MAX_DIR_CHANGE);
-		lemmings[enemyInc].en_idleTarget = randomEnemyAngle();
+		lemmings[enemyInc].en_idleTarget = randomAngle();
 	}
 
 	// stop the breather
@@ -183,7 +202,7 @@ void aiSmartFrame(int enemyInc) {
 	else if(lemmings[enemyInc].coord.y < border) 				lemmings[enemyInc].en_idleTarget = avoidTop();
 
 	// Walk towards homing direction
-	Coord homeStep = getAngleStep(lemmings[enemyInc].en_idleTarget, ENEMY_SPEED, false);
+	Coord homeStep = getAngleStep(lemmings[enemyInc].en_idleTarget, LEM_SPEED, false);
 	lemmings[enemyInc].coord.x += homeStep.x;
 	lemmings[enemyInc].coord.y += homeStep.y;
 

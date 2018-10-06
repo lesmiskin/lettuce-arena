@@ -4,5 +4,6 @@
 #include "common.h"
 
 extern void aiSmartFrame(int enemyInc);
+extern double randomAngle();
 
 #endif

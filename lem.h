@@ -6,6 +6,7 @@
 
 typedef struct {
     bool isPlayer;
+	bool isEnemy;
     bool valid;
     Coord coord;
     int color;
@@ -34,6 +35,7 @@ typedef struct {
 } Lem;
 
 #define MAX_LEM 4
+#define MAX_SPAWNS 4
 
 extern const int PLAYER_INDEX;
 
@@ -43,5 +45,10 @@ extern void lemRenderFrame();
 extern int spawnLem(Coord coord, int color, bool isPlayer);
 extern void lemAnimateFrame();
 extern bool havingBreather(int i);
+extern bool canShoot(int i);
+extern const double LEM_SPEED;
+extern const double LEM_BOUND;
+
+extern Coord spawns[MAX_SPAWNS];
 
 #endif

@@ -46,5 +46,6 @@ extern double getAngle(Coord a, Coord b);
 extern Coord getAngleStep(double angle, double speed, bool negativeMagic);
 extern Coord getStep(Coord a, Coord b, double speed, bool negativeMagic);
 extern bool chance(int probability);
-
+extern bool onScreen(Coord coord, double threshold);
+	
 #endif

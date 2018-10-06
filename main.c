@@ -7,10 +7,11 @@
 #include "mysdl.h"
 #include "player.h"
 #include "assets.h"
-#include "enemy.h"
 #include "scene.h"
 #include "lem.h"
 #include "fx.h"
+#include "enemy.h"
+#include "weapon.h"
 
 // [easy] health packs
 // [easy] spinning rocket sprites.
@@ -186,6 +187,7 @@ int main()  {
     initPlayer();
     initEnemy();
     initScene();
+    initWeapon();
     // initHud();
 
 	changeMode(MODE_GAME);
@@ -201,8 +203,9 @@ int main()  {
         if(timer(&lastGameFrameTime, GAME_HZ)) {
             pollInput();
             playerGameFrame();
-            enemyGameFrame();
-            enemyFxFrame();
+            // enemyGameFrame();
+            // enemyFxFrame();
+			weaponGameFrame();
             lemGameFrame();
             fxGameFrame();
 			sceneGameFrame();
@@ -221,11 +224,12 @@ int main()  {
         if(timer(&lastRenderFrameTime, RENDER_HZ)) {
 			sceneRenderFrame();
             // hudRenderFrame();
-            enemyFxRenderFrame();
-            enemyRenderFrame();
+            // enemyFxRenderFrame();
+            // enemyRenderFrame();
+			weaponRenderFrame();
             lemRenderFrame();
             fxRenderFrame();
-            enemyDeathRenderFrame();
+            // enemyDeathRenderFrame();
 
             updateCanvas();
         }
