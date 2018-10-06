@@ -33,6 +33,9 @@ void pollInput(void) {
 
 				SDL_Keycode keypress = event.key.keysym.scancode;
 
+				// if (keypress == SDL_SCANCODE_SPACE)
+				// 	shoot(0, );
+
 				//Exit to title.
 				if (keypress == SDL_SCANCODE_ESCAPE)
 					commands[CMD_QUIT] = true;
