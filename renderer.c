@@ -44,8 +44,8 @@ void drawSpriteFull(Sprite sprite, Coord origin, double scalex, double scaley, d
     int offsetY = sprite.offset.y;
 
     //NB: We adjust the offset to ensure all sprites are drawn centered at their coord points
-    offsetX -= (sprite.size.x / 2);
-    offsetY -= (sprite.size.y / 2);
+    offsetX -= ((sprite.size.x*scalex) / 2);
+    offsetY -= ((sprite.size.y*scaley) / 2);
 
     //Configure target location output sprite_t size, adjusting the latter for the constant sprite_t scaling factor.
     SDL_Rect destination  = {

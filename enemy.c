@@ -3,7 +3,8 @@
 #include "lem.h"
 #include <time.h>
 
-const int INITIAL_ENEMIES = 1;
+const int INITIAL_ENEMIES = 3;
+int enemyColorCounter = 1;	// player is always color zero.
 
 void spawnEnemy(Coord point, int color) {
 	// spawn them.
@@ -27,7 +28,7 @@ void initEnemy(void) {
 	for(int i=0; i < INITIAL_ENEMIES; i++) {
 		spawnEnemy(
 			spawns[i+1],			// hit spawns in sequence, so we don't telefrag.
-			randomMq(1, 4)
+			enemyColorCounter++
 		);
 	}
 }

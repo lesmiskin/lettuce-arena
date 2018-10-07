@@ -40,18 +40,30 @@ void weaponGameFrame() {
 
 		// Did we hit a lemming?
 		for(int e=0; e < MAX_LEM; e++) {
-			if(lemmings[e].coord.x == 0) continue;
+			if(!lemmings[e].valid) continue;
 			if(shots[i].shooter == e) continue;		// don't hit ourselves :p
 			if(lemmings[e].dead) continue;			// don't hit corpses
 
 			if(inBounds(shots[i].coord, makeSquareBounds(lemmings[e].coord, LEM_BOUND))) {
-				spawnExp(shots[i].coord);
 				shots[i].valid = false;
 				lemmings[e].health -= DAMAGE;
-				if(lemmings[e].health <=0)
+
+				if(lemmings[e].health <=0) {
+					spawnExp(shots[i].coord, false);
+					spawnLemExp(shots[i].coord, lemmings[e].color);
 					lemmings[e].dead = true;		// make dead
-				continue;
+					lemmings[e].deadTime = clock();
+					lemmings[e].active = false;
+				}else{
+					spawnExp(shots[i].coord, true);
+				}
+				return;
 			}
+		}
+
+		// spawn a puff
+		if(timer(&shots[i].lastPuff, PUFF_FREQ)) {
+			spawnPuff(shots[i].coord);
 		}
 	}
 }

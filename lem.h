@@ -5,6 +5,11 @@
 #define LEM_H
 
 typedef struct {
+	long lastFlash;
+	bool flashInc;
+	long spawnTime;
+	bool active;
+	long deadTime;
     bool isPlayer;
 	bool isEnemy;
     bool valid;

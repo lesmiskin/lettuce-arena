@@ -7,6 +7,11 @@
 extern void spawnTele(Coord c);
 extern void fxGameFrame();
 extern void fxRenderFrame();
-extern void spawnExp(Coord c);
+extern void spawnExp(Coord c, bool smallExp);
+extern void spawnLemExp(Coord c, int lemColor);
+
+#define MAX_PUFFS 100
+extern const double PUFF_FREQ;
+extern void spawnPuff(Coord c);
 
 #endif

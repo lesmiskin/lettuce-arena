@@ -121,6 +121,8 @@ static void loadImages(void) {
         { "rocket-03.png" },
         { "rocket-04.png" },
 
+        { "flash.png" },
+
         { "puff-01.png" },
         { "puff-02.png" },
         { "puff-03.png" },
@@ -132,6 +134,19 @@ static void loadImages(void) {
         { "lem-pink-dead-dark.png" },
         { "lem-pink-stun-01.png" },
         { "lem-pink-stun-02.png" },
+
+        { "lem-red-exp-01.png" },
+        { "lem-red-exp-02.png" },
+        { "lem-red-exp-03.png" },
+        { "lem-blue-exp-01.png" },
+        { "lem-blue-exp-02.png" },
+        { "lem-blue-exp-03.png" },
+        { "lem-orange-exp-01.png" },
+        { "lem-orange-exp-02.png" },
+        { "lem-orange-exp-03.png" },
+        { "lem-pink-exp-01.png" },
+        { "lem-pink-exp-02.png" },
+        { "lem-pink-exp-03.png" },
 
         { "lem-orange-01.png" },
         { "lem-orange-02.png" },

@@ -13,6 +13,22 @@
 #include "enemy.h"
 #include "weapon.h"
 
+// annoying / unclear what happens when enemy grabs gun then shoots immediately and we respawn immediately
+
+// 2-second delay when shot.
+
+// lemming / worm-esque explosion when hit (particles)
+
+// GUTS!
+// you fragged X
+// fragged by X
+// score vs lead.
+// text above their heads.
+// ability to customise text (w/ colors)
+
+
+
+
 // [easy] health packs
 // [easy] spinning rocket sprites.
 // [easy] 1-frame large muzzleflash.
@@ -227,8 +243,8 @@ int main()  {
             // enemyFxRenderFrame();
             // enemyRenderFrame();
 			weaponRenderFrame();
-            lemRenderFrame();
             fxRenderFrame();
+            lemRenderFrame();
             // enemyDeathRenderFrame();
 
             updateCanvas();

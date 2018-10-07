@@ -11,6 +11,8 @@
 
 Coord spawns[MAX_SPAWNS];
 
+const int RESPAWN_TIME = 1500;
+
 Lem lemmings[MAX_LEM];
 const int PLAYER_INDEX = 0;
 static long lastIdleTime;
@@ -35,6 +37,11 @@ int spawnLem(Coord coord, int color, bool isPlayer) {
 
 	// Set up the LEM object with all his properties.
 	Lem l = {
+		clock(),
+		0,
+		clock(),
+		true,
+		0,
 		isPlayer,
 		!isPlayer,
 		true,
@@ -103,9 +110,11 @@ void lemGameFrame() {
 		if(!lemmings[i].valid) continue;
 
 		// Respawn if dead
-		if(lemmings[i].dead) {
+		if(lemmings[i].dead && isDue(clock(), lemmings[i].deadTime, RESPAWN_TIME)) {
 			respawn(i);
 		}
+
+		if(!lemmings[i].active) continue;
 
 		// Run enemy AI
 		if(!lemmings[i].isPlayer){
@@ -245,16 +254,30 @@ void lemRenderFrame() {
 	// show all lemming sprites here.
 	for(int i=0; i < MAX_LEM; i++) {
 		Lem lem = lemmings[i];
-		if(!lem.valid) continue;
+		if(!lem.valid || !lem.active) continue;
 
 		// are we traveling left or right?
 		double deg = radToDeg(lem.angle);
 		SDL_RendererFlip flip = deg > 90 && deg < 270 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 //		printf(lemmings[0].angle);
 
-		// Set animation frame on sprite file.
 		char frameFile[25];
-		sprintf(frameFile, "lem-%s-0%d.png", "red", lem.animInc);
+
+		// Set animation frame on sprite file.
+		switch(lem.color) {
+			case 0:
+				sprintf(frameFile, "lem-%s-0%d.png", "red", lem.animInc);
+				break;
+			case 1:
+				sprintf(frameFile, "lem-%s-0%d.png", "blue", lem.animInc);
+				break;
+			case 2:
+				sprintf(frameFile, "lem-%s-0%d.png", "pink", lem.animInc);
+				break;
+			case 3:
+				sprintf(frameFile, "lem-%s-0%d.png", "orange", lem.animInc);
+				break;
+		}
 
 		// draw the sprite
 		Sprite lemSprite = makeFlippedSprite(frameFile, flip);
@@ -265,7 +288,18 @@ void lemRenderFrame() {
 			weaponCarryFrame(i);
 
 		// draw player plume
-		if(lem.isPlayer)
-			drawSprite(makeSimpleSprite("p1.png"), deriveCoord(lem.coord, -1, -13));
+		if(lem.isPlayer){
+			drawSprite(makeSimpleSprite("p1-arrow.png"), deriveCoord(lem.coord, -1, -13));
+
+			// spawn "you are here" signal upon respawn.
+			if(!isDue(clock(), lem.spawnTime, 1000)) {
+				if(isDue(clock(), lem.lastFlash, 100)) {
+					lemmings[i].flashInc = !lemmings[i].flashInc;
+					lemmings[i].lastFlash = clock();
+				}
+				if(lem.flashInc)
+					drawSprite(makeSimpleSprite("flash.png"), lem.coord);
+			}
+		}
 	}
 }
