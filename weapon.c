@@ -56,6 +56,7 @@ void weaponGameFrame() {
 					lemmings[e].deadTime = clock();
 					lemmings[e].active = false;
 					lemmings[e].killer = shots[i].shooter;
+					lemmings[e].hasRock = false;
 				}else{
 					spawnExp(shots[i].coord, true);
 				}

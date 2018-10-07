@@ -86,6 +86,23 @@ void hudGameFrame(void) {
 
 int fraglimit = 30;
 
+int compare_ints(const void *p, const void *q) {
+    Lem x = *(const Lem *)p;
+    Lem y = *(const Lem *)q;
+
+    if (x.frags < y.frags)
+        return -1;  // Return -1 if you want ascending, 1 if you want descending order. 
+    else if (x.frags > y.frags)
+        return 1;   // Return 1 if you want ascending, -1 if you want descending order. 
+
+    return 0;
+}
+
+/* Sort an array of n integers, pointed to by a. */
+void sort_ints(Lem *a, size_t n) {
+    qsort(a, n, sizeof *a, &compare_ints);
+}
+
 void hudRenderFrame(void) {
 	Lem lem = lemmings[PLAYER_INDEX];
 
@@ -104,10 +121,19 @@ void hudRenderFrame(void) {
 
 	writeText(fraglimit, makeCoord(272, 3), false);
 
+	// if(lem.dead) {
+		int y =0 ;
+		for(int i=0; i < MAX_LEM; i++) {
+			writeFont(lemmings[i].name, makeCoord(130, 80 + y));
+			writeAmount(lemmings[i].frags, makeCoord(180, 77+y));
+			y += 10;
+		}
+	// }
+
 	// ammo
 	if(lem.hasRock) {
-		drawSprite(makeSimpleSprite("rocket-e.png"), makeCoord(30,5));
-		writeText(lem.ammo, makeCoord(39, 5), false);
+		drawSprite(makeSimpleSprite("rocket-e.png"), makeCoord(10,6));
+		writeAmount(lem.ammo, makeCoord(19, 3));
 	}
 
 
