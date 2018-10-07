@@ -35,17 +35,21 @@ Sprite makeSimpleSprite(char *textureName) {
 	return makeSprite(texture, zeroCoord(), SDL_FLIP_NONE);
 }
 
-void drawSpriteFull(Sprite sprite, Coord origin, double scalex, double scaley, double angle) {
+void drawSpriteFull(Sprite sprite, Coord origin, double scalex, double scaley, double angle, bool centered) {
     //Ensure we're always calling this with an initialised sprite_t.
     assert(sprite.texture != NULL);
 
     //Offsets should be relative to image pixel metrics, not screen metrics.
-    int offsetX = sprite.offset.x;
-    int offsetY = sprite.offset.y;
+    int offsetX = 0;
+    int offsetY = 0;
+    // int offsetX = sprite.offset.x;
+    // int offsetY = sprite.offset.y;
 
     //NB: We adjust the offset to ensure all sprites are drawn centered at their coord points
-    offsetX -= ((sprite.size.x*scalex) / 2);
-    offsetY -= ((sprite.size.y*scaley) / 2);
+	if(centered) {
+		offsetX -= ((sprite.size.x*scalex) / 2);
+		offsetY -= ((sprite.size.y*scaley) / 2);
+	}
 
     //Configure target location output sprite_t size, adjusting the latter for the constant sprite_t scaling factor.
     SDL_Rect destination  = {
@@ -66,7 +70,7 @@ void drawSpriteFull(Sprite sprite, Coord origin, double scalex, double scaley, d
 }
 
 void drawSprite(Sprite sprite, Coord origin) {
-    drawSpriteFull(sprite, origin, 1, 1, 0);
+    drawSpriteFull(sprite, origin, 1, 1, 0, true);
 }
 
 void initRenderer(void) {

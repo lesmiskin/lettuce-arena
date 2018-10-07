@@ -20,7 +20,7 @@ static const int ANIM_HZ = 1000 / 4;
 const double LEM_SPEED = 1;
 const double LEM_BOUND = 15;
 
-int spawnLem(Coord coord, int color, bool isPlayer) {
+int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 	spawnTele(coord);
 
 	// player is always at index zero.
@@ -37,6 +37,9 @@ int spawnLem(Coord coord, int color, bool isPlayer) {
 
 	// Set up the LEM object with all his properties.
 	Lem l = {
+		-1,
+		name,
+		frags,
 		clock(),
 		0,
 		clock(),
@@ -84,7 +87,9 @@ void respawn(int i) {
 	spawnLem(
 		spawns[randomMq(0,3)],
 		lemmings[i].color,
-		lemmings[i].isPlayer
+		lemmings[i].isPlayer,
+		lemmings[i].frags,
+		lemmings[i].name
 	);
 }
 
@@ -140,7 +145,7 @@ void lemGameFrame() {
 
 			if(inBounds(lemmings[i].coord, makeSquareBounds(weapons[j].coord, 10))) {
 				lemmings[i].hasRock = true;
-				lemmings[i].ammo += 5;
+				lemmings[i].ammo += 3;
 				weapons[j].pickedUp = true;
 				weapons[j].lastPickup = clock();
 			}
@@ -279,6 +284,23 @@ void lemRenderFrame() {
 				break;
 		}
 
+		// draw player plume
+		if(lem.isPlayer){
+			// spawn "you are here" signal upon respawn.
+			if(!isDue(clock(), lem.spawnTime, 1000)) {
+				if(isDue(clock(), lem.lastFlash, 100)) {
+					lemmings[i].flashInc = !lemmings[i].flashInc;
+					lemmings[i].lastFlash = clock();
+				}
+				if(lem.flashInc) {
+					drawSprite(makeSimpleSprite("flash.png"), lem.coord);
+					drawSprite(makeSimpleSprite("p1.png"), deriveCoord(lem.coord, -1, -15));
+				}
+			} else {
+				drawSprite(makeSimpleSprite("p1-arrow.png"), deriveCoord(lem.coord, -1, -13));
+			}
+		}
+
 		// draw the sprite
 		Sprite lemSprite = makeFlippedSprite(frameFile, flip);
 		drawSprite(lemSprite, lem.coord);
@@ -286,20 +308,5 @@ void lemRenderFrame() {
 		// draw carrying weapon
 		if(lem.hasRock) 
 			weaponCarryFrame(i);
-
-		// draw player plume
-		if(lem.isPlayer){
-			drawSprite(makeSimpleSprite("p1-arrow.png"), deriveCoord(lem.coord, -1, -13));
-
-			// spawn "you are here" signal upon respawn.
-			if(!isDue(clock(), lem.spawnTime, 1000)) {
-				if(isDue(clock(), lem.lastFlash, 100)) {
-					lemmings[i].flashInc = !lemmings[i].flashInc;
-					lemmings[i].lastFlash = clock();
-				}
-				if(lem.flashInc)
-					drawSprite(makeSimpleSprite("flash.png"), lem.coord);
-			}
-		}
 	}
 }

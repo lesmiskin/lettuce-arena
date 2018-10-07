@@ -53,7 +53,7 @@ void pollInput(void) {
 	else if(keysHeld[SDL_SCANCODE_DOWN])
 		commands[CMD_PLAYER_DOWN] = true;
 
-	if(keysHeld[SDL_SCANCODE_SPACE])
+	if(keysHeld[SDL_SCANCODE_LCTRL] || keysHeld[SDL_SCANCODE_RCTRL])
 		commands[CMD_SHOOT] = true;
 }
 

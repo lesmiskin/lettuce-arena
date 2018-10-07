@@ -5,6 +5,9 @@
 #define LEM_H
 
 typedef struct {
+	int killer;
+	char* name;
+	int frags;
 	long lastFlash;
 	bool flashInc;
 	long spawnTime;
@@ -48,7 +51,7 @@ extern void respawn(int color);
 extern Lem lemmings[MAX_LEM];
 extern void lemGameFrame();
 extern void lemRenderFrame();
-extern int spawnLem(Coord coord, int color, bool isPlayer);
+extern int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name);
 extern void lemAnimateFrame();
 extern bool havingBreather(int i);
 extern bool canShoot(int i);

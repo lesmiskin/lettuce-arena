@@ -6,9 +6,11 @@
 const int INITIAL_ENEMIES = 3;
 int enemyColorCounter = 1;	// player is always color zero.
 
-void spawnEnemy(Coord point, int color) {
+char* names[] = { "redwood", "mr elusive", "tokay", "scary", "mynx", "tycho", "lowtax", "hellchick", "cartman", "kenny", "neo", "morpheus" };
+
+void spawnEnemy(Coord point, int color, char* name) {
 	// spawn them.
-	int lindex = spawnLem(point, color, false);
+	int lindex = spawnLem(point, color, false, 0, name);
 
 	// set enemy-specific properties.
 	lemmings[lindex].angle = randomAngle();
@@ -17,10 +19,10 @@ void spawnEnemy(Coord point, int color) {
 }
 
 void initEnemy(void) {
-	spawns[0] = makeCoord(20, 20);
+	spawns[0] = makeCoord(20, 35);
 	spawns[1] = makeCoord(300, 220);
 	spawns[2] = makeCoord(20, 220);
-	spawns[3] = makeCoord(300, 20);
+	spawns[3] = makeCoord(300, 40);
 
 	// Coord point = spawns[randomMq(0, MAX_SPAWNS)];
 
@@ -28,7 +30,8 @@ void initEnemy(void) {
 	for(int i=0; i < INITIAL_ENEMIES; i++) {
 		spawnEnemy(
 			spawns[i+1],			// hit spawns in sequence, so we don't telefrag.
-			enemyColorCounter++
+			enemyColorCounter++,
+			names[randomMq(0,7)]
 		);
 	}
 }

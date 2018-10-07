@@ -24,6 +24,8 @@ const double UP_LEFT = 215;
 const double UP = 270;
 const double UP_RIGHT = 315;
 
+static const int BAR_SIZE = 10;
+
 const int BREATHER_CHANCE = 20;
 
 const double SPREAD = 5;	// how wide the targetting range is from the exact angle.
@@ -196,10 +198,10 @@ void aiSmartFrame(int enemyInc) {
 	int border = 10;
 
 	// border avoidance (might be nice to restore onScreen once reliable approach found)
-	if(lemmings[enemyInc].coord.x > screenBounds.x-border) 		lemmings[enemyInc].angle = avoidRight();
-	else if(lemmings[enemyInc].coord.x < border) 				lemmings[enemyInc].angle = avoidLeft();
+	if(lemmings[enemyInc].coord.x > screenBounds.x-border) 			lemmings[enemyInc].angle = avoidRight();
+	else if(lemmings[enemyInc].coord.x < border) 					lemmings[enemyInc].angle = avoidLeft();
 	else if(lemmings[enemyInc].coord.y > screenBounds.y-border) 	lemmings[enemyInc].angle = avoidBottom();
-	else if(lemmings[enemyInc].coord.y < border) 				lemmings[enemyInc].angle = avoidTop();
+	else if(lemmings[enemyInc].coord.y < border-BAR_SIZE) 			lemmings[enemyInc].angle = avoidTop();
 
 	// Walk towards homing direction
 	Coord homeStep = getAngleStep(lemmings[enemyInc].angle, LEM_SPEED, false);

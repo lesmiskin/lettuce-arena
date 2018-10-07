@@ -47,6 +47,7 @@ void weaponGameFrame() {
 			if(inBounds(shots[i].coord, makeSquareBounds(lemmings[e].coord, LEM_BOUND))) {
 				shots[i].valid = false;
 				lemmings[e].health -= DAMAGE;
+				lemmings[shots[i].shooter].frags++;
 
 				if(lemmings[e].health <=0) {
 					spawnExp(shots[i].coord, false);
@@ -54,6 +55,7 @@ void weaponGameFrame() {
 					lemmings[e].dead = true;		// make dead
 					lemmings[e].deadTime = clock();
 					lemmings[e].active = false;
+					lemmings[e].killer = shots[i].shooter;
 				}else{
 					spawnExp(shots[i].coord, true);
 				}
@@ -123,7 +125,7 @@ void shoot(int i, double deg) {
 	if(lemmings[i].isEnemy){
 		lemmings[i].angle = degToRad(deg);
 		lemmings[i].en_lastDirTime = clock();
-		lemmings[i].en_nextDirTime = 350;		// quick dir change so we don't collide.
+		lemmings[i].en_nextDirTime = 30;		// quick dir change so we don't collide.
 	}
 
 	// find a spare projectile 

@@ -1,6 +1,7 @@
 {
-    "files.associations": {
-        "lem.h": "c",
-        "input.h": "c"
-    }
+	"files.associations": {
+		"lem.h": "c",
+		"input.h": "c",
+		"stdio.h": "c"
+	}
 }

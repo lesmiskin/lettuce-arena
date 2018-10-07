@@ -128,7 +128,7 @@ void fxRenderFrame() {
 		char file[10];
 		double scale = explosions[i].smallExp ? 0.5 : 1;
 		sprintf(file, "exp-0%d.png", explosions[i].animInc+1);
-		drawSpriteFull(makeSimpleSprite(file), explosions[i].coord, scale, scale, 0.0);
+		drawSpriteFull(makeSimpleSprite(file), explosions[i].coord, scale, scale, 0.0, true);
 	}
 
 	// teleportations

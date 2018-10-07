@@ -12,6 +12,8 @@ const double BORDER = 10;
 bool playerWalking = false;
 static int playerIndex;
 
+const int BAR_SIZE = 10;
+
 void walk() {
 
 	Coord pos = lemmings[PLAYER_INDEX].coord;
@@ -30,7 +32,7 @@ void walk() {
 		pos.x -= MOVE_INC;
 	if (isRight && pos.x < screenBounds.x-BORDER) 
 		pos.x += MOVE_INC;
-	if (isUp && pos.y > BORDER) 
+	if (isUp && pos.y > BORDER + BAR_SIZE) 
 		pos.y -= MOVE_INC;
 	if (isDown && pos.y < screenBounds.y-BORDER)
 		pos.y += MOVE_INC;
@@ -74,5 +76,5 @@ void playerGameFrame(void) {
 }
 
 void initPlayer() {
-	playerIndex = spawnLem(makeCoord(20,20), 0, true);
+	playerIndex = spawnLem(spawns[0], 0, true, 0, "player");
 }

@@ -12,22 +12,41 @@
 #include "fx.h"
 #include "enemy.h"
 #include "weapon.h"
+#include "hud.h"
+
+// on spawn, lem should FACE inwards.
+
+// rocket fires out FURTHER than origin.
+// muzzle flash animation (single frame, POSITIONED)
+
+// status bar
+// no of kills (reticle)
+// ammo (rocket) -- vanishes when not gotten.
+
+// you fragged NAME
+// fragged by NAME
+
+
+
+
+
+
+
+// stop player 1 hogging the first spawn point every time.
+// only put "P1" plume up when indicator has finished flashing.
+
+
+
+
+
 
 // annoying / unclear what happens when enemy grabs gun then shoots immediately and we respawn immediately
-
-// 2-second delay when shot.
-
-// lemming / worm-esque explosion when hit (particles)
-
 // GUTS!
 // you fragged X
 // fragged by X
 // score vs lead.
 // text above their heads.
 // ability to customise text (w/ colors)
-
-
-
 
 // [easy] health packs
 // [easy] spinning rocket sprites.
@@ -147,7 +166,7 @@ const int FX_HZ = 1000 / 12;            //24fps
 bool running = true;
 SDL_Window *window = NULL;
 
-Coord windowSize = { 1024, 768 };   // 320x240
+Coord windowSize = { 320*3, 240*3 };   // 320x240
 
 static void initSDL(void) {
     SDL_Init(SDL_INIT_AUDIO);
@@ -200,11 +219,11 @@ int main()  {
     initWindow();
     initRenderer();
     initAssets();
-    initPlayer();
     initEnemy();
     initScene();
     initWeapon();
-    // initHud();
+    initHud();
+    initPlayer();
 
 	changeMode(MODE_GAME);
 
@@ -225,7 +244,7 @@ int main()  {
             lemGameFrame();
             fxGameFrame();
 			sceneGameFrame();
-			// hudGameFrame();
+			hudGameFrame();
             processSystemCommands();
         }
 
@@ -239,12 +258,12 @@ int main()  {
         double renderFPS;
         if(timer(&lastRenderFrameTime, RENDER_HZ)) {
 			sceneRenderFrame();
-            // hudRenderFrame();
             // enemyFxRenderFrame();
             // enemyRenderFrame();
 			weaponRenderFrame();
             fxRenderFrame();
             lemRenderFrame();
+            hudRenderFrame();
             // enemyDeathRenderFrame();
 
             updateCanvas();
