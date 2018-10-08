@@ -15,43 +15,49 @@
 #include "hud.h"
 
 
-// dont overlap players
-
-// white highlight on score moves if not first or second.
-// blue background on score moves if not first or second.
-
-
+// time limit + counter
+// end screen when fraglimit is hit
+// ability to have no player (spectator mode).
 // shooting animation (overlaid muzzle-flash sprite)
 // spawn points have a funny tile (e.g. quake 2 teleporter)
 // player takes random spawn point FIRST.
-
-
-
-
-
-// title screen with headlamp rotation ala commander keen.
-// 
-
-
-// add a wall block.
-// machinegun
-
-
-
 // on spawn, lem should FACE inwards.
-// ability to PUNCH (alex kidd style)
 
-// stop enemy cheating with angular motion towards weapons (should walk diag, then adjust / swap with straght, then diag)
+// sound effects
+// add a wall block.
+
+// game.cfg (fraglimit, time limit)
+// botnames.cfg
+// maps.cfg
+// keys.cfg (arrows vs. wsad, ctrl vs other keys)
+
+// simple punch to bash enemies around with
+
+// simple title screen: headlamp rotation, joint explosion.
+// demo mode comes up as attract mode!
+// "-- DEMO MODE --" flasher
+
+
+
+
+
+
+// powerup... invincibility.
+// powerup... splash damage.
+// gameplay: experiment with ammo + health bars
+
+// machinegun
+// dont overlap players
+// title screen with headlamp rotation ala commander keen.
+// ability to PUNCH (alex kidd style)
+// stop enemy cheating with angular motion towards weapons
 // annoying / unclear what happens when enemy grabs gun then shoots immediately and we respawn immediately
 // ability to customise text (w/ colors)
 // spinning rockets again.
-
 // [easy] health packs
 // [easy] spinning rocket sprites.
 // [easy] 1-frame large muzzleflash.
 // [easy] up/down walking sprites.
-
-
 // player bumps back if part of an explosion.
 // splash damage?
 
