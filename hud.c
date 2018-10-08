@@ -105,23 +105,23 @@ void hudRenderFrame(void) {
 	}
 
 	// frags
+	writeText(fraglimit, makeCoord(272, 3), false);
 	drawSpriteFull(makeSimpleSprite("white.png"), makeCoord(289,0), 16, 13, 0, false);
 	drawSpriteFull(makeSimpleSprite("score.png"), makeCoord(290,1), 14, 11, 0, false);
-	// drawSprite(makeSimpleSprite("cross.png"), makeCoord(5,lem.frags));
 	writeAmount(lem.frags, makeCoord(292, 3));
 
-	writeText(fraglimit, makeCoord(272, 3), false);
-
-	Lem* scores = malloc(sizeof(Lem)*MAX_LEM);	
-	memcpy(scores, lemmings, sizeof(lemmings));
-
-	sort_ints(scores, 4);
-
+	// Scoreboard
 	if(lem.dead || checkCommand(CMD_SCORES)) {
-		int y =0 ;
+
+		// Sort the scores
+		Lem* scores = malloc(sizeof(Lem)*MAX_LEM);	
+		memcpy(scores, lemmings, sizeof(lemmings));
+		sort_ints(scores, 4);
+
+		int y =0;
 		for(int i=0; i < MAX_LEM; i++) {
 			writeFont(scores[i].name, makeCoord(130, 80 + y));
-			writeAmount(scores[i].frags, makeCoord(180, 77+y));
+			writeAmount(scores[i].frags, makeCoord(180, 80 + y));
 			y += 10;
 		}
 	}
