@@ -15,12 +15,15 @@
 #include "hud.h"
 #include "state.h"
 
-// on spawn, lem should FACE inwards.
-
 // try machinegun
 // try walls in the middle
 // - enemies dont shoot if theres a wall in the way.
 // - if we are NEAR a wall (i.e. block of two or more, then MOVE AROUND IT)
+
+// zelda-esque map sections, inspired from q3dm17 (outside area, inner area etc.)
+
+
+
 
 // powerup dropins (ala worms)
 // all pickups are in wood crates that you bash open (ala gta)
@@ -30,7 +33,6 @@
 // inspiration: gta (crates, machinegun)
 // inspiration: lemmings (explosions, sprites)
 
-// zelda-esque map sections, inspired from q3dm17 (outside area, inner area etc.)
 
 
 

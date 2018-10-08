@@ -10,8 +10,8 @@
 const double SHOT_SPEED = 1.75;
 const double SHOT_DIST = 13;//13;
 const int SHOT_FRAMES = 4;
-const int DAMAGE = 25;
-const double SHOT_RELOAD = 500;
+const int DAMAGE = 1;
+const double SHOT_RELOAD = 750;
 long lastShotFrame;
 long lastPlayerKillTime;
 int lastPlayerKillIndex = -1;

@@ -52,7 +52,7 @@ int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 		true,
 		coord,
 		color,
-		1,				// health
+		3,				// health
 		1, 				// animInc
 		false,			// isWalking
 
@@ -328,5 +328,16 @@ void lemRenderFrame() {
 		// draw carrying weapon
 		if(lem.hasRock) 
 			weaponCarryFrame(i);
+
+		char healthFile[] = "health-r.png";	// need enough chars for NULL terminator!!
+		if     (lem.health < 3) healthFile[7] = 'y';
+		else  				    healthFile[7] = 'g';
+
+		Coord h = deriveCoord(lem.coord, -4, -10);
+		int barWidth = (int)(((double)lem.health / 3) * 8.0);
+
+		drawSpriteFull(makeSimpleSprite("black.png"), deriveCoord(h, -1, -1), 10, 3, 0, false);
+		drawSpriteFull(makeSimpleSprite("health-r.png"), h, 8, 1, 0, false);
+		drawSpriteFull(makeSimpleSprite(healthFile), h, barWidth, 1, 0, false);
 	}
 }
