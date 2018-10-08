@@ -156,14 +156,22 @@ void aiSmartFrame(int enemyInc) {
 			}
 		}
 
-		double angle = getAngle(usPos, target);
+		// no weapon to home to - just skip then.
+		if(target.x == 0 && target.y == 0) {
+			// bit of a hack ... :p
+			// basically this stops them going into the corner!
 
-		// home on it.
-		lemmings[enemyInc].angle = angle;		// face direction we're walking ih.
-		Coord homeStep = getAngleStep(angle, LEM_SPEED, false);
-		lemmings[enemyInc].coord.x += homeStep.x;
-		lemmings[enemyInc].coord.y += homeStep.y;
-		return;
+		// home to it
+		}else{
+			double angle = getAngle(usPos, target);
+
+			// home on it.
+			lemmings[enemyInc].angle = angle;		// face direction we're walking ih.
+			Coord homeStep = getAngleStep(angle, LEM_SPEED, false);
+			lemmings[enemyInc].coord.x += homeStep.x;
+			lemmings[enemyInc].coord.y += homeStep.y;
+			return;
+		}
 	}
 
 	// shoot opponent, with a little wait between each shot.

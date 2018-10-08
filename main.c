@@ -15,18 +15,19 @@
 #include "hud.h"
 #include "state.h"
 
-// restart after 
+// game can play itself (SPECTATOR MODE)
+// title screen (lamp, short animated sequence)
 
-
-// time limit + counter
-// ability to have no player (spectator mode).
 // shooting animation (overlaid muzzle-flash sprite)
 // spawn points have a funny tile (e.g. quake 2 teleporter)
-// player takes random spawn point FIRST.
 // on spawn, lem should FACE inwards.
 
 // sound effects
 // add a wall block.
+
+
+// time limit + counter
+// player takes random spawn point FIRST.
 
 // game.cfg (fraglimit, time limit)
 // botnames.cfg
@@ -34,10 +35,7 @@
 // keys.cfg (arrows vs. wsad, ctrl vs other keys)
 
 // simple punch to bash enemies around with
-
-// simple title screen: headlamp rotation, joint explosion.
 // demo mode comes up as attract mode!
-// "-- DEMO MODE --" flasher
 
 
 
