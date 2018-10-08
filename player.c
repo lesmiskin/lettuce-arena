@@ -78,5 +78,6 @@ void playerGameFrame(void) {
 void initPlayer() {
 	playerIndex = spawnLem(spawns[0], 0, true, 0, "player");
 	// lemmings[0].ammo = 99;
+	// lemmings[0].health = 999999;
 	// lemmings[0].hasRock = true;
 }

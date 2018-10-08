@@ -17,10 +17,6 @@
 
 // dont overlap players
 
-// you fragged {NAME}
-// centered obit text.
-// "1st place with 5"
-
 // white highlight on score moves if not first or second.
 // blue background on score moves if not first or second.
 

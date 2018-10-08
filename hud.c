@@ -137,22 +137,26 @@ void hudRenderFrame(void) {
 	memcpy(scores, lemmings, sizeof(lemmings));
 	sort_ints(scores, 4);
 
+	int boardPosition = -1;
+
+	// find position in scoreboard.
+	for(int i=0; i < MAX_LEM; i++) {
+		if(scores[i].isPlayer) {
+			boardPosition = i;
+			break;
+		}
+	}
+
+	// If we're tied for zero - mark us on the board anyway
+	if(scores[0].frags == 0) boardPosition = 0;
+
 	// show position statement
 	if(showPosition) {
 		char msg[30];
 		char placing[10];
 
-		// find position in scoreboard.
-		int position = -1;
-		for(int i=0; i < MAX_LEM; i++) {
-			if(scores[i].isPlayer) {
-				position = i;
-				break;
-			}
-		}
-
 		// what phrasing should we use?
-		switch(position) {
+		switch(boardPosition) {
 			case 0:
 				sprintf(placing, "%s", "1st"); break;
 			case 1:
@@ -169,14 +173,28 @@ void hudRenderFrame(void) {
 
 	// frags
 	writeText(fraglimit, makeCoord(272, 3), false);
-	drawSpriteFull(makeSimpleSprite("white.png"), makeCoord(289,0), 16, 13, 0, false);
-	drawSpriteFull(makeSimpleSprite("score.png"), makeCoord(290,1), 14, 11, 0, false);
-	writeAmount(lem.frags, makeCoord(292, 3));
+
+	// highlight us if we are first, or second
+	if(boardPosition == 0) {
+		drawSpriteFull(makeSimpleSprite("white.png"), makeCoord(279,0), 16, 13, 0, false);
+		drawSpriteFull(makeSimpleSprite("score.png"), makeCoord(280,1), 14, 11, 0, false);
+	}else if(boardPosition == 1) {
+		drawSpriteFull(makeSimpleSprite("white.png"), makeCoord(299,0), 16, 13, 0, false);
+		drawSpriteFull(makeSimpleSprite("score.png"), makeCoord(300,1), 14, 11, 0, false);
+	}
+
+	// first and second placements
+	writeAmount(scores[0].frags, makeCoord(282, 3));
+	writeAmount(scores[1].frags, makeCoord(302, 3));
 
 	// Scoreboard
 	if(lem.dead || checkCommand(CMD_SCORES)) {
 		int y =0;
 		for(int i=0; i < MAX_LEM; i++) {
+			// draw blue marker where we are.
+			if(i == boardPosition) {
+				drawSpriteFull(makeSimpleSprite("score.png"), makeCoord(130-9,80 + y-2), 75, 11, 0, false);
+			}
 			writeFont(scores[i].name, makeCoord(130, 80 + y));
 			writeAmount(scores[i].frags, makeCoord(180, 80 + y));
 			y += 10;
