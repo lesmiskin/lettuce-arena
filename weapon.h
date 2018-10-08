@@ -22,5 +22,7 @@ extern void weaponGameFrame();
 extern void weaponRenderFrame();
 extern void shoot(int i, double deg);
 extern void initWeapon();
+extern long lastPlayerKillTime;
+extern int lastPlayerKillIndex;
 
 #endif

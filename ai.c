@@ -205,6 +205,16 @@ void aiSmartFrame(int enemyInc) {
 
 	// Walk towards homing direction
 	Coord homeStep = getAngleStep(lemmings[enemyInc].angle, LEM_SPEED, false);
+
+	// would hit other lemming? stop then.
+	// Coord hope = makeCoord(lemmings[enemyInc].coord.x + homeStep.x, lemmings[enemyInc].coord.y + homeStep.y);
+	// for(int i=0; i < MAX_LEM; i++) {
+	// 	int halfBound = LEM_BOUND/2;
+	// 	if(inBounds(hope, makeRect(lemmings[i].coord.x-halfBound, lemmings[i].coord.y-halfBound, LEM_BOUND, LEM_BOUND))) {
+	// 		return;
+	// 	}
+	// }
+
 	lemmings[enemyInc].coord.x += homeStep.x;
 	lemmings[enemyInc].coord.y += homeStep.y;
 

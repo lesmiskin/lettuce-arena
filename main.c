@@ -14,117 +14,56 @@
 #include "weapon.h"
 #include "hud.h"
 
+
+// dont overlap players
+
+// you fragged {NAME}
+// centered obit text.
+// "1st place with 5"
+
+// white highlight on score moves if not first or second.
+// blue background on score moves if not first or second.
+
+
+// shooting animation (overlaid muzzle-flash sprite)
+// spawn points have a funny tile (e.g. quake 2 teleporter)
+// player takes random spawn point FIRST.
+
+
+
+
+
+// title screen with headlamp rotation ala commander keen.
+// 
+
+
+// add a wall block.
+// machinegun
+
+
+
 // on spawn, lem should FACE inwards.
+// ability to PUNCH (alex kidd style)
 
-// rocket fires out FURTHER than origin.
-// muzzle flash animation (single frame, POSITIONED)
-
-// status bar
-// no of kills (reticle)
-// ammo (rocket) -- vanishes when not gotten.
-
-// you fragged NAME
-// fragged by NAME
-
-
-
-
-
-
-
-// stop player 1 hogging the first spawn point every time.
-// only put "P1" plume up when indicator has finished flashing.
-
-
-
-
-
-
+// stop enemy cheating with angular motion towards weapons (should walk diag, then adjust / swap with straght, then diag)
 // annoying / unclear what happens when enemy grabs gun then shoots immediately and we respawn immediately
-// GUTS!
-// you fragged X
-// fragged by X
-// score vs lead.
-// text above their heads.
 // ability to customise text (w/ colors)
+// spinning rockets again.
 
 // [easy] health packs
 // [easy] spinning rocket sprites.
 // [easy] 1-frame large muzzleflash.
 // [easy] up/down walking sprites.
 
-// character clipping.
-// chaingun
-// player participation
-// tab scoreboard
 
-
-// player can pick up rocket too.
-
-
-
-
-
-
-
-// pain feedback (bump back, flash red)
-// up/down walking sprites.
-// spinning rockets again.
-// shooting animation.
-// player has health and can die.
-// player participates in spawn point musical chairs
-// player can shoot.
-// character clipping
-// smoother death jumping.
+// player bumps back if part of an explosion.
 // splash damage?
-// initial pistol weapon
-// can pick up machinegun
-// spawn points have a funny tile (e.g. quake 2 teleporter)
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// health packs
-// persistent score area.
 
 // ability to scroll, and enter different areas
-// stop enemy cheating with angular motion towards weapons (should walk diag, then adjust / swap with straght, then diag)
-
 // simple walls for strategy.
 // enemies don't shoot if wall is in the way.
 
@@ -140,7 +79,6 @@
     // . . . .         . . . .
 
 // QUAD DAMAGE powerup spawns infrequently in middle of map.
-// huge gibs fly out when this is used.
 
 // chairs and computer desks lying around.
 // office theme (worker sprites, chairs, desks with computers)

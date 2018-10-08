@@ -6,10 +6,13 @@
 #include "fx.h"
 
 const double SHOT_SPEED = 1.75;
+const double SHOT_DIST = 13;//13;
 const int SHOT_FRAMES = 4;
 const int DAMAGE = 25;
 const double SHOT_RELOAD = 500;
 long lastShotFrame;
+long lastPlayerKillTime;
+int lastPlayerKillIndex = -1;
 
 Shot shots[MAX_SHOTS];
 
@@ -57,6 +60,11 @@ void weaponGameFrame() {
 					lemmings[e].active = false;
 					lemmings[e].killer = shots[i].shooter;
 					lemmings[e].hasRock = false;
+
+					if(lemmings[shots[i].shooter].isPlayer) {
+						lastPlayerKillTime = clock();
+						lastPlayerKillIndex = e;
+					}
 				}else{
 					spawnExp(shots[i].coord, true);
 				}
@@ -133,7 +141,7 @@ void shoot(int i, double deg) {
 	for(int j=0; j < MAX_SHOTS; j++) {
 		if(shots[j].valid) continue;
 
-		Coord origin = lemmings[i].coord;
+		Coord origin = extendOnAngle(lemmings[i].coord, lemmings[i].angle, SHOT_DIST);
 		Coord shotStep = getAngleStep(rad, SHOT_SPEED, false);
 		Shot s = { true, origin, shotStep, deg, 0, i, 0 };
 		shots[j] = s;

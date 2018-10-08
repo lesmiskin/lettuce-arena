@@ -192,3 +192,10 @@ Rect makeRect(double x, double y, double width, double height) {
     Rect rect = { x, y, width, height };
     return rect;
 }
+
+Coord extendOnAngle(Coord origin, double radians, int distance) {
+	return deriveCoord(origin, 
+		(cos(radians)) * distance, 
+		(sin(radians)) * distance
+	);
+}

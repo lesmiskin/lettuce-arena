@@ -1,7 +1,9 @@
 #include <stdlib.h>
+#include <time.h>
 #include "renderer.h"
 #include "lem.h"
 #include "input.h"
+#include "weapon.h"
 // #include "hud.h"
 // #include "time.h"
 // #include "scene.h"
@@ -14,7 +16,7 @@ void initHud(void) {
 	//Pre-load font sprites.
 	for(int i=0; i < 10; i++) {
 		char textureName[50];
-		sprintf(textureName, "font-%02d.png", i);
+		sprintf(textureName, "font-%d.png", i);
 		letters[i] = makeSimpleSprite(textureName);
 	}
 }
@@ -38,7 +40,7 @@ void writeAmount(int amount, Coord pos) {
 	for(int i=0; i < strlen(text); i++) {
 		char fontFile[50];
 
-		sprintf(fontFile, "font-0%c.png", text[i]);
+		sprintf(fontFile, "font-%c.png", text[i]);
 
 		Sprite sprite = makeSimpleSprite(fontFile);
 		drawSpriteFull(sprite, pos, 1, 1, 0, false);
@@ -47,8 +49,14 @@ void writeAmount(int amount, Coord pos) {
 	}
 }
 
-void writeFont(char *text, Coord pos) {
-	for(int i=0; i < strlen(text); i++) {
+void writeFontFull(char *text, Coord pos, bool centered) { 
+	int stringLength = strlen(text);
+
+	// center the text onscreen if desired (we estimate, most chars are 4px :p)
+	if(centered)
+		pos.x = (screenBounds.x / 2) - ((stringLength * 4) / 2);
+
+	for(int i=0; i < stringLength; i++) {
 		//Print text if it's not a space.
 		if(text[i] != ' ') {
 
@@ -68,6 +76,10 @@ void writeFont(char *text, Coord pos) {
 			pos.x += 2;
 		}
 	}
+}
+
+void writeFont(char *text, Coord pos) {
+	writeFontFull(text, pos, false);
 }
 
 void hudGameFrame(void) {
@@ -97,11 +109,62 @@ void sort_ints(Lem *a, size_t n) {
 void hudRenderFrame(void) {
 	Lem lem = lemmings[PLAYER_INDEX];
 
-	// print who killed us
-	if(lem.dead) {
-		char killer[10];
+	bool showPosition = checkCommand(CMD_SCORES);
+
+	// print who player killed
+	if(lastPlayerKillIndex > -1) {
+		if(isDue(clock(), lastPlayerKillTime, 1000)) {
+			lastPlayerKillIndex = -1;
+			lastPlayerKillTime = 0;
+		}else{
+			char killer[30];
+			sprintf(killer, "you fragged %s", lemmings[lastPlayerKillIndex].name);
+			writeFontFull(killer, makeCoord(135, 40), true);
+			showPosition = true;
+		}
+	}
+
+	// print who killed us (unless we hit someone when dead! then show that instead)
+	if(lem.dead && lastPlayerKillTime < lem.deadTime) {
+		char killer[30];
 		sprintf(killer, "fragged by %s",lemmings[lem.killer].name);
-		writeFont(killer, makeCoord(135, 40));
+		writeFontFull(killer, makeCoord(135, 40), true);
+		showPosition = true;
+	}
+
+	// Sort the scores
+	Lem* scores = malloc(sizeof(Lem)*MAX_LEM);	
+	memcpy(scores, lemmings, sizeof(lemmings));
+	sort_ints(scores, 4);
+
+	// show position statement
+	if(showPosition) {
+		char msg[30];
+		char placing[10];
+
+		// find position in scoreboard.
+		int position = -1;
+		for(int i=0; i < MAX_LEM; i++) {
+			if(scores[i].isPlayer) {
+				position = i;
+				break;
+			}
+		}
+
+		// what phrasing should we use?
+		switch(position) {
+			case 0:
+				sprintf(placing, "%s", "1st"); break;
+			case 1:
+				sprintf(placing, "%s", "2nd"); break;
+			case 2:
+				sprintf(placing, "%s", "3rd"); break;
+			case 3:
+				sprintf(placing, "%s", "4th");break;
+		}
+
+		sprintf(msg, "%s place with %d", placing, lem.frags);
+		writeFontFull(msg, makeCoord(135, 50), true);
 	}
 
 	// frags
@@ -112,12 +175,6 @@ void hudRenderFrame(void) {
 
 	// Scoreboard
 	if(lem.dead || checkCommand(CMD_SCORES)) {
-
-		// Sort the scores
-		Lem* scores = malloc(sizeof(Lem)*MAX_LEM);	
-		memcpy(scores, lemmings, sizeof(lemmings));
-		sort_ints(scores, 4);
-
 		int y =0;
 		for(int i=0; i < MAX_LEM; i++) {
 			writeFont(scores[i].name, makeCoord(130, 80 + y));
@@ -127,29 +184,15 @@ void hudRenderFrame(void) {
 	}
 
 	// ammo
-	if(lem.hasRock) {
+	 if(lem.hasRock) {
 		drawSprite(makeSimpleSprite("rocket-e.png"), makeCoord(10,6));
 		writeAmount(lem.ammo, makeCoord(19, 3));
 
 		// draw crosshair
 		drawSpriteFull(
 			makeSimpleSprite("cross.png"), 
-			deriveCoord(lem.coord, 
-				radToDeg(cos(lem.angle)) / 1.5, 
-				radToDeg(sin(lem.angle)) / 1.5
-			), 1, 1, 0, true);
+			extendOnAngle(lem.coord, lem.angle, 35), 
+			1, 1, 0, true
+		);
 	}
-
-	// ability to PUNCH (alex kidd style)
-	// PROPERLY center obit. text (take sum of all chars, divide width by two etc.)
-
-
-
-	// writeFont("a", makeCoord(xoff, 		yoff));
-	// writeFont("m", makeCoord(xoff + 5, 	yoff));
-	// writeFont("m", makeCoord(xoff + 11,	yoff));
-	// writeFont("o", makeCoord(xoff + 16, yoff));
-
-	// writeFont("health", makeCoord(10, 10));
-	// writeFont("health", makeCoord(10, 10));
 }

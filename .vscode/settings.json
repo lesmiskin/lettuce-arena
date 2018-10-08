@@ -2,6 +2,7 @@
 	"files.associations": {
 		"lem.h": "c",
 		"input.h": "c",
-		"stdio.h": "c"
+		"stdio.h": "c",
+		"cmath": "c"
 	}
 }
