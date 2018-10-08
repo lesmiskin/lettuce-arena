@@ -42,6 +42,8 @@ void pollInput(void) {
 		}
 	}
 
+		commands[CMD_SCORES] = false;
+
 	//Combat keys
 	if(keysHeld[SDL_SCANCODE_LEFT])
 		commands[CMD_PLAYER_LEFT] = true;
@@ -55,6 +57,9 @@ void pollInput(void) {
 
 	if(keysHeld[SDL_SCANCODE_LCTRL] || keysHeld[SDL_SCANCODE_RCTRL])
 		commands[CMD_SHOOT] = true;
+
+	if(keysHeld[SDL_SCANCODE_TAB])
+		commands[CMD_SCORES] = true;
 }
 
 void processSystemCommands(void) {

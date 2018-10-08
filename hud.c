@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "renderer.h"
 #include "lem.h"
+#include "input.h"
 // #include "hud.h"
 // #include "time.h"
 // #include "scene.h"
@@ -91,14 +92,16 @@ int compare_ints(const void *p, const void *q) {
     Lem y = *(const Lem *)q;
 
     if (x.frags < y.frags)
-        return -1;  // Return -1 if you want ascending, 1 if you want descending order. 
+        return 1;  // Return -1 if you want ascending, 1 if you want descending order. 
     else if (x.frags > y.frags)
-        return 1;   // Return 1 if you want ascending, -1 if you want descending order. 
+        return -1;   // Return 1 if you want ascending, -1 if you want descending order. 
 
     return 0;
 }
 
-/* Sort an array of n integers, pointed to by a. */
+// the player stops BECAUSE they are no longer at INDEX 0.
+// stop enemies from taking the SAME NAME.
+
 void sort_ints(Lem *a, size_t n) {
     qsort(a, n, sizeof *a, &compare_ints);
 }
@@ -121,14 +124,19 @@ void hudRenderFrame(void) {
 
 	writeText(fraglimit, makeCoord(272, 3), false);
 
-	// if(lem.dead) {
+	Lem* scores = malloc(sizeof(Lem)*MAX_LEM);	
+	memcpy(scores, lemmings, sizeof(lemmings));
+
+	sort_ints(scores, 4);
+
+	if(lem.dead || checkCommand(CMD_SCORES)) {
 		int y =0 ;
 		for(int i=0; i < MAX_LEM; i++) {
-			writeFont(lemmings[i].name, makeCoord(130, 80 + y));
-			writeAmount(lemmings[i].frags, makeCoord(180, 77+y));
+			writeFont(scores[i].name, makeCoord(130, 80 + y));
+			writeAmount(scores[i].frags, makeCoord(180, 77+y));
 			y += 10;
 		}
-	// }
+	}
 
 	// ammo
 	if(lem.hasRock) {
