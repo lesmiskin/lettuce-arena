@@ -1,5 +1,4 @@
 #include <stdbool.h>
-
 #include "common.h"
 #include "input.h"
 #include "lem.h"
@@ -18,8 +17,14 @@ void pollInput(void) {
     SDL_PumpEvents();
     const Uint8 *keysHeld = SDL_GetKeyboardState(NULL);
 
+	// FIX: Whole notion of storing commands and cancelling them out is wrong :p
+	// they are flag-number based, NOT index-based.
+
     //We're on a new frame, so clear all previous checkCommand (not key) states (i.e. set to false)
-    memset(commands, 0, sizeof(commands));
+	for(int i=0; i < MAX_COMMANDS; i++) commands[i] = false;
+
+	// HACK
+	commands[CMD_SCORES] = false;
 
     //Respond to SDL events, or key presses (not holds)
     SDL_Event event;
@@ -41,8 +46,6 @@ void pollInput(void) {
 			}
 		}
 	}
-
-		commands[CMD_SCORES] = false;
 
 	//Combat keys
 	if(keysHeld[SDL_SCANCODE_LEFT])

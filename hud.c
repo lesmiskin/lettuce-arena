@@ -61,21 +61,9 @@ void writeFont(char *text, Coord pos) {
 			}
 
 			Sprite sprite = makeSimpleSprite(fontFile);
-			drawSprite(sprite, makeCoord(pos.x, pos.y));
+			drawSpriteFull(sprite, makeCoord(pos.x, pos.y), 1, 1, 0, false);
 
-			if(text[i] == 'q') {
-				pos.x += 4;
-			}else if(text[i] == 'w' || text[i] == 'm') {
-				pos.x += 5;
-			}else if(text[i] == 'o') {
-				pos.x += 5;
-			}else if(text[i] == 'u') {
-				pos.x += 5;
-			}else if(text[i] == 'i' || text[i] == 'e') {
-				pos.x += 3;
-			}else{
-				pos.x += sprite.size.x - 1;
-			}
+			pos.x += sprite.size.x - 1;
 		}else{
 			pos.x += 2;
 		}
@@ -113,7 +101,7 @@ void hudRenderFrame(void) {
 	if(lem.dead) {
 		char killer[10];
 		sprintf(killer, "fragged by %s",lemmings[lem.killer].name);
-		writeFont(killer, makeCoord(135, 5));
+		writeFont(killer, makeCoord(135, 40));
 	}
 
 	// frags

@@ -3,7 +3,7 @@
 #include "lem.h"
 #include <time.h>
 
-const int INITIAL_ENEMIES = 3;
+#define INITIAL_ENEMIES 3
 int enemyColorCounter = 1;	// player is always color zero.
 
 char* names[] = { "redwood", "mr elusive", "tokay", "scary", "mynx", "tycho", "lowtax", "hellchick", "cartman", "kenny", "neo", "morpheus" };
@@ -16,6 +16,30 @@ void spawnEnemy(Coord point, int color, char* name) {
 	lemmings[lindex].angle = randomAngle();
 	lemmings[lindex].en_lastDirTime = clock();
 	lemmings[lindex].en_nextDirTime = 500;
+}
+
+int chosenNames[INITIAL_ENEMIES];
+int chosenNameInc = 0;
+
+char* randomName() {
+	bool different;
+	while(1) {
+		int random = randomMq(0,11);
+		bool isNameTaken = false;
+
+		// See if we already took this name.
+		for(int j=0; j < 7; j++) {
+			if(random == chosenNames[j]) {
+				isNameTaken = true;
+				break;
+			}
+		}
+
+		if(isNameTaken) continue;
+
+		chosenNames[chosenNameInc++] = random;
+		return names[random];
+	}
 }
 
 void initEnemy(void) {
@@ -31,7 +55,7 @@ void initEnemy(void) {
 		spawnEnemy(
 			spawns[i+1],			// hit spawns in sequence, so we don't telefrag.
 			enemyColorCounter++,
-			names[randomMq(0,7)]
+			randomName()
 		);
 	}
 }
