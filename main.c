@@ -15,13 +15,29 @@
 #include "hud.h"
 #include "state.h"
 
+// on spawn, lem should FACE inwards.
+
+// try machinegun
+// try walls in the middle
+// - enemies dont shoot if theres a wall in the way.
+// - if we are NEAR a wall (i.e. block of two or more, then MOVE AROUND IT)
+
+// powerup dropins (ala worms)
+// all pickups are in wood crates that you bash open (ala gta)
+
+// inspiration: worms (names, crates, powerups)
+// inspiration: quake 3 arena (respawning, pace, weapons, scoreboards)
+// inspiration: gta (crates, machinegun)
+// inspiration: lemmings (explosions, sprites)
+
+// zelda-esque map sections, inspired from q3dm17 (outside area, inner area etc.)
+
+
+
 // when killed, or KILL, show that lemming's name in yellow.
-
 // demo mode (game can play itself -- spectator mode)
-
 // shooting animation (overlaid muzzle-flash sprite)
 // spawn points have a funny tile (e.g. quake 2 teleporter)
-// on spawn, lem should FACE inwards.
 
 // icon when killed, or we frag someone
 // "frags" and "deaths"
@@ -31,17 +47,11 @@
 
 // frag plumes above enemies that just killed someone
 
-// option to write players names above them
-
 // title screen:
 // - double-sized lettering
 // - flashing "press any key"
 // - rippling bright lettering.
 
-// try machinegun
-// try walls in the middle
-// - enemies dont shoot if theres a wall in the way.
-// - if we are NEAR a wall (i.e. block of two or more, then MOVE AROUND IT)
 
 
 
@@ -142,6 +152,7 @@ Coord windowSize = { 320*3, 240*3 };   // 320x240
 
 static void initSDL(void) {
     SDL_Init(SDL_INIT_AUDIO);
+
     if(!IMG_Init(IMG_INIT_PNG)) {
         fatalError("Fatal error", "SDL_Image did not initialise.");
     }
@@ -161,6 +172,7 @@ static void initWindow(void) {
         SDL_WINDOW_OPENGL
     );
     assert(window != NULL);
+	SDL_ShowCursor(SDL_DISABLE);
 }
 
 static void shutdownWindow(void) {

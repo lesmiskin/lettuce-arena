@@ -132,7 +132,6 @@ double avoidBottom() {
 // TODO: Would be nice to have a "find closest" function.
 
 void aiSmartFrame(int enemyInc) {
-
 	// searching for rocket launcher.
 	if(!lemmings[enemyInc].hasRock) {
 

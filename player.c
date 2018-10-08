@@ -16,7 +16,6 @@ int playerIndex;
 const int BAR_SIZE = 10;
 
 void walk() {
-
 	Coord pos = lemmings[PLAYER_INDEX].coord;
 
 	bool isRight = checkCommand(CMD_PLAYER_RIGHT);

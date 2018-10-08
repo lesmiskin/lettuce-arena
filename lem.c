@@ -70,7 +70,10 @@ int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 		0, 
 
 		// enemy-specific
-		0, 
+
+		// SDL_RendererFlip flip = deg > 90 && deg < 270 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+
+		coord.x > screenBounds.x/2 ? 3.14 : 0, 	// face inwards if on right side of screen
 		0, 
 		0, 
 		0
@@ -310,6 +313,9 @@ void lemRenderFrame() {
 //				drawSprite(makeSimpleSprite("p1-arrow.png"), deriveCoord(lem.coord, -1, -13));
 			}
 		}
+
+		// show angle as plume.		
+		// writeAmount(radToDeg(lem.angle), deriveCoord(lem.coord, 0, -18));
 
 		if(showName) {
 			writeFontFull(lem.name, deriveCoord(lem.coord, 0, -18), false, true);

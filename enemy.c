@@ -12,7 +12,7 @@ void spawnEnemy(Coord point, int color, char* name) {
 	int lindex = spawnLem(point, color, false, 0, name);
 
 	// set enemy-specific properties.
-	lemmings[lindex].angle = randomAngle();
+	// lemmings[lindex].angle = randomAngle();
 	lemmings[lindex].en_lastDirTime = clock();
 	lemmings[lindex].en_nextDirTime = 500;
 }
