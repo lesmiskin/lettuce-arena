@@ -168,7 +168,7 @@ void hudRenderFrame(void) {
 	}
 
 	// frags
-	writeText(fraglimit, makeCoord(272, 3), false);
+	writeText(fraglimit, makeCoord(262, 3), false);
 
 	// highlight us if we are first, or second
 	if(boardPosition == 0) {

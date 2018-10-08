@@ -115,6 +115,8 @@ void updateWalk(int i) {
 void lemGameFrame() {
 	// do all animation here.
 
+	if(practice) return;
+
 	for(int i=0; i < MAX_LEM; i++) {
 		if(!lemmings[i].valid) continue;
 
@@ -291,7 +293,7 @@ void lemRenderFrame() {
 		// draw player plume
 		if(lem.isPlayer){
 			// spawn "you are here" signal upon respawn.
-			if(!isDue(clock(), lem.spawnTime, 1000)) {
+			if(!isDue(clock(), lem.spawnTime, practice ? PRACTICE_WAIT : 1000)) {
 				if(isDue(clock(), lem.lastFlash, 100)) {
 					lemmings[i].flashInc = !lemmings[i].flashInc;
 					lemmings[i].lastFlash = clock();

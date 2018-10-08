@@ -8,13 +8,22 @@
 #include "weapon.h"
 
 bool gameover = false;
-int fraglimit = 1;
+bool practice = false;
+int fraglimit = 25;
 long endTime;
+long startTime;
+const int START_WAIT = 2000;
 const int GAMEOVER_WAIT = 1500;
+const int PRACTICE_WAIT = 1500;
 
 void gameOver() {
 	endTime = clock();
 	gameover = true;
+}
+
+void startGame() {
+	startTime = clock();
+	practice = true;
 }
 
 void restartGame() {
@@ -32,10 +41,18 @@ void restartGame() {
 	initEnemy();
 	initWeapon();
 	gameover = false;
+
+	startGame();
 }
 
 void stateFrame() {
+	// check for restart
 	if(checkCommand(CMD_RESTART)) {
 		restartGame();
+	}
+
+	// end practice, and start play.
+	if(isDue(clock(), startTime, PRACTICE_WAIT)) {
+		practice = false;
 	}
 }

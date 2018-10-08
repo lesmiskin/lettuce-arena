@@ -5,12 +5,13 @@
 #include "input.h"
 #include "renderer.h"
 #include "weapon.h"
+#include "state.h"
 
 const double MOVE_INC = 1;
 const double BORDER = 10;
 
 bool playerWalking = false;
-static int playerIndex;
+int playerIndex;
 
 const int BAR_SIZE = 10;
 
@@ -66,6 +67,8 @@ void walk() {
 }
 
 void playerGameFrame(void) {
+	if(practice) return;
+
 	playerWalking = false;
 
 	// Shooting
@@ -76,7 +79,7 @@ void playerGameFrame(void) {
 }
 
 void initPlayer() {
-	playerIndex = spawnLem(spawns[0], 0, true, 0, "player");
+	// playerIndex = spawnLem(spawns[randomMq(0, MAX_SPAWNS-1)], 0, true, 0, "player");
 	// lemmings[0].ammo = 99;
 	// lemmings[0].health = 999999;
 	// lemmings[0].hasRock = true;

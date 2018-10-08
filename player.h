@@ -9,5 +9,6 @@ extern void initPlayer();
 extern int health;
 extern bool playerWalking;
 extern bool playerDir;
+extern int playerIndex;
 
 #endif

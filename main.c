@@ -166,6 +166,8 @@ int main()  {
 
 	changeMode(MODE_GAME);
 
+	startGame();
+
     long lastRenderFrameTime = clock();
     long lastGameFrameTime = lastRenderFrameTime;
     long lastAnimFrameTime = lastRenderFrameTime;
