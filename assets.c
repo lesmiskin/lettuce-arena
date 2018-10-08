@@ -204,6 +204,7 @@ static void loadImages(void) {
         { "white.png" },
         { "cross.png" },
         { "score.png" },
+        { "score-2.png" },
 
         { "font-0.png" },
         { "font-1.png" },

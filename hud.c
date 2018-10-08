@@ -171,17 +171,19 @@ void hudRenderFrame(void) {
 	writeText(fraglimit, makeCoord(262, 3), false);
 
 	// highlight us if we are first, or second
+	
+	// in the lead.
 	if(boardPosition == 0) {
 		drawSpriteFull(makeSimpleSprite("white.png"), makeCoord(279,0), 16, 13, 0, false);
 		drawSpriteFull(makeSimpleSprite("score.png"), makeCoord(280,1), 14, 11, 0, false);
-	}else if(boardPosition == 1) {
+	} else {
 		drawSpriteFull(makeSimpleSprite("white.png"), makeCoord(299,0), 16, 13, 0, false);
-		drawSpriteFull(makeSimpleSprite("score.png"), makeCoord(300,1), 14, 11, 0, false);
+		drawSpriteFull(makeSimpleSprite("score-2.png"), makeCoord(300,1), 14, 11, 0, false);
 	}
 
 	// first and second placements
 	writeAmount(scores[0].frags, makeCoord(282, 3));
-	writeAmount(scores[1].frags, makeCoord(302, 3));
+	writeAmount(boardPosition != 0 ? lem.frags : scores[1].frags, makeCoord(302, 3));
 
 	// Scoreboard
 	if(lem.dead || checkCommand(CMD_SCORES) || gameover) {
