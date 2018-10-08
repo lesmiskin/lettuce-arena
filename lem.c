@@ -290,6 +290,8 @@ void lemRenderFrame() {
 				break;
 		}
 
+		bool showName = !lem.isPlayer;
+
 		// draw player plume
 		if(lem.isPlayer){
 			// spawn "you are here" signal upon respawn.
@@ -300,11 +302,17 @@ void lemRenderFrame() {
 				}
 				if(lem.flashInc) {
 					drawSprite(makeSimpleSprite("flash.png"), lem.coord);
+					writeFontFull(lem.name, deriveCoord(lem.coord, 0, -18), false, true);
 //					drawSprite(makeSimpleSprite("p1.png"), deriveCoord(lem.coord, -1, -15));
 				}
 			} else {
+				showName = true;
 //				drawSprite(makeSimpleSprite("p1-arrow.png"), deriveCoord(lem.coord, -1, -13));
 			}
+		}
+
+		if(showName) {
+			writeFontFull(lem.name, deriveCoord(lem.coord, 0, -18), false, true);
 		}
 
 		// draw the sprite
@@ -314,7 +322,5 @@ void lemRenderFrame() {
 		// draw carrying weapon
 		if(lem.hasRock) 
 			weaponCarryFrame(i);
-
-		writeFontFull(lem.name, deriveCoord(lem.coord, 0, -18), false, true);
 	}
 }

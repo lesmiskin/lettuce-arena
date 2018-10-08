@@ -43,8 +43,8 @@ int randomColor() {
 	}
 }
 
-#define MAX_NAMES 12
-char* names[] = { "redwood", "mr elusive", "tokay", "scary", "mynx", "tycho", "lowtax", "hellchick", "cartman", "kenny", "neo", "morpheus" };
+#define MAX_NAMES 6
+char* names[] = { "sherbert", "blinky", "bob", "whippy", "yorp", "wilkins" };
 int chosenNames[INITIAL_ENEMIES];
 int chosenNameInc = 0;
 
@@ -87,7 +87,7 @@ void initEnemy(void) {
 	// Make the enemies
 	for(int i=0; i < LEMMINGS; i++) {
 		if(i == playerOrder) {
-			playerIndex = spawnLem(spawns[i], randomColor(), true, 0, "sputnik");
+			playerIndex = spawnLem(spawns[i], randomColor(), true, 0, "spud");
 		}else{
 			spawnEnemy(
 				spawns[i],			// hit spawns in sequence, so we don't telefrag.

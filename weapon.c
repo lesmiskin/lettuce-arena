@@ -140,7 +140,7 @@ void weaponRenderFrame() {
 
 void shoot(int i, double deg) {
 	// only shoot if we have ammo.
-	if(lemmings[i].ammo == 0 || !isDue(clock(), lemmings[i].lastShot, SHOT_RELOAD)) return;
+	if(!lemmings[i].active || lemmings[i].ammo == 0 || !isDue(clock(), lemmings[i].lastShot, SHOT_RELOAD)) return;
 
 	double rad = degToRad(deg);
 
