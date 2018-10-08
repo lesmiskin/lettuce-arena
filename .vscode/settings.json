@@ -3,6 +3,8 @@
 		"lem.h": "c",
 		"input.h": "c",
 		"stdio.h": "c",
-		"cmath": "c"
+		"cmath": "c",
+		"state.h": "c",
+		"time.h": "c"
 	}
 }

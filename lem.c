@@ -9,6 +9,7 @@
 #include "player.h"
 #include "weapon.h"
 #include "hud.h"
+#include "state.h"
 
 Coord spawns[MAX_SPAWNS];
 

@@ -13,10 +13,12 @@
 #include "enemy.h"
 #include "weapon.h"
 #include "hud.h"
+#include "state.h"
+
+// restart after 
 
 
 // time limit + counter
-// end screen when fraglimit is hit
 // ability to have no player (spectator mode).
 // shooting animation (overlaid muzzle-flash sprite)
 // spawn points have a funny tile (e.g. quake 2 teleporter)
@@ -146,14 +148,11 @@ static void shutdownMain(void) {
     SDL_Quit();
 }
 
-// spawn some monsters on the screen (green square)
-// spawn a player on the screen (blue square)
-
 int main()  {
     //Seed randomMq number generator
     srand(time(NULL));
 
-    atexit(shutdownMain);
+	atexit(shutdownMain);
 
     initSDL();
     initWindow();
@@ -178,19 +177,17 @@ int main()  {
         if(timer(&lastGameFrameTime, GAME_HZ)) {
             pollInput();
             playerGameFrame();
-            // enemyGameFrame();
-            // enemyFxFrame();
 			weaponGameFrame();
             lemGameFrame();
             fxGameFrame();
 			sceneGameFrame();
 			hudGameFrame();
+			stateFrame();
             processSystemCommands();
         }
 
 		//Animation frame
 		if(timer(&lastAnimFrameTime, ANIMATION_HZ)) {
-			// sceneAnimateFrame();
            lemAnimateFrame();
 		}
 
@@ -198,13 +195,10 @@ int main()  {
         double renderFPS;
         if(timer(&lastRenderFrameTime, RENDER_HZ)) {
 			sceneRenderFrame();
-            // enemyFxRenderFrame();
-            // enemyRenderFrame();
 			weaponRenderFrame();
             fxRenderFrame();
             lemRenderFrame();
             hudRenderFrame();
-            // enemyDeathRenderFrame();
 
             updateCanvas();
         }

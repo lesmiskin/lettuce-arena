@@ -3,9 +3,10 @@
 #include "input.h"
 #include "lem.h"
 #include "weapon.h"
-// #include "enemy.h"
-// #include "player.h"
-// #include "scene.h"
+#include "hud.h"
+#include "enemy.h"
+#include "player.h"
+#include "state.h"
 
 bool commands[MAX_COMMANDS];
 
@@ -39,6 +40,15 @@ void pollInput(void) {
 				if (event.key.repeat) break;
 
 				SDL_Keycode keypress = event.key.keysym.scancode;
+
+				// Restart the game.
+				if (gameover && (
+					keypress == SDL_SCANCODE_LCTRL || 
+					keypress == SDL_SCANCODE_RETURN || 
+					keypress == SDL_SCANCODE_SPACE
+				)) {
+					commands[CMD_RESTART] = true;
+				}
 
 				//Exit to title.
 				if (keypress == SDL_SCANCODE_ESCAPE)

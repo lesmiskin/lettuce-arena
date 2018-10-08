@@ -8,6 +8,5 @@ extern void hudRenderFrame(void);
 extern void hudGameFrame(void);
 extern void hudAnimFrame(void);
 extern int fraglimit;
-extern bool gameover;
 
 #endif

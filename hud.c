@@ -4,13 +4,8 @@
 #include "lem.h"
 #include "input.h"
 #include "weapon.h"
-// #include "hud.h"
-// #include "time.h"
-// #include "scene.h"
-// #include "enemy.h"
+#include "state.h"
 
-int fraglimit = 1;
-bool gameover = false;
 static Sprite letters[10];
 static const int LETTER_WIDTH = 4;
 

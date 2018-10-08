@@ -5,6 +5,7 @@
 #include "renderer.h"
 #include "fx.h"
 #include "hud.h"
+#include "state.h"
 
 const double SHOT_SPEED = 1.75;
 const double SHOT_DIST = 13;//13;
@@ -18,7 +19,8 @@ int lastPlayerKillIndex = -1;
 Shot shots[MAX_SHOTS];
 
 void initWeapon() {
-	for(int i=0; i < MAX_SHOTS; i++) shots[i].valid = false;
+	for(int i=0; i < MAX_SHOTS; i++) 
+		shots[i].valid = false;
 }
 
 bool onScreen(Coord coord, double threshold) {
@@ -75,7 +77,7 @@ void weaponGameFrame() {
 							lemmings[j].active = false;
 							spawnTele(lemmings[j].coord);	// flash everyone out of existence.
 						}
-						gameover = true;
+						gameOver();
 					}
 				}else{
 					spawnExp(shots[i].coord, true);
