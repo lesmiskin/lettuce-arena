@@ -8,6 +8,7 @@
 #include "mysdl.h"
 #include "player.h"
 #include "weapon.h"
+#include "hud.h"
 
 Coord spawns[MAX_SPAWNS];
 
@@ -81,6 +82,8 @@ int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 }
 
 void respawn(int i) {
+	if(gameover) return;
+
 	// take out of main rotation.
 	lemmings[i].valid = false;
 

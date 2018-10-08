@@ -4,6 +4,7 @@
 #include "weapon.h"
 #include "renderer.h"
 #include "fx.h"
+#include "hud.h"
 
 const double SHOT_SPEED = 1.75;
 const double SHOT_DIST = 13;//13;
@@ -50,20 +51,31 @@ void weaponGameFrame() {
 			if(inBounds(shots[i].coord, makeSquareBounds(lemmings[e].coord, LEM_BOUND))) {
 				shots[i].valid = false;
 				lemmings[e].health -= DAMAGE;
-				lemmings[shots[i].shooter].frags++;
 
+				// if hit lemming is dead.
 				if(lemmings[e].health <=0) {
-					spawnExp(shots[i].coord, false);
-					spawnLemExp(shots[i].coord, lemmings[e].color);
+					lemmings[shots[i].shooter].frags++;
 					lemmings[e].dead = true;		// make dead
 					lemmings[e].deadTime = clock();
 					lemmings[e].active = false;
 					lemmings[e].killer = shots[i].shooter;
 					lemmings[e].hasRock = false;
 
+					spawnExp(shots[i].coord, false);
+					spawnLemExp(shots[i].coord, lemmings[e].color);
+
 					if(lemmings[shots[i].shooter].isPlayer) {
 						lastPlayerKillTime = clock();
 						lastPlayerKillIndex = e;
+					}
+
+					// hit the fraglimit
+					if(lemmings[shots[i].shooter].frags >= fraglimit) {
+						for(int j=0; j < MAX_LEM; j++) {
+							lemmings[j].active = false;
+							spawnTele(lemmings[j].coord);	// flash everyone out of existence.
+						}
+						gameover = true;
 					}
 				}else{
 					spawnExp(shots[i].coord, true);

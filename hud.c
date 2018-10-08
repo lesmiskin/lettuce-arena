@@ -9,6 +9,8 @@
 // #include "scene.h"
 // #include "enemy.h"
 
+int fraglimit = 1;
+bool gameover = false;
 static Sprite letters[10];
 static const int LETTER_WIDTH = 4;
 
@@ -85,8 +87,6 @@ void writeFont(char *text, Coord pos) {
 void hudGameFrame(void) {
 }
 
-int fraglimit = 30;
-
 int compare_ints(const void *p, const void *q) {
     Lem x = *(const Lem *)p;
     Lem y = *(const Lem *)q;
@@ -109,7 +109,7 @@ void sort_ints(Lem *a, size_t n) {
 void hudRenderFrame(void) {
 	Lem lem = lemmings[PLAYER_INDEX];
 
-	bool showPosition = checkCommand(CMD_SCORES);
+	bool showPosition = checkCommand(CMD_SCORES) || gameover;
 
 	// print who player killed
 	if(lastPlayerKillIndex > -1) {
@@ -125,7 +125,8 @@ void hudRenderFrame(void) {
 	}
 
 	// print who killed us (unless we hit someone when dead! then show that instead)
-	if(lem.dead && lastPlayerKillTime < lem.deadTime) {
+	// additional logic is when showing at endgame, it goes away eventually.
+	if(lem.dead && lastPlayerKillTime < lem.deadTime && !isDue(clock(), lem.deadTime, 3000)) {
 		char killer[30];
 		sprintf(killer, "fragged by %s",lemmings[lem.killer].name);
 		writeFontFull(killer, makeCoord(135, 40), true);
@@ -188,7 +189,7 @@ void hudRenderFrame(void) {
 	writeAmount(scores[1].frags, makeCoord(302, 3));
 
 	// Scoreboard
-	if(lem.dead || checkCommand(CMD_SCORES)) {
+	if(lem.dead || checkCommand(CMD_SCORES) || gameover) {
 		int y =0;
 		for(int i=0; i < MAX_LEM; i++) {
 			// draw blue marker where we are.
@@ -202,7 +203,7 @@ void hudRenderFrame(void) {
 	}
 
 	// ammo
-	 if(lem.hasRock) {
+	 if(lem.hasRock && lem.active) {
 		drawSprite(makeSimpleSprite("rocket-e.png"), makeCoord(10,6));
 		writeAmount(lem.ammo, makeCoord(19, 3));
 
