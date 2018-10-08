@@ -300,10 +300,10 @@ void lemRenderFrame() {
 				}
 				if(lem.flashInc) {
 					drawSprite(makeSimpleSprite("flash.png"), lem.coord);
-					drawSprite(makeSimpleSprite("p1.png"), deriveCoord(lem.coord, -1, -15));
+//					drawSprite(makeSimpleSprite("p1.png"), deriveCoord(lem.coord, -1, -15));
 				}
 			} else {
-				drawSprite(makeSimpleSprite("p1-arrow.png"), deriveCoord(lem.coord, -1, -13));
+//				drawSprite(makeSimpleSprite("p1-arrow.png"), deriveCoord(lem.coord, -1, -13));
 			}
 		}
 
@@ -314,5 +314,7 @@ void lemRenderFrame() {
 		// draw carrying weapon
 		if(lem.hasRock) 
 			weaponCarryFrame(i);
+
+		writeFontFull(lem.name, deriveCoord(lem.coord, 0, -18), false, true);
 	}
 }

@@ -46,12 +46,14 @@ void writeAmount(int amount, Coord pos) {
 	}
 }
 
-void writeFontFull(char *text, Coord pos, bool centered) { 
+void writeFontFull(char *text, Coord pos, bool centerScreen, bool centerText) { 
 	int stringLength = strlen(text);
 
-	// center the text onscreen if desired (we estimate, most chars are 4px :p)
-	if(centered)
+	// center the text based on whole-screen, or existing coords
+	if(centerScreen)
 		pos.x = (screenBounds.x / 2) - ((stringLength * 4) / 2);
+	if(centerText)
+		pos.x -= ((stringLength * 4) / 2);
 
 	for(int i=0; i < stringLength; i++) {
 		//Print text if it's not a space.
@@ -76,7 +78,7 @@ void writeFontFull(char *text, Coord pos, bool centered) {
 }
 
 void writeFont(char *text, Coord pos) {
-	writeFontFull(text, pos, false);
+	writeFontFull(text, pos, false, false);
 }
 
 void hudGameFrame(void) {
@@ -101,6 +103,10 @@ void sort_ints(Lem *a, size_t n) {
     qsort(a, n, sizeof *a, &compare_ints);
 }
 
+const int firstLine = 2;
+const int secondLine = 10;
+const int scoreY = 100;
+
 void hudRenderFrame(void) {
 	Lem lem = lemmings[PLAYER_INDEX];
 
@@ -114,7 +120,7 @@ void hudRenderFrame(void) {
 		}else{
 			char killer[30];
 			sprintf(killer, "you fragged %s", lemmings[lastPlayerKillIndex].name);
-			writeFontFull(killer, makeCoord(135, 40), true);
+			writeFontFull(killer, makeCoord(135, firstLine), true, false);
 			showPosition = true;
 		}
 	}
@@ -124,7 +130,7 @@ void hudRenderFrame(void) {
 	if(lem.dead && lastPlayerKillTime < lem.deadTime && !isDue(clock(), lem.deadTime, 3000)) {
 		char killer[30];
 		sprintf(killer, "fragged by %s",lemmings[lem.killer].name);
-		writeFontFull(killer, makeCoord(135, 40), true);
+		writeFontFull(killer, makeCoord(135, firstLine), true, false);
 		showPosition = true;
 	}
 
@@ -164,7 +170,7 @@ void hudRenderFrame(void) {
 		}
 
 		sprintf(msg, "%s place with %d", placing, lem.frags);
-		writeFontFull(msg, makeCoord(135, 50), true);
+		writeFontFull(msg, makeCoord(135, secondLine), true, false);
 	}
 
 	// frags
@@ -191,10 +197,10 @@ void hudRenderFrame(void) {
 		for(int i=0; i < MAX_LEM; i++) {
 			// draw blue marker where we are.
 			if(i == boardPosition) {
-				drawSpriteFull(makeSimpleSprite("score.png"), makeCoord(130-9,80 + y-2), 75, 11, 0, false);
+				drawSpriteFull(makeSimpleSprite("score.png"), makeCoord(130-9,scoreY + y-2), 75, 11, 0, false);
 			}
-			writeFont(scores[i].name, makeCoord(130, 80 + y));
-			writeAmount(scores[i].frags, makeCoord(180, 80 + y));
+			writeFont(scores[i].name, makeCoord(130, scoreY + y));
+			writeAmount(scores[i].frags, makeCoord(180, scoreY + y));
 			y += 10;
 		}
 	}

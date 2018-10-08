@@ -8,5 +8,6 @@ extern void hudRenderFrame(void);
 extern void hudGameFrame(void);
 extern void hudAnimFrame(void);
 extern int fraglimit;
+extern void writeFontFull(char *text, Coord pos, bool centerScreen, bool centerText);
 
 #endif

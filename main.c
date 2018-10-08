@@ -15,19 +15,51 @@
 #include "hud.h"
 #include "state.h"
 
-// game can play itself (SPECTATOR MODE)
-// title screen (lamp, short animated sequence)
+// when killed, or KILL, show that lemming's name in yellow.
+
+// demo mode (game can play itself -- spectator mode)
 
 // shooting animation (overlaid muzzle-flash sprite)
 // spawn points have a funny tile (e.g. quake 2 teleporter)
 // on spawn, lem should FACE inwards.
+
+// icon when killed, or we frag someone
+// "frags" and "deaths"
+// no. of deaths on scoreboard
+// blue lettering when killing / 1st place.
+// red lettering when dead
+
+// frag plumes above enemies that just killed someone
+
+// option to write players names above them
+
+// title screen:
+// - double-sized lettering
+// - flashing "press any key"
+// - rippling bright lettering.
+
+// try machinegun
+// try walls in the middle
+// - enemies dont shoot if theres a wall in the way.
+// - if we are NEAR a wall (i.e. block of two or more, then MOVE AROUND IT)
+
+
+
+
+
+
+
+
+// ((
+// gameplay tweaks: player speed.
+// gameplay tweaks: bounding box.
+// ))
 
 // sound effects
 // add a wall block.
 
 
 // time limit + counter
-// player takes random spawn point FIRST.
 
 // game.cfg (fraglimit, time limit)
 // botnames.cfg
@@ -35,7 +67,6 @@
 // keys.cfg (arrows vs. wsad, ctrl vs other keys)
 
 // simple punch to bash enemies around with
-// demo mode comes up as attract mode!
 
 
 
@@ -46,7 +77,8 @@
 // powerup... splash damage.
 // gameplay: experiment with ammo + health bars
 
-// machinegun
+
+
 // dont overlap players
 // title screen with headlamp rotation ala commander keen.
 // ability to PUNCH (alex kidd style)
