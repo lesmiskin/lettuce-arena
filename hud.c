@@ -130,7 +130,19 @@ void hudRenderFrame(void) {
 	if(lem.hasRock) {
 		drawSprite(makeSimpleSprite("rocket-e.png"), makeCoord(10,6));
 		writeAmount(lem.ammo, makeCoord(19, 3));
+
+		// draw crosshair
+		drawSpriteFull(
+			makeSimpleSprite("cross.png"), 
+			deriveCoord(lem.coord, 
+				radToDeg(cos(lem.angle)) / 1.5, 
+				radToDeg(sin(lem.angle)) / 1.5
+			), 1, 1, 0, true);
 	}
+
+	// ability to PUNCH (alex kidd style)
+	// PROPERLY center obit. text (take sum of all chars, divide width by two etc.)
+
 
 
 	// writeFont("a", makeCoord(xoff, 		yoff));
