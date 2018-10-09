@@ -20,7 +20,70 @@ const int PLAYER_INDEX = 0;
 static long lastIdleTime;
 static const int ANIM_HZ = 1000 / 4;
 const double LEM_SPEED = 1;
-const double LEM_BOUND = 15;
+const double LEM_BOUND = 17;
+
+Coord tryMove(Coord target, Coord origin, int selfIndex) {
+	// cycle through all actors, and find one we're in the bounds of.
+	for(int i=0; i < MAX_LEM; i++) {
+		if(i == selfIndex) continue;
+
+		int halfBound = LEM_BOUND/2;
+		if(inBounds(target, makeSquareBounds(lemmings[i].coord, LEM_BOUND))) {
+			// we've detected an obstruction. let's SEND BACK a coordinate that represents
+			// the LIMITED movement based on WHERE its obstructing.
+
+			bool xisok = true; bool yisok = true;
+
+			// is the X AXIS free?
+			Coord xTry = makeCoord(target.x, origin.y);
+			for(int j=0; j < MAX_LEM; j++) {
+				if(j == selfIndex) continue;
+				// as soon as we encounter a visible obstruction - STOP ON THIS AXIS.
+				if(inBounds(xTry, makeSquareBounds(lemmings[j].coord, LEM_BOUND))) {
+					xisok = false;
+					break;
+				}
+			}
+
+			// is the Y AXIS free?
+			Coord yTry = makeCoord(origin.x, target.y);
+			for(int j=0; j < MAX_LEM; j++) {
+				if(j == selfIndex) continue;
+				// as soon as we encounter a visible obstruction - STOP ON THIS AXIS.
+				if(inBounds(yTry, makeSquareBounds(lemmings[j].coord, LEM_BOUND))) {
+					yisok = false;
+					break;
+				}
+			}
+
+			// send back resultant limited coordinate.
+			return makeCoord(
+				xisok ? target.x : origin.x,
+				yisok ? target.y : origin.y
+			);
+		}
+	}
+
+	// hit nothing? cool - it's ok to go to the target then.
+	return target;
+}
+
+bool canMove(Coord target, int selfIndex) {
+	return true;
+
+	// Clipping against other lemmings
+	for(int i=0; i < MAX_LEM; i++) {
+		// don't clip against ourselves :p
+		if(i == selfIndex) continue;
+
+		int halfBound = LEM_BOUND/2;
+		if(inBounds(target, makeSquareBounds(lemmings[i].coord, LEM_BOUND))) {
+			// SDL_Quit();
+			return false;
+		}
+	}
+	return true;
+}
 
 int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 	spawnTele(coord);

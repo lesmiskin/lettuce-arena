@@ -7,7 +7,7 @@
 #include "weapon.h"
 #include "state.h"
 
-const double MOVE_INC = 1;
+const double MOVE_INC = 1.5;
 const double BORDER = 10;
 
 bool playerWalking = false;
@@ -61,8 +61,13 @@ void walk() {
 		lemmings[playerIndex].angle = degToRad(dir-90);
 	}
 
+// Coord tryMove(Coord target, Coord origin, int selfIndex) {
+	lemmings[playerIndex].coord = tryMove(pos, lemmings[PLAYER_INDEX].coord, PLAYER_INDEX);
+
 	// apply position to the player lemming.
-	lemmings[playerIndex].coord = pos;
+	// if(canMove(pos, PLAYER_INDEX)) {
+	// 	lemmings[playerIndex].coord = pos;
+	// }
 }
 
 void playerGameFrame(void) {

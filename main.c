@@ -15,10 +15,13 @@
 #include "hud.h"
 #include "state.h"
 
-// play without the player.
+// stop enemies from being blown past map boundaries.
 
-// try machinegun
-// try walls in the middle
+// DO NOT CLIP lemmings through other lemmings (the missing link for knockback believability)
+
+// walls in the middle
+
+// machinegun
 // - enemies dont shoot if theres a wall in the way.
 // - if we are NEAR a wall (i.e. block of two or more, then MOVE AROUND IT)
 
