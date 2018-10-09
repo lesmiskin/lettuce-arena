@@ -81,7 +81,8 @@ void weaponGameFrame() {
 					}
 				// small explosion if we just hit them, but didn't kill 'em
 				}else{
-					spawnExp(shots[i].coord, true);
+					spawnExp(shots[i].coord, false);
+					// spawnExp(shots[i].coord, true);
 
 					// push them back.
 //					double blastAngle = getAngle(shots[i].coord, lemmings[e].coord);

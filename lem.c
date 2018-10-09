@@ -166,7 +166,7 @@ void lemGameFrame() {
 		// blast pushing
 		if(lemmings[i].pushAmount > 0.5) {
 			Coord step = getAngleStep(lemmings[i].pushAngle, lemmings[i].pushAmount, false);
-			lemmings[i].pushAmount /= 1.25;
+			lemmings[i].pushAmount /= 1.1;
 			lemmings[i].coord.x += step.x;
 			lemmings[i].coord.y += step.y;
 		}
