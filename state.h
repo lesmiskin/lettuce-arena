@@ -9,5 +9,6 @@ extern void gameOver();
 extern void startGame();
 extern bool practice;
 extern const int PRACTICE_WAIT;
+extern bool usePlayer;
 
 #endif

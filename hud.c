@@ -110,10 +110,10 @@ const int scoreY = 100;
 void hudRenderFrame(void) {
 	Lem lem = lemmings[PLAYER_INDEX];
 
-	bool showPosition = checkCommand(CMD_SCORES) || gameover;
+	bool showPosition = usePlayer && (checkCommand(CMD_SCORES) || gameover);
 
 	// print who player killed
-	if(lastPlayerKillIndex > -1) {
+	if(usePlayer && lastPlayerKillIndex > -1) {
 		if(isDue(clock(), lastPlayerKillTime, 1000)) {
 			lastPlayerKillIndex = -1;
 			lastPlayerKillTime = 0;
@@ -127,7 +127,7 @@ void hudRenderFrame(void) {
 
 	// print who killed us (unless we hit someone when dead! then show that instead)
 	// additional logic is when showing at endgame, it goes away eventually.
-	if(lem.dead && lastPlayerKillTime < lem.deadTime && !isDue(clock(), lem.deadTime, 3000)) {
+	if(usePlayer && lem.dead && lastPlayerKillTime < lem.deadTime && !isDue(clock(), lem.deadTime, 3000)) {
 		char killer[30];
 		sprintf(killer, "fragged by %s",lemmings[lem.killer].name);
 		writeFontFull(killer, makeCoord(135, firstLine), true, false);
@@ -150,7 +150,7 @@ void hudRenderFrame(void) {
 	}
 
 	// If we're tied for zero - mark us on the board anyway
-	if(scores[0].frags == 0) boardPosition = 0;
+	if(usePlayer && scores[0].frags == 0) boardPosition = 0;
 
 	// show position statement
 	if(showPosition) {
@@ -206,7 +206,7 @@ void hudRenderFrame(void) {
 	}
 
 	// ammo
-	 if(lem.hasRock && lem.active) {
+	if(lem.hasRock && lem.active) {
 		drawSprite(makeSimpleSprite("rocket-e.png"), makeCoord(10,6));
 		writeAmount(lem.ammo, makeCoord(19, 3));
 

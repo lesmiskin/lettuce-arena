@@ -3,6 +3,7 @@
 #include "lem.h"
 #include "player.h"
 #include <time.h>
+#include "state.h"
 
 #define INITIAL_ENEMIES 3
 #define LEMMINGS 4
@@ -86,7 +87,7 @@ void initEnemy(void) {
 
 	// Make the enemies
 	for(int i=0; i < LEMMINGS; i++) {
-		if(i == playerOrder) {
+		if(usePlayer && i == playerOrder) {
 			playerIndex = spawnLem(spawns[i], randomColor(), true, 0, "spud");
 			// lemmings[playerIndex].hasRock = true;
 			// lemmings[playerIndex].ammo = 99;

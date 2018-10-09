@@ -15,6 +15,8 @@
 #include "hud.h"
 #include "state.h"
 
+// play without the player.
+
 // try machinegun
 // try walls in the middle
 // - enemies dont shoot if theres a wall in the way.

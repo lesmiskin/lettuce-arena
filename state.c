@@ -7,6 +7,7 @@
 #include "scene.h"
 #include "weapon.h"
 
+bool usePlayer = false;
 bool gameover = false;
 bool practice = false;
 int fraglimit = 25;
@@ -23,7 +24,10 @@ void gameOver() {
 
 void startGame() {
 	startTime = clock();
-	practice = true;
+
+	// only bother doing practice if player is there.	
+	if(usePlayer) 
+		practice = true;
 }
 
 void restartGame() {

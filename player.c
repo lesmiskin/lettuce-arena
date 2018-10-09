@@ -66,7 +66,7 @@ void walk() {
 }
 
 void playerGameFrame(void) {
-	if(practice) return;
+	if(practice || !usePlayer) return;
 
 	playerWalking = false;
 
