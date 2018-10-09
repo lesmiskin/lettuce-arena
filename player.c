@@ -61,13 +61,8 @@ void walk() {
 		lemmings[playerIndex].angle = degToRad(dir-90);
 	}
 
-// Coord tryMove(Coord target, Coord origin, int selfIndex) {
+	// try to move.
 	lemmings[playerIndex].coord = tryMove(pos, lemmings[PLAYER_INDEX].coord, PLAYER_INDEX);
-
-	// apply position to the player lemming.
-	// if(canMove(pos, PLAYER_INDEX)) {
-	// 	lemmings[playerIndex].coord = pos;
-	// }
 }
 
 void playerGameFrame(void) {

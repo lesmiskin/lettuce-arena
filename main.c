@@ -15,9 +15,7 @@
 #include "hud.h"
 #include "state.h"
 
-// stop enemies from being blown past map boundaries.
-
-// DO NOT CLIP lemmings through other lemmings (the missing link for knockback believability)
+// use TRYMOVE to limit being pushed out of window, or into players.
 
 // walls in the middle
 
@@ -26,6 +24,20 @@
 // - if we are NEAR a wall (i.e. block of two or more, then MOVE AROUND IT)
 
 // zelda-esque map sections, inspired from q3dm17 (outside area, inner area etc.)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

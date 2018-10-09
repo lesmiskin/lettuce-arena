@@ -68,23 +68,6 @@ Coord tryMove(Coord target, Coord origin, int selfIndex) {
 	return target;
 }
 
-bool canMove(Coord target, int selfIndex) {
-	return true;
-
-	// Clipping against other lemmings
-	for(int i=0; i < MAX_LEM; i++) {
-		// don't clip against ourselves :p
-		if(i == selfIndex) continue;
-
-		int halfBound = LEM_BOUND/2;
-		if(inBounds(target, makeSquareBounds(lemmings[i].coord, LEM_BOUND))) {
-			// SDL_Quit();
-			return false;
-		}
-	}
-	return true;
-}
-
 int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 	spawnTele(coord);
 
