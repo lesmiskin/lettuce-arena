@@ -79,8 +79,15 @@ void weaponGameFrame() {
 						}
 						gameOver();
 					}
+				// small explosion if we just hit them, but didn't kill 'em
 				}else{
 					spawnExp(shots[i].coord, true);
+
+					// push them back.
+//					double blastAngle = getAngle(shots[i].coord, lemmings[e].coord);
+					double blastAngle = degToRad(shots[i].angle);
+					lemmings[e].pushAmount = 3;
+					lemmings[e].pushAngle = blastAngle;
 				}
 				return;
 			}

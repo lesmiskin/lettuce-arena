@@ -132,6 +132,7 @@ double avoidBottom() {
 // TODO: Would be nice to have a "find closest" function.
 
 void aiSmartFrame(int enemyInc) {
+	// return;
 	// searching for rocket launcher.
 	if(!lemmings[enemyInc].hasRock) {
 
@@ -140,7 +141,9 @@ void aiSmartFrame(int enemyInc) {
 		double bestDistance = 1000;
 		Coord usPos = lemmings[enemyInc].coord;
 
-		// What enemy are we closest to?
+		bool anyWeapon = false;
+
+		// What weapon are we closest to?
 		for(int i=0; i < MAX_WEAPONS; i++) {
 			if(!weapons[i].valid || weapons[i].pickedUp) continue;
 
@@ -153,15 +156,12 @@ void aiSmartFrame(int enemyInc) {
 				target = themPos;
 				bestDistance = distance;
 			}
+
+			anyWeapon = true;
 		}
 
-		// no weapon to home to - just skip then.
-		if(target.x == 0 && target.y == 0) {
-			// bit of a hack ... :p
-			// basically this stops them going into the corner!
-
 		// home to it
-		}else{
+		if(anyWeapon) {
 			double angle = getAngle(usPos, target);
 
 			// home on it.

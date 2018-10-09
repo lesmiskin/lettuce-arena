@@ -40,6 +40,9 @@ typedef struct {
     long en_lastDirTime;
     int en_nextDirTime;
     long en_lastBreather;
+
+	double pushAngle;
+	double pushAmount;
 } Lem;
 
 #define MAX_LEM 4

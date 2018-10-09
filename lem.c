@@ -76,6 +76,9 @@ int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 		coord.x > screenBounds.x/2 ? 3.14 : 0, 	// face inwards if on right side of screen
 		0, 
 		0, 
+		0,
+
+		0,
 		0
 	};
 
@@ -158,6 +161,14 @@ void lemGameFrame() {
 				weapons[j].pickedUp = true;
 				weapons[j].lastPickup = clock();
 			}
+		}
+
+		// blast pushing
+		if(lemmings[i].pushAmount > 0.5) {
+			Coord step = getAngleStep(lemmings[i].pushAngle, lemmings[i].pushAmount, false);
+			lemmings[i].pushAmount /= 1.25;
+			lemmings[i].coord.x += step.x;
+			lemmings[i].coord.y += step.y;
 		}
 	}
 }

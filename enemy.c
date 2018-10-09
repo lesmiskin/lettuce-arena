@@ -88,6 +88,8 @@ void initEnemy(void) {
 	for(int i=0; i < LEMMINGS; i++) {
 		if(i == playerOrder) {
 			playerIndex = spawnLem(spawns[i], randomColor(), true, 0, "spud");
+			// lemmings[playerIndex].hasRock = true;
+			// lemmings[playerIndex].ammo = 99;
 		}else{
 			spawnEnemy(
 				spawns[i],			// hit spawns in sequence, so we don't telefrag.
