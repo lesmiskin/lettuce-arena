@@ -15,7 +15,7 @@ long endTime;
 long startTime;
 const int START_WAIT = 2000;
 const int GAMEOVER_WAIT = 1500;
-const int PRACTICE_WAIT = 0;//1500;
+const int PRACTICE_WAIT = 1500;
 
 void gameOver() {
 	endTime = clock();

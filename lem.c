@@ -14,6 +14,8 @@
 Coord spawns[MAX_SPAWNS];
 
 const int RESPAWN_TIME = 1500;
+const int LEM_HEALTH = 3;
+const int BAR_WIDTH = 8;
 
 Lem lemmings[MAX_LEM];
 const int PLAYER_INDEX = 0;
@@ -98,7 +100,7 @@ int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 		true,
 		coord,
 		color,
-		3,				// health
+		LEM_HEALTH,		// health
 		1, 				// animInc
 		false,			// isWalking
 
@@ -363,18 +365,13 @@ void lemRenderFrame() {
 				if(lem.flashInc) {
 					drawSprite(makeSimpleSprite("flash.png"), lem.coord);
 					writeFontFull(lem.name, deriveCoord(lem.coord, 0, -18), false, true);
-//					drawSprite(makeSimpleSprite("p1.png"), deriveCoord(lem.coord, -1, -15));
 				}
 			} else {
 				showName = true;
-//				drawSprite(makeSimpleSprite("p1-arrow.png"), deriveCoord(lem.coord, -1, -13));
 			}
 		}
 
-		// show angle as plume.		
-		// writeAmount(radToDeg(lem.angle), deriveCoord(lem.coord, 0, -18));
-
-		if(showName) {
+		if(showName && !isDue(clock(), lem.spawnTime, 1500)) {
 			writeFontFull(lem.name, deriveCoord(lem.coord, 0, -18), false, true);
 		}
 
@@ -386,15 +383,21 @@ void lemRenderFrame() {
 		if(lem.hasRock) 
 			weaponCarryFrame(i);
 
+
+		// -----------
+		// health bars
+		// -----------
 		char healthFile[] = "health-r.png";	// need enough chars for NULL terminator!!
-		if     (lem.health < 3) healthFile[7] = 'y';
-		else  				    healthFile[7] = 'g';
+
+		// show as green if 2 or above.
+		if(lem.health >= (double)LEM_HEALTH / 2) {
+			healthFile[7] = 'g';
+		}
 
 		Coord h = deriveCoord(lem.coord, -4, -10);
-		int barWidth = (int)(((double)lem.health / 3) * 8.0);
+		int barWidth = (int)(((double)lem.health / LEM_HEALTH) * BAR_WIDTH);
 
-		drawSpriteFull(makeSimpleSprite("black.png"), deriveCoord(h, -1, -1), 10, 3, 0, false);
-		drawSpriteFull(makeSimpleSprite("health-r.png"), h, 8, 1, 0, false);
+		drawSpriteFull(makeSimpleSprite("black.png"), deriveCoord(h, -1, -1), barWidth+1, 3, 0, false);
 		drawSpriteFull(makeSimpleSprite(healthFile), h, barWidth, 1, 0, false);
 	}
 }

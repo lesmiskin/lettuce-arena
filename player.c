@@ -7,7 +7,7 @@
 #include "weapon.h"
 #include "state.h"
 
-const double MOVE_INC = 1.5;
+const double MOVE_INC = 1;
 const double BORDER = 10;
 
 bool playerWalking = false;
