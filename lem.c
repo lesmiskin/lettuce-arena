@@ -10,10 +10,11 @@
 #include "weapon.h"
 #include "hud.h"
 #include "state.h"
+#include "input.h"
 
 Coord spawns[MAX_SPAWNS];
 
-const int RESPAWN_TIME = 1500;
+const int RESPAWN_TIME = 2000;
 const int LEM_HEALTH = 3;
 const int BAR_WIDTH = 8;
 
@@ -354,10 +355,10 @@ void lemRenderFrame() {
 
 		bool showName = !lem.isPlayer;
 
-		// draw player plume
+		// player plume
 		if(lem.isPlayer){
 			// spawn "you are here" signal upon respawn.
-			if(!isDue(clock(), lem.spawnTime, practice ? PRACTICE_WAIT : 1000)) {
+			if(!isDue(clock(), lem.spawnTime, 1500)) {
 				if(isDue(clock(), lem.lastFlash, 100)) {
 					lemmings[i].flashInc = !lemmings[i].flashInc;
 					lemmings[i].lastFlash = clock();
@@ -371,7 +372,8 @@ void lemRenderFrame() {
 			}
 		}
 
-		if(showName && !isDue(clock(), lem.spawnTime, 1500)) {
+		// names
+		if(lemmings[PLAYER_INDEX].dead || checkCommand(CMD_SCORES) || (showName && !isDue(clock(), lem.spawnTime, 1500))) {
 			writeFontFull(lem.name, deriveCoord(lem.coord, 0, -18), false, true);
 		}
 
