@@ -84,6 +84,22 @@ void sceneRenderFrame() {
 		Coord c = !flash ? weapons[i].coord : deriveCoord(weapons[i].coord, 0, 1);
 		drawSprite(makeSimpleSprite(file), weapons[i].coord);
 	}
+
+	const int BRICK = 10;
+
+	drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(BRICK*13, BRICK*8), 1, 1, 0, false);
+	drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(BRICK*13, BRICK*9), 1, 1, 0, false);
+	drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(BRICK*13, BRICK*10), 1, 1, 0, false);
+	drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(BRICK*13, BRICK*11), 1, 1, 0, false);
+
+
+	for(int i=0; i < screenBounds.x; i += 10) {
+		drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(i, 1), 1, 1, 0, false);
+	}
+
+	for(int i=0; i < screenBounds.x; i += 10) {
+		drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(i, 240-10), 1, 1, 0, false);
+	}
 }
 
 //Should happen each time the scene is shown.

@@ -201,6 +201,14 @@ static void loadImages(void) {
         { "ground3.png" },
         { "ground4.png" },
 
+        { "rock.png" },
+        { "rock2.png" },
+        { "rock3.png" },
+        { "rock4.png" },
+        { "rock5.png" },
+        { "rock6.png" },
+        { "rock7.png" },
+
         { "white.png" },
         { "cross.png" },
         { "score.png" },

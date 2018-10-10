@@ -16,6 +16,8 @@
 #include "state.h"
 
 // use TRYMOVE to limit being pushed out of window, or into players.
+// BUG: enemy occupies hitbox before respawn.
+
 
 // walls in the middle
 
@@ -24,6 +26,9 @@
 // - if we are NEAR a wall (i.e. block of two or more, then MOVE AROUND IT)
 
 // zelda-esque map sections, inspired from q3dm17 (outside area, inner area etc.)
+
+// directional gibs based on rocket direction.
+// death/explosion gets pushed back, like in regular hits.
 
 
 
