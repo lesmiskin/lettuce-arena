@@ -24,18 +24,50 @@ static long lastIdleTime;
 static const int ANIM_HZ = 1000 / 4;
 const double LEM_SPEED = 1;
 const double LEM_BOUND = 17;
+const double BORDER_X = 5;
+const double BORDER_Y = 10;
+const int WEAP_BOUND = 16;
 
-Coord tryMove(Coord target, Coord origin, int selfIndex) {
-	// cycle through all actors, and find one we're in the bounds of.
+Dir4 makeFreeDir() {
+	Dir4 d = { true, true, true, true };
+	return d;
+}
+
+Move makeMove(Coord final, Dir4 dir) {
+	Move m = { final, dir };
+	return m;
+}
+
+Move tryMove(Coord target, Coord origin, int selfIndex) {
+	Coord permitted = target;
+	Dir4 allowDir = makeFreeDir();
+	Dir4 intendDir = { 
+		target.y < origin.y, target.y > origin.y,
+		target.x < origin.x, target.x > origin.x,
+	};
+
+	// --------------------
+	// block screen borders
+	// --------------------
+	if(target.x <= BORDER_X) 
+		allowDir.left = false;
+	if(target.x > screenBounds.x-BORDER_X)
+		allowDir.right = false;
+	if(target.y <= BORDER_Y)
+		allowDir.up = false;
+	if(target.y > screenBounds.y-BORDER_Y)
+		allowDir.down = false;
+
+	// ------------------
+	// block other actors
+	// ------------------
 	for(int i=0; i < MAX_LEM; i++) {
-		if(i == selfIndex) continue;
+		if(i == selfIndex || !lemmings[i].active) continue;
 
 		int halfBound = LEM_BOUND/2;
 		if(inBounds(target, makeSquareBounds(lemmings[i].coord, LEM_BOUND))) {
 			// we've detected an obstruction. let's SEND BACK a coordinate that represents
 			// the LIMITED movement based on WHERE its obstructing.
-
-			bool xisok = true; bool yisok = true;
 
 			// is the X AXIS free?
 			Coord xTry = makeCoord(target.x, origin.y);
@@ -43,7 +75,8 @@ Coord tryMove(Coord target, Coord origin, int selfIndex) {
 				if(j == selfIndex) continue;
 				// as soon as we encounter a visible obstruction - STOP ON THIS AXIS.
 				if(inBounds(xTry, makeSquareBounds(lemmings[j].coord, LEM_BOUND))) {
-					xisok = false;
+					if(intendDir.right) allowDir.right = false;
+					if(intendDir.left) allowDir.left = false;
 					break;
 				}
 			}
@@ -54,21 +87,19 @@ Coord tryMove(Coord target, Coord origin, int selfIndex) {
 				if(j == selfIndex) continue;
 				// as soon as we encounter a visible obstruction - STOP ON THIS AXIS.
 				if(inBounds(yTry, makeSquareBounds(lemmings[j].coord, LEM_BOUND))) {
-					yisok = false;
+					if(intendDir.up) allowDir.up = false;
+					if(intendDir.down) allowDir.down = false;
 					break;
 				}
 			}
-
-			// send back resultant limited coordinate.
-			return makeCoord(
-				xisok ? target.x : origin.x,
-				yisok ? target.y : origin.y
-			);
 		}
 	}
 
-	// hit nothing? cool - it's ok to go to the target then.
-	return target;
+	// limit resultant coord based on movement ability
+	if(!allowDir.left || !allowDir.right) permitted.x = origin.x;
+	if(!allowDir.up || !allowDir.down) permitted.y = origin.y;
+
+	return makeMove(permitted, allowDir);
 }
 
 int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
@@ -204,7 +235,7 @@ void lemGameFrame() {
 		for(int j=0; j < MAX_WEAPONS; j++) {
 			if(!weapons[j].valid || weapons[j].pickedUp) continue;
 
-			if(inBounds(lemmings[i].coord, makeSquareBounds(weapons[j].coord, 10))) {
+			if(inBounds(lemmings[i].coord, makeSquareBounds(weapons[j].coord, WEAP_BOUND))) {
 				lemmings[i].hasRock = true;
 				lemmings[i].ammo += 3;
 				weapons[j].pickedUp = true;
@@ -215,9 +246,9 @@ void lemGameFrame() {
 		// blast pushing
 		if(lemmings[i].pushAmount > 0.5) {
 			Coord step = getAngleStep(lemmings[i].pushAngle, lemmings[i].pushAmount, false);
+			Coord target = deriveCoord(lemmings[i].coord, step.x, step.y);
 			lemmings[i].pushAmount /= 1.1;
-			lemmings[i].coord.x += step.x;
-			lemmings[i].coord.y += step.y;
+			lemmings[i].coord = tryMove(target, lemmings[i].coord, i).result;
 		}
 	}
 }

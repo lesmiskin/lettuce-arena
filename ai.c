@@ -202,20 +202,18 @@ void aiSmartFrame(int enemyInc) {
 		return;
 	}
 
-	int border = 10;
-
-	// border avoidance (might be nice to restore onScreen once reliable approach found)
-	if(lemmings[enemyInc].coord.x > screenBounds.x-border) 			lemmings[enemyInc].angle = avoidRight();
-	else if(lemmings[enemyInc].coord.x < border) 					lemmings[enemyInc].angle = avoidLeft();
-	else if(lemmings[enemyInc].coord.y > screenBounds.y-border) 	lemmings[enemyInc].angle = avoidBottom();
-	else if(lemmings[enemyInc].coord.y < border-BAR_SIZE) 			lemmings[enemyInc].angle = avoidTop();
-
 	// Walk towards homing direction
 	Coord homeStep = getAngleStep(lemmings[enemyInc].angle, LEM_SPEED, false);
 
 	// move if we can.
 	Coord hope = makeCoord(lemmings[enemyInc].coord.x + homeStep.x, lemmings[enemyInc].coord.y + homeStep.y);
-	lemmings[enemyInc].coord = tryMove(hope, lemmings[enemyInc].coord, enemyInc);
+	Move m = tryMove(hope, lemmings[enemyInc].coord, enemyInc);
+	lemmings[enemyInc].coord = m.result;
 
+	// if we hit something, try to move away from it on the next frame.
+	if(!m.freeDir.up) 		lemmings[enemyInc].angle = avoidTop();
+	if(!m.freeDir.down) 	lemmings[enemyInc].angle = avoidBottom();
+	if(!m.freeDir.left) 	lemmings[enemyInc].angle = avoidLeft();
+	if(!m.freeDir.right) 	lemmings[enemyInc].angle = avoidRight();
 	// printf("%f - %f\n", lemmings[0].angle.x, lemmings[0].angle.y);
 }

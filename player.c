@@ -8,7 +8,6 @@
 #include "state.h"
 
 const double MOVE_INC = 1;
-const double BORDER = 10;
 
 bool playerWalking = false;
 int playerIndex;
@@ -28,13 +27,21 @@ void walk() {
 		playerWalking = true;
 
 	// Actually applying movement coordinates.
-	if (isLeft && pos.x > BORDER) 
+	// if (isLeft && pos.x > BORDER) 
+	// 	pos.x -= MOVE_INC;
+	// if (isRight && pos.x < screenBounds.x-BORDER) 
+	// 	pos.x += MOVE_INC;
+	// if (isUp && pos.y > BORDER + BAR_SIZE) 
+	// 	pos.y -= MOVE_INC;
+	// if (isDown && pos.y < screenBounds.y-BORDER)
+	// 	pos.y += MOVE_INC;
+	if (isLeft) 
 		pos.x -= MOVE_INC;
-	if (isRight && pos.x < screenBounds.x-BORDER) 
+	if (isRight) 
 		pos.x += MOVE_INC;
-	if (isUp && pos.y > BORDER + BAR_SIZE) 
+	if (isUp) 
 		pos.y -= MOVE_INC;
-	if (isDown && pos.y < screenBounds.y-BORDER)
+	if (isDown)
 		pos.y += MOVE_INC;
 
 	// Calculate what heading dir we're walking in (so we know what dir to
@@ -62,7 +69,8 @@ void walk() {
 	}
 
 	// try to move.
-	lemmings[playerIndex].coord = tryMove(pos, lemmings[PLAYER_INDEX].coord, PLAYER_INDEX);
+	Move m = tryMove(pos, lemmings[PLAYER_INDEX].coord, PLAYER_INDEX);
+	lemmings[playerIndex].coord = m.result;
 }
 
 void playerGameFrame(void) {

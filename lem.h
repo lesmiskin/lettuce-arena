@@ -45,12 +45,24 @@ typedef struct {
 	double pushAmount;
 } Lem;
 
+typedef struct {
+	bool up;
+	bool down;
+	bool left;
+	bool right;
+} Dir4;
+
+typedef struct {
+	Coord result;
+	Dir4 freeDir;
+} Move;
+
 #define MAX_LEM 4
 #define MAX_SPAWNS 4
 
 extern const int PLAYER_INDEX;
 
-extern Coord tryMove(Coord target, Coord origin, int selfIndex);
+extern Move tryMove(Coord target, Coord origin, int selfIndex);
 extern void respawn(int color);
 extern Lem lemmings[MAX_LEM];
 extern void lemGameFrame();

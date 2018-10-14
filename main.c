@@ -15,37 +15,53 @@
 #include "hud.h"
 #include "state.h"
 
-// use TRYMOVE to limit being pushed out of window, or into players.
-// BUG: enemy occupies hitbox before respawn.
+// machine gun pickup.
+// shoots out jellybeans / bullets.
 
 
-// walls in the middle
+
 
 // machinegun
-// - enemies dont shoot if theres a wall in the way.
-// - if we are NEAR a wall (i.e. block of two or more, then MOVE AROUND IT)
-
 // zelda-esque map sections, inspired from q3dm17 (outside area, inner area etc.)
 
+// walls should prevent movement
+// - enemies dont shoot if theres a wall in the way.
+// nicer way of defining walls (tile array)
+// enemies go away from walls.
+
+// BUG: enemies can (still) get stuck on one another.
+
+
+
+
+
+
+
+// enemies walk through players when homing into rockets.
+// enemies cheat by homing directly to rockets rather than legally walking.
+
+
+// rocket is too high-color, reduce it to be more pixelly.
+// quad damage powerup
+// pools of lava
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// - if we are NEAR a wall (i.e. block of two or more, then MOVE AROUND IT)
 // directional gibs based on rocket direction.
 // death/explosion gets pushed back, like in regular hits.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // powerup dropins (ala worms)
 // all pickups are in wood crates that you bash open (ala gta)
