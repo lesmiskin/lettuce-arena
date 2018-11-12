@@ -141,6 +141,7 @@ int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 		0,
 		false,
 		0,
+		0,
 
 		// dying
 		false,
@@ -237,7 +238,7 @@ void lemGameFrame() {
 			if(!weapons[j].valid || weapons[j].pickedUp) continue;
 
 			if(inBounds(lemmings[i].coord, makeSquareBounds(weapons[j].coord, WEAP_BOUND))) {
-				lemmings[i].hasRock = true;
+				lemmings[i].weap = W_ROCK;
 				lemmings[i].ammo += 3;
 				weapons[j].pickedUp = true;
 				weapons[j].lastPickup = clock();
@@ -353,7 +354,7 @@ void weaponCarryFrame(int i) {
 
 bool canShoot(int i) {
 	Lem l = lemmings[i];
-	return l.ammo > 0 && l.hasRock && isDue(clock(), l.lastShot, SHOT_RELOAD);
+	return l.ammo > 0 && l.weap > 0 && isDue(clock(), l.lastShot, SHOT_RELOAD);
 }
 
 void lemRenderFrame() {
@@ -414,7 +415,7 @@ void lemRenderFrame() {
 		drawSprite(lemSprite, lem.coord);
 
 		// draw carrying weapon
-		if(lem.hasRock) 
+		if(lem.weap > 0) 
 			weaponCarryFrame(i);
 
 

@@ -15,31 +15,29 @@
 #include "hud.h"
 #include "state.h"
 
+// MONDAY LIBRARY BURST
+// [x] q3dm starry sky
 // machinegun
-// q3dm starry sky
-// scrolling (from mouse quest)
-
-
-
-
 // green hand things
 
+
+// Scrolling stars are VERY unoptimised. replace with scrolling bg's?
+// Fade in / fade out
+
+
+
+
+// up/down movement gif's
 
 // MAP ------------------------------
 // starry sky "out the window" (scrolling ala hexxagon)
 // q3dm7 style, metal platforms with edges.
-
-// GUNS -----------------------------
-// machine gun pickup.
 
 // WALLS -----------------------------
 // wall segments in middle of the map.
 // array-style wall definition.
 // monsters wont shoot through walls.
 // monsters will deflect if bumping against a wall.
-
-
-
 
 // zelda-esque map sections, inspired from q3dm17 (outside area, inner area etc.)
 // BUG: enemies can (still) get stuck on one another.

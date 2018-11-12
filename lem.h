@@ -25,6 +25,7 @@ typedef struct {
     // weapons
     long lastShot;
     bool hasRock;
+	int weap;
     int ammo;
 
     // dying

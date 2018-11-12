@@ -206,7 +206,7 @@ void hudRenderFrame(void) {
 	}
 
 	// ammo
-	if(lem.hasRock && lem.active) {
+	if(lem.weap > 0 && lem.active) {
 		drawSprite(makeSimpleSprite("rocket-e.png"), makeCoord(10,6));
 		writeAmount(lem.ammo, makeCoord(19, 3));
 

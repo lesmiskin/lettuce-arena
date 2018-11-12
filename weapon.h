@@ -18,6 +18,8 @@ typedef struct {
     int animInc;
 } Shot;
 
+extern const int W_ROCK;
+extern const int W_MACH;
 extern void weaponGameFrame();
 extern void weaponRenderFrame();
 extern void shoot(int i, double deg);

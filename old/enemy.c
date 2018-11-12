@@ -220,7 +220,7 @@ void fireAngleShot(int e, double deg) {
 	enemies[e].lastShot = clock();
 
 	// drop weapon if run out of ammo.
-	if(enemies[e].ammo == 0) enemies[e].hasRock = false;
+	if(enemies[e].ammo == 0) enemies[e].weap = 0;
 }
 
 

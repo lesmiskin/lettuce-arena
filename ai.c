@@ -134,7 +134,7 @@ double avoidBottom() {
 void aiSmartFrame(int enemyInc) {
 	// return;
 	// searching for rocket launcher.
-	if(!lemmings[enemyInc].hasRock) {
+	if(lemmings[enemyInc].weap == 0) {
 
 		// target nearest weapon.
 		Coord target;

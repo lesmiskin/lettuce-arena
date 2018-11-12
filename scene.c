@@ -2,6 +2,7 @@
 #include "renderer.h"
 #include "common.h"
 #include "assets.h"
+#include "weapon.h"
 #include <time.h>
 
 const int TILE_SIZE_X = 10;
@@ -28,7 +29,6 @@ static int starInc = 0;
 // ----------
 // Weapons
 // ----------
-const int WEAP_ROCKET = 0;
 Weapon weapons[MAX_WEAPONS];
 
 const double WEAP_RESPAWN_TIME = 5000;
@@ -173,7 +173,11 @@ void sceneRenderFrame() {
 		if(timer(&lastFlash, 500)) flash = !flash;
 
 		char file[12];
-		sprintf(file, "w_rock3-%d.png", flash);
+		if(weapons[i].type == W_MACH) 
+			sprintf(file, "w_mach-0.png");
+		else
+			sprintf(file, "w_rock-0.png");
+		// sprintf(file, "w_rock3-%d.png", flash);
 
 		// dancing weapons
 		// Coord c = !flash ? weapons[i].coord : deriveCoord(weapons[i].coord, 0, 1);
@@ -201,16 +205,16 @@ void sceneRenderFrame() {
 
 //Should happen each time the scene is shown.
 void initScene() {
-	Weapon rock = { true, false, 0,  makeCoord(160-30, 120-30), WEAP_ROCKET };
+	Weapon rock = { true, false, 0,  makeCoord(160-30, 120-30), W_MACH };
 	weapons[0] = rock;
 
-	Weapon rock2 = { true, false, 0, makeCoord(160+30, 120-30), WEAP_ROCKET };
+	Weapon rock2 = { true, false, 0, makeCoord(160+30, 120-30), W_ROCK };
 	weapons[1] = rock2;
 
-	Weapon rock3 = { true, false, 0, makeCoord(160-30, 120+30), WEAP_ROCKET };
+	Weapon rock3 = { true, false, 0, makeCoord(160-30, 120+30), W_ROCK };
 	weapons[2] = rock3;
 
-	Weapon rock4 = { true, false, 0, makeCoord(160+30, 120+30), WEAP_ROCKET };
+	Weapon rock4 = { true, false, 0, makeCoord(160+30, 120+30), W_MACH };
 	weapons[3] = rock4;
 
 	starsInit();

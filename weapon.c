@@ -7,6 +7,8 @@
 #include "hud.h"
 #include "state.h"
 
+const int W_ROCK = 2;
+const int W_MACH = 1;
 const double SHOT_SPEED = 1.75;
 const double SHOT_DIST = 13;//13;
 const int SHOT_FRAMES = 4;
@@ -62,7 +64,7 @@ void weaponGameFrame() {
 					lemmings[e].deadTime = clock();
 					lemmings[e].active = false;
 					lemmings[e].killer = shots[i].shooter;
-					lemmings[e].hasRock = false;
+					lemmings[e].weap = 0;
 
 					spawnExp(shots[i].coord, false);
 					spawnLemExp(shots[i].coord, lemmings[e].color);
