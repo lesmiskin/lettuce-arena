@@ -4,8 +4,8 @@
 #include "assets.h"
 #include <time.h>
 
-const int TILE_SIZE_X = 48;
-const int TILE_SIZE_Y = 48;
+const int TILE_SIZE_X = 10;
+const int TILE_SIZE_Y = 10;
 static Sprite ground;
 
 typedef struct {
@@ -17,9 +17,9 @@ typedef struct {
 static const double SCROLL_SPEED = 0.5;			//TODO: Should be in FPS.
 
 //STARS
-#define MAX_STARS 64
+#define MAX_STARS 96
 static bool starsBegun = false;
-static int STAR_DELAY = 150;	//lower is greater.
+static int STAR_DELAY = 100;	//lower is greater.
 static Star stars[MAX_STARS];
 static long lastStarTime = 0;
 static int starInc = 0;
@@ -45,23 +45,53 @@ static void makeGroundTexture() {
 		(int)1024,
 		(int)768
 	);
+	SDL_SetTextureBlendMode(groundTexture, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureAlphaMod(groundTexture, 255);
+
+	// SDL_SetRenderDrawColor(renderer, 32, 32, 32, 255);
+	// SDL_RenderClear(renderer);
 
 	//Prepare sprite, and change the rendering target to our above texture.
 	// Sprite tile = makeSimpleSprite("space.png");
-	Sprite tile = makeSimpleSprite("space.png");
+	Sprite tile = makeSimpleSprite("base-tile.png");
 	SDL_SetRenderTarget(renderer, groundTexture);
 
 	// drawSprite(tile, makeCoord(320/2, 240/2));
 
 	//Draw the tiles out onto the texture.
 	for(int x=0; x < 320; x += TILE_SIZE_X) {
+		if(x < 10 || x >= 320-10) continue;
 		for (int y = 0; y < 240; y += TILE_SIZE_Y) {
-			drawSprite(tile, makeCoord(x, y));
+			if(y < 10 || y >= 240-10) continue;
+
+			// hole in middle
+			if(x == 160 && y == 120) continue;
+			if(x == 150 && y == 120) continue;
+			if(x == 160 && y == 110) continue;
+			if(x == 150 && y == 110) continue;
+
+			// top hole
+			if(x == 150 && y == 10) continue;
+			if(x == 160 && y == 10) continue;
+
+			// bottom hole
+			if(x == 150 && y == 220) continue;
+			if(x == 160 && y == 220) continue;
+
+			// left hole
+			if(x == 10 && y == 110) continue;
+			if(x == 10 && y == 120) continue;
+
+			// right hole
+			if(x == 300 && y == 110) continue;
+			if(x == 300 && y == 120) continue;
+
+			drawSpriteFull(tile, makeCoord(x, y), 1, 1, 0, false);
 		}
 	}
 
 	//Darken
-	SDL_SetTextureColorMod(groundTexture, 64, 64, 96);
+	SDL_SetTextureColorMod(groundTexture, 128, 128, 128);
 
 	//Switch rendering back to the normal renderBuffer target.
 	SDL_SetRenderTarget(renderer, renderBuffer);
@@ -84,7 +114,7 @@ void sceneGameFrame() {
 	//Scroll stars.
 	for(int i=0; i < MAX_STARS; i++) {
 		//Different star 'distances' scroll at different speeds.
-		stars[i].position.y +=
+		stars[i].position.x -=
 			stars[i].brightness == 0 ? 0.75 : stars[i].brightness == 1 ? 1 : 1.25;
 	}
 }
@@ -111,8 +141,8 @@ void renderStars() {
 	if(timer(&lastStarTime, STAR_DELAY)) {
 		Star star = {
 			makeCoord(
-				randomMq(0, screenBounds.x),  //spawn across the width of the screen
-				0
+				screenBounds.x,
+				randomMq(0, screenBounds.y)  //spawn across the width of the screen
 			),
 			randomMq(0, 2),		//layer
 			randomMq(0, 2),		//brightness
@@ -134,7 +164,7 @@ void renderStars() {
 
 void sceneRenderFrame() {
 	renderStars();
-//	drawSprite(ground, makeCoord(1024/2, 768/2));
+	drawSprite(ground, makeCoord(1024/2, 768/2));
 
 	// Draw weapons
 	for(int i=0; i < MAX_WEAPONS; i++) {
@@ -153,22 +183,20 @@ void sceneRenderFrame() {
 		drawSprite(makeSimpleSprite(file), weapons[i].coord);
 	}
 
+	// ROCKS
 	const int BRICK = 10;
 
 	// drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(BRICK*13, BRICK*8), 1, 1, 0, false);
 	// drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(BRICK*13, BRICK*9), 1, 1, 0, false);
 	// drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(BRICK*13, BRICK*10), 1, 1, 0, false);
 	// drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(BRICK*13, BRICK*11), 1, 1, 0, false);
-
     // 32 x 24
-
-	for(int i=0; i < screenBounds.x; i += 10) {
-		drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(i, 1), 1, 1, 0, false);
-	}
-
-	for(int i=0; i < screenBounds.x; i += 10) {
-		drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(i, 240-10), 1, 1, 0, false);
-	}
+	// for(int i=0; i < screenBounds.x; i += 10) {
+	// 	drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(i, 1), 1, 1, 0, false);
+	// }
+	// for(int i=0; i < screenBounds.x; i += 10) {
+	// 	drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(i, 240-10), 1, 1, 0, false);
+	// }
 }
 
 //Should happen each time the scene is shown.
@@ -186,5 +214,5 @@ void initScene() {
 	weapons[3] = rock4;
 
 	starsInit();
-//	makeGroundTexture();
+	makeGroundTexture();
 }

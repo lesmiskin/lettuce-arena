@@ -78,6 +78,9 @@ static void loadImages(void) {
     //Define assets to be loaded.
     AssetDef definitions[] = {
 
+        { "base-tile.png" },
+        { "base-ne.png" },
+
         { "space.png" },
 		{ "star-bright.png" },
 		{ "star-dim.png" },
