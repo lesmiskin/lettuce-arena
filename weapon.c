@@ -11,6 +11,7 @@ const double SHOT_SPEED = 1.75;
 const double SHOT_DIST = 13;//13;
 const int SHOT_FRAMES = 4;
 const int DAMAGE = 1;
+const int PUSH_AMOUNT = 4;
 const double SHOT_RELOAD = 750;
 long lastShotFrame;
 long lastPlayerKillTime;
@@ -87,7 +88,7 @@ void weaponGameFrame() {
 					// push them back.
 //					double blastAngle = getAngle(shots[i].coord, lemmings[e].coord);
 					double blastAngle = degToRad(shots[i].angle);
-					lemmings[e].pushAmount = 3;
+					lemmings[e].pushAmount = PUSH_AMOUNT;
 					lemmings[e].pushAngle = blastAngle;
 				}
 				return;

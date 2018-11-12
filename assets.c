@@ -78,6 +78,12 @@ static void loadImages(void) {
     //Define assets to be loaded.
     AssetDef definitions[] = {
 
+        { "space.png" },
+		{ "star-bright.png" },
+		{ "star-dim.png" },
+		{ "star-dark.png" },
+        { "ta-floor.png" },
+
         { "health-r.png" },
         { "health-g.png" },
         { "health-y.png" },

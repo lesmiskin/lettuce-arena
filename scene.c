@@ -4,9 +4,25 @@
 #include "assets.h"
 #include <time.h>
 
-const int TILE_SIZE_X = 6;
-const int TILE_SIZE_Y = 6;
+const int TILE_SIZE_X = 48;
+const int TILE_SIZE_Y = 48;
 static Sprite ground;
+
+typedef struct {
+	Coord position;
+	int layer;
+	int brightness;
+} Star;
+
+static const double SCROLL_SPEED = 0.5;			//TODO: Should be in FPS.
+
+//STARS
+#define MAX_STARS 64
+static bool starsBegun = false;
+static int STAR_DELAY = 150;	//lower is greater.
+static Star stars[MAX_STARS];
+static long lastStarTime = 0;
+static int starInc = 0;
 
 
 // ----------
@@ -31,17 +47,18 @@ static void makeGroundTexture() {
 	);
 
 	//Prepare sprite, and change the rendering target to our above texture.
-	Sprite tile = makeSimpleSprite("ground-big.png");
+	// Sprite tile = makeSimpleSprite("space.png");
+	Sprite tile = makeSimpleSprite("space.png");
 	SDL_SetRenderTarget(renderer, groundTexture);
 
-	drawSprite(tile, makeCoord(320/2, 240/2));
+	// drawSprite(tile, makeCoord(320/2, 240/2));
 
 	//Draw the tiles out onto the texture.
-	// for(int x=0; x < 320; x += TILE_SIZE_X) {
-	// 	for (int y = 0; y < 240; y += TILE_SIZE_Y) {
-	// 		drawSprite(tile, makeCoord(x, y));
-	// 	}
-	// }
+	for(int x=0; x < 320; x += TILE_SIZE_X) {
+		for (int y = 0; y < 240; y += TILE_SIZE_Y) {
+			drawSprite(tile, makeCoord(x, y));
+		}
+	}
 
 	//Darken
 	SDL_SetTextureColorMod(groundTexture, 64, 64, 96);
@@ -63,10 +80,61 @@ void sceneGameFrame() {
 			weapons[i].pickedUp = false;
 		}
 	}
+
+	//Scroll stars.
+	for(int i=0; i < MAX_STARS; i++) {
+		//Different star 'distances' scroll at different speeds.
+		stars[i].position.y +=
+			stars[i].brightness == 0 ? 0.75 : stars[i].brightness == 1 ? 1 : 1.25;
+	}
+}
+
+void starsInit() {
+	for(int i=0; i < 40; i++) {
+		Star star = {
+			makeCoord(
+				randomMq(0, screenBounds.x),
+				randomMq(0, screenBounds.y)
+			),
+			randomMq(0, 2),		//layer
+			randomMq(0, 2),		//brightness
+		};
+		stars[i++] = star;
+	}
+}
+
+void renderStars() {
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+	SDL_RenderClear(renderer);
+
+	//Spawn stars based on designated density.
+	if(timer(&lastStarTime, STAR_DELAY)) {
+		Star star = {
+			makeCoord(
+				randomMq(0, screenBounds.x),  //spawn across the width of the screen
+				0
+			),
+			randomMq(0, 2),		//layer
+			randomMq(0, 2),		//brightness
+		};
+
+		starInc = starInc == MAX_STARS ? 0 : starInc++;
+		stars[starInc++] = star;
+	}
+
+	//Render stars.
+	for(int i=0; i < MAX_STARS; i++) {
+		Sprite sprite = makeSprite(getTexture(
+			stars[i].layer == 0 ? "star-dark.png" : stars[i].layer == 1 ? "star-dim.png" : "star-bright.png"
+		), zeroCoord(), SDL_FLIP_NONE);
+
+		drawSprite(sprite, stars[i].position);
+	}
 }
 
 void sceneRenderFrame() {
-	drawSprite(ground, makeCoord(1024/2, 768/2));
+	renderStars();
+//	drawSprite(ground, makeCoord(1024/2, 768/2));
 
 	// Draw weapons
 	for(int i=0; i < MAX_WEAPONS; i++) {
@@ -117,5 +185,6 @@ void initScene() {
 	Weapon rock4 = { true, false, 0, makeCoord(160+30, 120+30), WEAP_ROCKET };
 	weapons[3] = rock4;
 
-	makeGroundTexture();
+	starsInit();
+//	makeGroundTexture();
 }

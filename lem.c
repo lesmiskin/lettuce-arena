@@ -27,6 +27,7 @@ const double LEM_BOUND = 17;
 const double BORDER_X = 5;
 const double BORDER_Y = 10;
 const int WEAP_BOUND = 16;
+const double PUSH_SPEED = 1.1;
 
 Dir4 makeFreeDir() {
 	Dir4 d = { true, true, true, true };
@@ -244,10 +245,10 @@ void lemGameFrame() {
 		}
 
 		// blast pushing
-		if(lemmings[i].pushAmount > 0.5) {
+		if(lemmings[i].pushAmount > 0.1) {
 			Coord step = getAngleStep(lemmings[i].pushAngle, lemmings[i].pushAmount, false);
 			Coord target = deriveCoord(lemmings[i].coord, step.x, step.y);
-			lemmings[i].pushAmount /= 1.1;
+			lemmings[i].pushAmount /= PUSH_SPEED;
 			lemmings[i].coord = tryMove(target, lemmings[i].coord, i).result;
 		}
 	}
@@ -389,7 +390,7 @@ void lemRenderFrame() {
 		// player plume
 		if(lem.isPlayer){
 			// spawn "you are here" signal upon respawn.
-			if(!isDue(clock(), lem.spawnTime, 1500)) {
+			if(!isDue(clock(), lem.spawnTime, PRACTICE_WAIT)) {
 				if(isDue(clock(), lem.lastFlash, 100)) {
 					lemmings[i].flashInc = !lemmings[i].flashInc;
 					lemmings[i].lastFlash = clock();
@@ -404,7 +405,7 @@ void lemRenderFrame() {
 		}
 
 		// names
-		if(lemmings[PLAYER_INDEX].dead || checkCommand(CMD_SCORES) || (showName && !isDue(clock(), lem.spawnTime, 1500))) {
+		if(lemmings[PLAYER_INDEX].dead || checkCommand(CMD_SCORES) || (showName && !isDue(clock(), lem.spawnTime, PRACTICE_WAIT))) {
 			writeFontFull(lem.name, deriveCoord(lem.coord, 0, -18), false, true);
 		}
 

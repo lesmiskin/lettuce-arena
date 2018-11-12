@@ -15,20 +15,33 @@
 #include "hud.h"
 #include "state.h"
 
-// machine gun pickup.
-// shoots out jellybeans / bullets.
-
-
-
-
 // machinegun
+// q3dm starry sky
+// scrolling (from mouse quest)
+
+
+
+
+// green hand things
+
+
+// MAP ------------------------------
+// starry sky "out the window" (scrolling ala hexxagon)
+// q3dm7 style, metal platforms with edges.
+
+// GUNS -----------------------------
+// machine gun pickup.
+
+// WALLS -----------------------------
+// wall segments in middle of the map.
+// array-style wall definition.
+// monsters wont shoot through walls.
+// monsters will deflect if bumping against a wall.
+
+
+
+
 // zelda-esque map sections, inspired from q3dm17 (outside area, inner area etc.)
-
-// walls should prevent movement
-// - enemies dont shoot if theres a wall in the way.
-// nicer way of defining walls (tile array)
-// enemies go away from walls.
-
 // BUG: enemies can (still) get stuck on one another.
 
 
