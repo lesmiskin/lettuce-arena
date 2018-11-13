@@ -22,6 +22,7 @@ typedef struct {
     int health;
     int animInc;
     bool isWalking;
+	long lastHit;
 
     // weapons
     long lastShot;

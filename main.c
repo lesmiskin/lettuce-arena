@@ -15,7 +15,11 @@
 #include "hud.h"
 #include "state.h"
 
-// BUG: north-west shot angles are OFF!
+// NW rockets not working for enemies :S
+
+// figure out why enemy shots end up going in WOBBLY dir
+
+// enemy lems get low health, and bar turns black :p
 
 // WHITE PUFFS
 // VIVID YELLOW BULLETS.

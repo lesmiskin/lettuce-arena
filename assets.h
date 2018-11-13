@@ -3,9 +3,15 @@
 
 #include "mysdl.h"
 
+#define ASSET_VERSIONS 2
+typedef enum {
+	ASSET_DEFAULT = 0,
+	ASSET_WHITE = 1
+} AssetVersion;
+
 typedef struct {
     char* key;
-    SDL_Texture* texture;
+	SDL_Texture* textures[ASSET_VERSIONS];
 } Asset;
 
 typedef struct {
@@ -15,6 +21,7 @@ typedef struct {
 
 extern void initAssets(void);
 extern SDL_Texture *getTexture(char *path);
+extern SDL_Texture *getTextureVersion(char *path, AssetVersion version);
 extern Asset getAsset(char *path);
 extern void shutdownAssets(void);
 extern SoundAsset getSound(char *path);

@@ -15,20 +15,20 @@
 const double MIN_DIR_CHANGE = 500;
 const double MAX_DIR_CHANGE = 3000;
 
-const double RIGHT = 0;
-const double DOWN_RIGHT = 45;
-const double DOWN = 90;
-const double DOWN_LEFT = 135;
-const double LEFT = 180;
-const double UP_LEFT = 215;
-const double UP = 270;
-const double UP_RIGHT = 315;
+const int RIGHT = 0;
+const int DOWN_RIGHT = 45;
+const int DOWN = 90;
+const int DOWN_LEFT = 135;
+const int LEFT = 180;
+const int UP_LEFT = 215;
+const int UP = 270;
+const int UP_RIGHT = 315;
 
 static const int BAR_SIZE = 10;
 
 const int BREATHER_CHANCE = 20;
 
-const double SPREAD = 5;	// how wide the targetting range is from the exact angle.
+const double SPREAD = 5;	// accuracy threshold. how wide the targetting range is from the exact angle.
 
 double randomAngle() {
 	// Random 8-way direction.
@@ -67,6 +67,7 @@ double randomAngle() {
 	return degToRad(deg);
 }
 
+// accuracy threshold
 bool inRange(double deg, double target) {
 	return deg >= target-SPREAD && deg <= target+SPREAD; 
 }

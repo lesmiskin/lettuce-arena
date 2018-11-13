@@ -16,6 +16,7 @@ Coord spawns[MAX_SPAWNS];
 
 int xTween = 0;
 
+const int PAIN_DURATION = 200;
 const int AMMO_PICKUP = 100;
 const int RESPAWN_TIME = 2000;
 const int LEM_HEALTH = 100;
@@ -152,6 +153,7 @@ int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 		LEM_HEALTH,		// health
 		1, 				// animInc
 		false,			// isWalking
+		-1,				// lastHIt
 
 		// weapons
 		0,
@@ -214,6 +216,10 @@ void updateWalk(int i) {
 	}else{
 		lemmings[i].animInc = 1;
 	}
+}
+
+bool inPain(int i) {
+	return lemmings[i].lastHit > 0 && !isDue(clock(), lemmings[i].lastHit, PAIN_DURATION);
 }
 
 void lemGameFrame() {
@@ -324,7 +330,7 @@ void weaponCarryFrame(int i) {
 			derive = makeCoord(-2, 3);
 			break;
 		default:
-		case 305://nw
+		case 315://nw
 			sprintf(file, "w_rock-nw.png");
 			derive = makeCoord(-4, -3);
 			break;
@@ -354,7 +360,7 @@ void weaponCarryFrame(int i) {
 		// west bobbing
 		case 270:
 		case 225://sw
-		case 305://nw
+		case 315://nw
 		default:
 			if(lemmings[i].animInc == 1) { xoff = -1; yoff = 2; }	// backstep
 			if(lemmings[i].animInc == 2) { xoff = 0;  yoff = 0; }	// up
@@ -365,7 +371,9 @@ void weaponCarryFrame(int i) {
 
 	// draw weapon
 	Coord wc = deriveCoord(lemmings[i].coord, derive.x+xoff, derive.y+yoff);
-	drawSprite(makeSimpleSprite(file), wc);
+	AssetVersion spriteVersion = inPain(i) ? ASSET_WHITE : ASSET_DEFAULT;
+	Sprite lemSprite = makeSprite(getTextureVersion(file, spriteVersion), zeroCoord(), SDL_FLIP_NONE);
+	drawSprite(lemSprite, wc);
 }
 
 int getReloadTime(int i) {
@@ -457,7 +465,8 @@ void lemRenderFrame() {
 		}
 
 		// draw the sprite
-		Sprite lemSprite = makeFlippedSprite(frameFile, flip);
+		AssetVersion spriteVersion = inPain(i) ? ASSET_WHITE : ASSET_DEFAULT;
+		Sprite lemSprite = makeSprite(getTextureVersion(frameFile, spriteVersion), zeroCoord(), flip);
 		drawSprite(lemSprite, lem.coord);
 
 		// draw carrying weapon
@@ -477,6 +486,7 @@ void lemRenderFrame() {
 
 		Coord h = deriveCoord(lem.coord, -4, -10);
 		int barWidth = (int)(((double)lem.health / LEM_HEALTH) * BAR_WIDTH);
+		if(barWidth < 1) barWidth = 1;	// always show something (otherwise invisible)!
 
 		drawSpriteFull(makeSimpleSprite("black.png"), deriveCoord(h, -1, -1), barWidth+1, 3, 0, false);
 		drawSpriteFull(makeSimpleSprite(healthFile), h, barWidth, 1, 0, false);

@@ -134,3 +134,55 @@ void updateCanvas(void) {
     // clear the next frame.
     SDL_RenderClear(renderer);
 }
+
+Colour makeColour(int red, int green, int blue, int alpha) {
+	Colour colour = { red, green, blue, alpha };
+	return colour;
+}
+
+int getPixel(SDL_Surface *surface, int x, int y) {
+	int *pixels = (int *)surface->pixels;
+	return pixels[ ( y * surface->w ) + x ];
+}
+
+void setPixel(SDL_Surface *surface, int x, int y, Uint32 pixel) {
+	int *pixels = (int *)surface->pixels;
+	pixels[ ( y * surface->w ) + x ] = pixel;
+}
+
+//Note: We offer an additive blend mode, which is different from the multiplicative approach offered by
+//SDL's colour modulate. Also, we operate on a surface, rather than a texture.
+SDL_Surface *colouriseSprite(SDL_Surface *original, Colour colour, ColourisationMethod method) {
+	//Set all opaque pixels as per colour argument.
+	for( int x = 0; x < original->w; x++) {
+		for( int y = 0; y < original->h; y++) {
+			//Obtain alpha channel from pixel
+			int pixel = getPixel(original, x, y);
+			Uint8 oAlpha, or, og, ob;
+			SDL_GetRGBA(pixel, original->format, &or, &og, &ob, &oAlpha);
+
+			//Don't colourise fully-transparent pixels.
+			if(oAlpha == 0) continue;
+
+			Colour final;
+
+			//Set colour to what's supplied without any modulation.
+			if(method == COLOURISE_ABSOLUTE) {
+				final = colour;
+				final.alpha = colour.alpha;
+			//Increase each colour channel value by that of the input colour, and cancel out any channel
+			// that is not in the input - ensuring a complete colourisation every time.
+			}else{
+				final.red = 	colour.red > 0 ? or + colour.red > 255 ? 255 : or + colour.red : 0;
+				final.green = 	colour.green > 0 ? og + colour.green > 255 ? 255 : og + colour.green : 0;
+				final.blue = 	colour.blue > 0 ? ob + colour.blue > 255 ? 255 : ob + colour.blue : 0;
+				final.alpha = 	colour.alpha;
+			}
+
+			setPixel(original, x, y, SDL_MapRGBA(
+				original->format,
+				final.red, final.green, final.blue, final.alpha)
+			);
+		}
+	}
+}

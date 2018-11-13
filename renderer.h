@@ -11,6 +11,18 @@ typedef struct {
     SDL_RendererFlip flip;
 } Sprite;
 
+typedef struct {
+	int red, green, blue, alpha;
+} Colour;
+
+typedef enum {
+	COLOURISE_ABSOLUTE = 0,
+	COLOURISE_ADDITIVE = 1
+} ColourisationMethod;
+
+extern Colour makeColour(int red, int green, int blue, int alpha);
+extern SDL_Surface *colouriseSprite(SDL_Surface *original, Colour colour, ColourisationMethod method);
+
 extern SDL_Renderer *renderer;
 extern SDL_Texture *renderBuffer;
 extern Coord screenBounds;

@@ -11,7 +11,7 @@
 const int W_ROCK = 2;
 const double ROCK_SPEED = 1.75;
 const double ROCK_RELOAD = 750;
-const double ROCK_DAMAGE = 33;
+const double ROCK_DAMAGE = 34;
 const double ROCK_PUSH = 3;
 
 // MACHINE GUN
@@ -68,6 +68,7 @@ void weaponGameFrame() {
 				if(lemmings[e].isPlayer && CHEAT_GOD) continue;
 
 				lemmings[e].health -= shots[i].type == W_ROCK ? ROCK_DAMAGE : MACH_DAMAGE;
+				lemmings[e].lastHit = clock();
 
 				// if hit lemming is dead.
 				if(lemmings[e].health <=0) {
@@ -159,6 +160,7 @@ void weaponRenderFrame() {
 				drawSprite(makeSimpleSprite(file), shots[i].coord);
 				break;
 			case 315:
+			default:	// :p (hack)
 				sprintf(file, "rocket-nw.png");
 				drawSprite(makeSimpleSprite(file), shots[i].coord);
 				break;
@@ -171,7 +173,7 @@ void shootMach(int i, double deg) {
 
 	// turn enemy TOWARDS where he's shooting
 	if(lemmings[i].isEnemy){
-		lemmings[i].angle = degToRad(deg);
+		lemmings[i].angle = rad;
 		lemmings[i].en_lastDirTime = clock();
 		lemmings[i].en_nextDirTime = 30;		// quick dir change so we don't collide.
 	}
@@ -193,7 +195,7 @@ void shootRock(int i, double deg) {
 
 	// turn enemy TOWARDS where he's shooting
 	if(lemmings[i].isEnemy){
-		lemmings[i].angle = degToRad(deg);
+		lemmings[i].angle = rad;
 		lemmings[i].en_lastDirTime = clock();
 		lemmings[i].en_nextDirTime = 30;		// quick dir change so we don't collide.
 	}
