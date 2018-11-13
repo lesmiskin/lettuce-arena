@@ -15,6 +15,8 @@
 #include "hud.h"
 #include "state.h"
 
+// BUG: north-west shot angles are OFF!
+
 // WHITE PUFFS
 // VIVID YELLOW BULLETS.
 

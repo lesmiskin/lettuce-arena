@@ -17,7 +17,7 @@ const double ROCK_PUSH = 3;
 // MACHINE GUN
 const int W_MACH = 1;
 const double MACH_SPEED = 2.5;
-const double MACH_RELOAD = 200;
+const double MACH_RELOAD = 150;
 const double MACH_DAMAGE = 5;
 const double MACH_PUSH = 0.5;
 
@@ -158,7 +158,7 @@ void weaponRenderFrame() {
 				sprintf(file, "rocket-sw.png");
 				drawSprite(makeSimpleSprite(file), shots[i].coord);
 				break;
-			case 305:
+			case 315:
 				sprintf(file, "rocket-nw.png");
 				drawSprite(makeSimpleSprite(file), shots[i].coord);
 				break;

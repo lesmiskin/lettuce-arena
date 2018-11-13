@@ -49,7 +49,7 @@ void walk() {
 	if(playerWalking) {
 		int dir;
 		if (isLeft && isUp) 
-			dir = 305; //nw
+			dir = 315; //nw
 		else if (isRight && isUp) 
 			dir = 405; //ne
 		else if (isLeft && isDown) 
@@ -92,6 +92,10 @@ void initPlayer() {
 	// lemmings[0].hasRock = true;
 	if(CHEAT_GIVE_MACH) {
 		lemmings[PLAYER_INDEX].weap = W_MACH;
+		lemmings[PLAYER_INDEX].ammo = 999;
+	}
+	else if(CHEAT_GIVE_ROCK) {
+		lemmings[PLAYER_INDEX].weap = W_ROCK;
 		lemmings[PLAYER_INDEX].ammo = 999;
 	}
 }
