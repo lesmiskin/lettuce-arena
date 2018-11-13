@@ -7,6 +7,15 @@
 // #include "scene.h"
 // #include "player.h"
 
+// DEBUG SETTINGS
+bool CHEAT_GIVE_MACH = true;
+bool CHEAT_GOD = true;
+bool DEBUG_SKIP_INTRO = true;
+bool DEBUG_NO_ENEMIES = true;
+
+// GENERAL SETTINGS
+bool PLAYER_INDICATOR = false;
+
 static const double RADIAN_CIRCLE = 6.28;
 
 GameMode currentMode = MODE_GAME;

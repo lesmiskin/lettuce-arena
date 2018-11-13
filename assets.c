@@ -94,6 +94,9 @@ static void loadImages(void) {
         { "black.png" },
 
         { "w_mach-0.png" },
+        { "w_mach-1.png" },
+        { "w_mach-2.png" },
+        { "bullet.png" },
 
         { "w_rock-n.png" },
         { "w_rock-s.png" },

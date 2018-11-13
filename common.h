@@ -4,6 +4,12 @@
 #include <stdbool.h>
 #include "mysdl.h"
 
+extern bool CHEAT_GIVE_MACH;
+extern bool CHEAT_GOD;
+extern bool DEBUG_SKIP_INTRO;
+extern bool DEBUG_NO_ENEMIES;
+extern bool PLAYER_INDICATOR;
+
 typedef struct {
     double x, y;
 } Coord;

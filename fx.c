@@ -31,8 +31,8 @@ typedef struct {
 } Puff;
 
 const double PUFF_FREQ = 75;
-const double PUFF_DURATION = 500;
-const int PUFF_FADE_TIME = 100;
+const double PUFF_DURATION = 1000;
+const int PUFF_FADE_TIME = 200;
 const int PUFF_FRAMES = 3;
 long lastExpFrame;
 Puff puffs[MAX_PUFFS];

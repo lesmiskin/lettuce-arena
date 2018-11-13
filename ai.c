@@ -174,7 +174,7 @@ void aiSmartFrame(int enemyInc) {
 	}
 
 	// shoot opponent, with a little wait between each shot.
-	if(canShoot(enemyInc) && isDue(clock(), lemmings[enemyInc].lastShot, SHOT_RELOAD * randomMq(1, 3))) {
+	if(canShoot(enemyInc) && isDue(clock(), lemmings[enemyInc].lastShot, getReloadTime(enemyInc) * randomMq(1, 3))) {
 		shootAtOpponent(enemyInc);
 	}
 

@@ -174,10 +174,9 @@ void sceneRenderFrame() {
 
 		char file[12];
 		if(weapons[i].type == W_MACH) 
-			sprintf(file, "w_mach-0.png");
+			sprintf(file, "w_mach-%d.png", flash);
 		else
-			sprintf(file, "w_rock-0.png");
-		// sprintf(file, "w_rock3-%d.png", flash);
+			sprintf(file, "w_rock3-%d.png", flash);
 
 		// dancing weapons
 		// Coord c = !flash ? weapons[i].coord : deriveCoord(weapons[i].coord, 0, 1);
@@ -205,17 +204,15 @@ void sceneRenderFrame() {
 
 //Should happen each time the scene is shown.
 void initScene() {
-	Weapon rock = { true, false, 0,  makeCoord(160-30, 120-30), W_MACH };
+	Weapon rock = { true, false, 0,  makeCoord(screenBounds.x/2, 35), W_MACH };
 	weapons[0] = rock;
-
-	Weapon rock2 = { true, false, 0, makeCoord(160+30, 120-30), W_ROCK };
-	weapons[1] = rock2;
-
-	Weapon rock3 = { true, false, 0, makeCoord(160-30, 120+30), W_ROCK };
-	weapons[2] = rock3;
-
-	Weapon rock4 = { true, false, 0, makeCoord(160+30, 120+30), W_MACH };
+	Weapon rock4 = { true, false, 0, makeCoord(screenBounds.x/2, screenBounds.y-35), W_MACH };
 	weapons[3] = rock4;
+
+	Weapon rock2 = { true, false, 0, makeCoord(35, screenBounds.y/2), W_ROCK };
+	weapons[1] = rock2;
+	Weapon rock3 = { true, false, 0, makeCoord(screenBounds.x-35, screenBounds.y/2), W_ROCK };
+	weapons[2] = rock3;
 
 	starsInit();
 	makeGroundTexture();

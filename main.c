@@ -15,10 +15,32 @@
 #include "hud.h"
 #include "state.h"
 
-// MONDAY LIBRARY BURST
-// [x] q3dm starry sky
-// machinegun
-// green hand things
+// WHITE PUFFS
+// VIVID YELLOW BULLETS.
+
+// machinegun holding sprite.
+// muzzle flashes
+
+// auto-strafe when button held down?!
+
+// spawn point textures
+// moving / swaying weapons when idle
+
+// puff of colored smoke when machinegun hits
+// HURT flicker animation when hit by machinegun
+// muzzle flash for both weapons
+
+// STUN lemming when killed by machinegun (not explode)
+// up/down lemming sprites
+
+// CRATES with powerups (invince, quad damage, health)
+// crates can be shot
+
+
+
+
+
+
 
 
 // Scrolling stars are VERY unoptimised. replace with scrolling bg's?

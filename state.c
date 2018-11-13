@@ -25,7 +25,7 @@ void startGame() {
 	startTime = clock();
 
 	// only bother doing practice if player is there.	
-	if(usePlayer) 
+	if(usePlayer && !DEBUG_SKIP_INTRO) 
 		practice = true;
 }
 

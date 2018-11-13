@@ -14,8 +14,11 @@
 
 Coord spawns[MAX_SPAWNS];
 
+int xTween = 0;
+
+const int AMMO_PICKUP = 100;
 const int RESPAWN_TIME = 2000;
-const int LEM_HEALTH = 3;
+const int LEM_HEALTH = 100;
 const int BAR_WIDTH = 8;
 
 Lem lemmings[MAX_LEM];
@@ -27,7 +30,12 @@ const double LEM_BOUND = 17;
 const double BORDER_X = 5;
 const double BORDER_Y = 10;
 const int WEAP_BOUND = 16;
-const double PUSH_SPEED = 1.1;
+const double PUSH_SPEED = 1.035;
+
+static int arrowXOrigin;
+static int arrowYOrigin;
+static Coord arrowX;
+static Coord arrowY;
 
 Dir4 makeFreeDir() {
 	Dir4 d = { true, true, true, true };
@@ -109,13 +117,20 @@ int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 	// player is always at index zero.
 	int insertIndex = 0;
 
-	// otherwise find valid insert position in main lemming array.
 	if(!isPlayer) {
+		// otherwise find valid insert position in main lemming array.
 		for(int i=1; i < MAX_LEM; i++) {
 			if(lemmings[i].valid) continue;
 			insertIndex	= i;
 			break;
 		}
+
+	}
+
+	// reset player marker (set at opposing ends so we can see it come in - whole idea!)
+	if(isPlayer){
+		arrowXOrigin = coord.x < screenBounds.x/2 ? screenBounds.x : 0;
+		arrowYOrigin = coord.y < screenBounds.y/2 ? screenBounds.y : 0;
 	}
 
 	// Set up the LEM object with all his properties.
@@ -126,6 +141,7 @@ int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 		clock(),
 		0,
 		clock(),
+		SDL_GetTicks(),
 		true,
 		0,
 		isPlayer,
@@ -238,8 +254,8 @@ void lemGameFrame() {
 			if(!weapons[j].valid || weapons[j].pickedUp) continue;
 
 			if(inBounds(lemmings[i].coord, makeSquareBounds(weapons[j].coord, WEAP_BOUND))) {
-				lemmings[i].weap = W_ROCK;
-				lemmings[i].ammo += 3;
+				lemmings[i].weap = weapons[j].type;
+				lemmings[i].ammo += AMMO_PICKUP;
 				weapons[j].pickedUp = true;
 				weapons[j].lastPickup = clock();
 			}
@@ -352,10 +368,27 @@ void weaponCarryFrame(int i) {
 	drawSprite(makeSimpleSprite(file), wc);
 }
 
+int getReloadTime(int i) {
+	if(lemmings[i].weap == W_ROCK ? ROCK_RELOAD : MACH_RELOAD);
+}
+
 bool canShoot(int i) {
 	Lem l = lemmings[i];
-	return l.ammo > 0 && l.weap > 0 && isDue(clock(), l.lastShot, SHOT_RELOAD);
+	return l.ammo > 0 && l.weap > 0 && isDue(clock(), l.lastShot, getReloadTime(i));
 }
+
+float quadEaseOut (float t, float b, float c, float d) {
+	// quadratic ease out (http://gizma.com/easing)
+	t /= d;
+	return -c * t*(t-2) + b;	
+};
+
+float expoEaseOut (float t, float b, float c, float d) {
+	// if(b < c) {
+	// 	return b - (c * (-pow( 2, -10 * t/d ) + 1 ));
+	// }
+	return c * (-pow( 2, -10 * t/d ) + 1 ) + b;
+};
 
 void lemRenderFrame() {
 	// show all lemming sprites here.
@@ -389,19 +422,32 @@ void lemRenderFrame() {
 		bool showName = !lem.isPlayer;
 
 		// player plume
-		if(lem.isPlayer){
-			// spawn "you are here" signal upon respawn.
-			if(!isDue(clock(), lem.spawnTime, PRACTICE_WAIT)) {
-				if(isDue(clock(), lem.lastFlash, 100)) {
-					lemmings[i].flashInc = !lemmings[i].flashInc;
-					lemmings[i].lastFlash = clock();
-				}
-				if(lem.flashInc) {
-					drawSprite(makeSimpleSprite("flash.png"), lem.coord);
-					writeFontFull(lem.name, deriveCoord(lem.coord, 0, -18), false, true);
-				}
-			} else {
-				showName = true;
+		// spawn "you are here" signal upon respawn.
+		if(lem.isPlayer && !isDue(clock(), lem.spawnTime, PRACTICE_WAIT) && PLAYER_INDICATOR) {
+
+			// reset on spawn.
+			// plunge in opposite dir's.
+			// stop when already near the playa.
+
+			Coord target = lem.coord;
+
+			arrowX.y = target.y;
+			arrowX.x = expoEaseOut(SDL_GetTicks() - lem.spawnTimeSdl, 0, target.x, PRACTICE_WAIT*2.5);
+			// if(lem.coord.x < screenBounds.x/2) arrowX.x = screenBounds.x - arrowX.x;
+			// drawSpriteFull(makeSimpleSprite("arrow.png"), arrowX, 1, 1, 270, true);
+
+			arrowY.x = target.x;
+			arrowY.y = expoEaseOut(SDL_GetTicks() - lem.spawnTimeSdl, 0, target.y, PRACTICE_WAIT*2.5);
+			// if(lem.coord.y < screenBounds.y/2) arrowY.y = arrowY.y - screenBounds.y;
+			// drawSprite(makeSimpleSprite("arrow.png"), arrowY);
+
+			if(isDue(clock(), lem.lastFlash, 100)) {
+				lemmings[i].flashInc = !lemmings[i].flashInc;
+				lemmings[i].lastFlash = clock();
+			}
+			if(lem.flashInc) {
+				drawSprite(makeSimpleSprite("flash.png"), lem.coord);
+				writeFontFull(lem.name, deriveCoord(lem.coord, 0, -18), false, true);
 			}
 		}
 

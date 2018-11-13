@@ -11,6 +11,7 @@ typedef struct {
 	long lastFlash;
 	bool flashInc;
 	long spawnTime;
+	long spawnTimeSdl;
 	bool active;
 	long deadTime;
     bool isPlayer;
@@ -63,6 +64,7 @@ typedef struct {
 
 extern const int PLAYER_INDEX;
 
+extern int getReloadTime(int i);
 extern Move tryMove(Coord target, Coord origin, int selfIndex);
 extern void respawn(int color);
 extern Lem lemmings[MAX_LEM];

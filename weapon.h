@@ -6,7 +6,12 @@
 
 #define MAX_SHOTS 50
 
-extern const double SHOT_RELOAD;
+extern const double MACH_RELOAD;
+extern const double ROCK_RELOAD;
+extern const double ROCK_DAMAGE;
+extern const double MACH_DAMAGE;
+extern const double ROCK_PUSH;
+extern const double MACH_PUSH;
 
 typedef struct {
 	bool valid;
@@ -16,6 +21,7 @@ typedef struct {
     long lastPuff;
     int shooter;
     int animInc;
+	int type;
 } Shot;
 
 extern const int W_ROCK;

@@ -90,6 +90,7 @@ void initEnemy(void) {
 		if(usePlayer && i == playerOrder) {
 			playerIndex = spawnLem(spawns[i], randomColor(), true, 0, "spud");
 		}else{
+			if(DEBUG_NO_ENEMIES) continue;
 			spawnEnemy(
 				spawns[i],			// hit spawns in sequence, so we don't telefrag.
 				randomColor(),

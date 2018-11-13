@@ -90,4 +90,8 @@ void initPlayer() {
 	// lemmings[0].ammo = 99;
 	// lemmings[0].health = 999999;
 	// lemmings[0].hasRock = true;
+	if(CHEAT_GIVE_MACH) {
+		lemmings[PLAYER_INDEX].weap = W_MACH;
+		lemmings[PLAYER_INDEX].ammo = 999;
+	}
 }
