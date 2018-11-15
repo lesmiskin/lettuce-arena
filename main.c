@@ -15,45 +15,35 @@
 #include "hud.h"
 #include "state.h"
 
-// NW rockets not working for enemies :S
 
-// figure out why enemy shots end up going in WOBBLY dir
-
-// enemy lems get low health, and bar turns black :p
-
-// WHITE PUFFS
-// VIVID YELLOW BULLETS.
-
-// machinegun holding sprite.
-// muzzle flashes
-
-// auto-strafe when button held down?!
-
-// spawn point textures
-// moving / swaying weapons when idle
-
+// white rocket puffs, larger, more obvious
 // puff of colored smoke when machinegun hits
-// HURT flicker animation when hit by machinegun
-// muzzle flash for both weapons
 
-// STUN lemming when killed by machinegun (not explode)
-// up/down lemming sprites
+// pistol when starting
+// random crate drops with powerups
+// quadrants with doorways, basic architecture.
+// space quadrants linked by paths, q3dm7 / tower assault arch
 
-// CRATES with powerups (invince, quad damage, health)
-// crates can be shot
+// bouncing gravestone after explosion.
+// original animal IP rather than lemming.
+// machinegun carry sprite
+// bazooka-style worms graphic
+// muzzle flashes
+// spawn point textures
+// strafe button.
 
 
+// scoreboard highlight to be white/blue based on lead.
+// ensure "tied for lead", and tied for 2nd count as blue and red.
+// gothic / hell map with lava and rocks
 
+// figure out why enemy shots end up going in WOBBLY dir still.
+// up/down character sprites
+// bug: stop enemies not clipping when homing to rockets.
+// bug: stop enemies cheating on angle when homing.
 
-
-
-
-
-// Scrolling stars are VERY unoptimised. replace with scrolling bg's?
+// opt: Scrolling stars are VERY unoptimised. replace with scrolling bg's?
 // Fade in / fade out
-
-
-
 
 // up/down movement gif's
 
