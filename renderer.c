@@ -62,8 +62,8 @@ void drawSpriteFull(Sprite sprite, Coord origin, double scalex, double scaley, d
     //Rotation
     SDL_Point rotateOrigin = { 0, 0 };
     if(angle > 0) {
-        rotateOrigin.x = (int)sprite.size.x / 2;
-        rotateOrigin.y = (int)sprite.size.y / 2;
+        rotateOrigin.x = ((int)sprite.size.x*scaley) / 2;
+        rotateOrigin.y = ((int)sprite.size.y*scaley) / 2;
     };
 
     SDL_RenderCopyEx(renderer, sprite.texture, NULL, &destination, angle, &rotateOrigin, sprite.flip);

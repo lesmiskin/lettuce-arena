@@ -8,9 +8,9 @@
 // #include "player.h"
 
 // DEBUG SETTINGS
-bool CHEAT_GIVE_MACH = true;
+bool CHEAT_GIVE_MACH = false;
 bool CHEAT_GIVE_ROCK = true;
-bool CHEAT_GOD = false;
+bool CHEAT_GOD = true;
 bool DEBUG_SKIP_INTRO = true;
 bool DEBUG_NO_ENEMIES = false;
 

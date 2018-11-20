@@ -22,6 +22,8 @@ const int RESPAWN_TIME = 2000;
 const int LEM_HEALTH = 100;
 const int BAR_WIDTH = 8;
 
+static int MUZZLE_DIST = 10;
+
 Lem lemmings[MAX_LEM];
 const int PLAYER_INDEX = 0;
 static long lastIdleTime;
@@ -157,6 +159,7 @@ int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 
 		// weapons
 		0,
+		false,
 		false,
 		0,
 		0,
@@ -367,6 +370,30 @@ void weaponCarryFrame(int i) {
 			if(lemmings[i].animInc == 3) { xoff = 1;  yoff = 2; }	// forwardstep
 			if(lemmings[i].animInc == 4) { xoff = 0;  yoff = 0; }	// up
 			break;
+	}
+
+	// muzzle flash
+	if(lemmings[i].weap == W_MACH) {
+		if(!isDue(clock(), lemmings[i].lastShot, 50)) {
+			Coord muzzPos = extendOnAngle(lemmings[i].coord, lemmings[i].angle, MUZZLE_DIST);
+			drawSpriteFull(makeSimpleSprite("exp-01.png"), muzzPos, 0.5, 0.5, radToDeg(randomAngle()), true);
+			xoff += 1;
+		}
+	}else if(lemmings[i].weap == W_ROCK) {
+		if(!isDue(clock(), lemmings[i].lastShot, 75)) {
+			Coord muzzPos = extendOnAngle(lemmings[i].coord, lemmings[i].angle, MUZZLE_DIST);
+			drawSpriteFull(makeSimpleSprite("exp-04.png"), muzzPos, 0.75, 0.75, 0, true);
+			xoff += 3;
+		}
+		else if(!isDue(clock(), lemmings[i].lastShot, 150)) {
+			Coord muzzPos = extendOnAngle(lemmings[i].coord, lemmings[i].angle, MUZZLE_DIST);
+			drawSpriteFull(makeSimpleSprite("exp-06.png"), muzzPos, 0.75, 0.75, 0, true);
+			xoff += 1;
+		}
+	}
+
+	if(!lemmings[i].shotFirst && !isDue(clock(), lemmings[i].lastShot, 50)) {
+		lemmings[i].shotFirst = true;
 	}
 
 	// draw weapon

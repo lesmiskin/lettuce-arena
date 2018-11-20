@@ -50,7 +50,7 @@ static Asset makeAsset(AssetDef definition) {
 
 	// make a white version
 	if(definition.makeWhiteVersion) {
-		colouriseSprite(original, makeColour(255,255,255,255), 1 /* additive */);
+		colouriseSprite(original, makeColour(255,0,0,255), 1 /* additive */);
 		SDL_Texture *hitTexture = SDL_CreateTextureFromSurface(renderer, original);
 		asset.textures[ASSET_WHITE] = hitTexture;
 	}

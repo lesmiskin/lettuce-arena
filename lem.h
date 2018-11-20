@@ -26,6 +26,7 @@ typedef struct {
 
     // weapons
     long lastShot;
+	bool shotFirst; // for recoil.
     bool hasRock;
 	int weap;
     int ammo;

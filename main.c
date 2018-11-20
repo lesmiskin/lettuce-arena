@@ -15,6 +15,14 @@
 #include "hud.h"
 #include "state.h"
 
+// new character ip
+// bazooka
+// ak-47
+// muzzle flashes
+
+// spawn point textures
+// strafe button.
+
 
 // white rocket puffs, larger, more obvious
 // puff of colored smoke when machinegun hits
@@ -26,17 +34,18 @@
 
 // bouncing gravestone after explosion.
 // original animal IP rather than lemming.
-// machinegun carry sprite
-// bazooka-style worms graphic
-// muzzle flashes
-// spawn point textures
-// strafe button.
+// ak-47 carry sprite
 
 
+// "killed x" to be in blue
+// "fragged by x" to be in red
+// "1st place with x" to be in blue
+// still say 1st even if tied
 // scoreboard highlight to be white/blue based on lead.
 // ensure "tied for lead", and tied for 2nd count as blue and red.
 // gothic / hell map with lava and rocks
 
+// dynamite / bomb
 // figure out why enemy shots end up going in WOBBLY dir still.
 // up/down character sprites
 // bug: stop enemies not clipping when homing to rockets.
