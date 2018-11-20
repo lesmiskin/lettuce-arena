@@ -22,7 +22,7 @@ const int RESPAWN_TIME = 2000;
 const int LEM_HEALTH = 100;
 const int BAR_WIDTH = 8;
 
-static int MUZZLE_DIST = 10;
+static int MUZZLE_DIST = 7;
 
 Lem lemmings[MAX_LEM];
 const int PLAYER_INDEX = 0;
@@ -372,32 +372,38 @@ void weaponCarryFrame(int i) {
 			break;
 	}
 
+	// Establish weapon origin.
+	Coord wc = deriveCoord(lemmings[i].coord, derive.x, derive.y);
+
 	// muzzle flash
 	if(lemmings[i].weap == W_MACH) {
 		if(!isDue(clock(), lemmings[i].lastShot, 50)) {
-			Coord muzzPos = extendOnAngle(lemmings[i].coord, lemmings[i].angle, MUZZLE_DIST);
+			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
 			drawSpriteFull(makeSimpleSprite("exp-01.png"), muzzPos, 0.5, 0.5, radToDeg(randomAngle()), true);
 			xoff += 1;
 		}
 	}else if(lemmings[i].weap == W_ROCK) {
-		if(!isDue(clock(), lemmings[i].lastShot, 75)) {
-			Coord muzzPos = extendOnAngle(lemmings[i].coord, lemmings[i].angle, MUZZLE_DIST);
-			drawSpriteFull(makeSimpleSprite("exp-04.png"), muzzPos, 0.75, 0.75, 0, true);
+		if(!isDue(clock(), lemmings[i].lastShot, 50)) {
+			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
+			drawSpriteFull(makeSimpleSprite("exp-04.png"), muzzPos, 1, 1, radToDeg(randomAngle()), true);
 			xoff += 3;
 		}
-		else if(!isDue(clock(), lemmings[i].lastShot, 150)) {
-			Coord muzzPos = extendOnAngle(lemmings[i].coord, lemmings[i].angle, MUZZLE_DIST);
-			drawSpriteFull(makeSimpleSprite("exp-06.png"), muzzPos, 0.75, 0.75, 0, true);
+		else if(!isDue(clock(), lemmings[i].lastShot, 100)) {
+			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
+			drawSpriteFull(makeSimpleSprite("exp-05.png"), muzzPos, 1, 1, radToDeg(randomAngle()), true);
+			xoff += 2;
+		}
+		else if(!isDue(clock(), lemmings[i].lastShot, 250)) {
+			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
+			drawSpriteFull(makeSimpleSprite("exp-06.png"), muzzPos, 1, 1, radToDeg(randomAngle()), true);
 			xoff += 1;
 		}
 	}
 
-	if(!lemmings[i].shotFirst && !isDue(clock(), lemmings[i].lastShot, 50)) {
-		lemmings[i].shotFirst = true;
-	}
+	// weapon recoil
+	wc = deriveCoord(wc, xoff, yoff);
 
 	// draw weapon
-	Coord wc = deriveCoord(lemmings[i].coord, derive.x+xoff, derive.y+yoff);
 	AssetVersion spriteVersion = inPain(i) ? ASSET_WHITE : ASSET_DEFAULT;
 	Sprite lemSprite = makeSprite(getTextureVersion(file, spriteVersion), zeroCoord(), SDL_FLIP_NONE);
 	drawSprite(lemSprite, wc);
