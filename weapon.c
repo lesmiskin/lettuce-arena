@@ -31,6 +31,17 @@ int lastPlayerKillIndex = -1;
 
 Shot shots[MAX_SHOTS];
 
+int getMaxAmmo(int weap) {
+	switch(weap) {
+		case 1: // stupid C!
+			return 50;
+		case 2:
+			return 5;
+		default:
+			return 0;
+	}
+}
+
 void initWeapon() {
 	for(int i=0; i < MAX_SHOTS; i++) 
 		shots[i].valid = false;
@@ -80,7 +91,7 @@ void weaponGameFrame() {
 					lemmings[e].deadTime = clock();
 					lemmings[e].active = false;
 					lemmings[e].killer = shots[i].shooter;
-					lemmings[e].weap = 0;
+					// lemmings[e].weap = 0;
 
 					// trigger three explosions in short sequence (looks good)
 					spawnExpDelay(deriveCoord(lemmings[e].coord, 0, -8), false, 0);

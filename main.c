@@ -22,14 +22,14 @@
 
 // show weap on last shot.
 
-// machinegun muzzle should be incremental switch between 0 and 90 degree, not random.
+// text when picking up weapons
+// "you fragged x" text is not actually centered.
 
 // reinstate nice green indicator arrows (bounce).
 // double animation frames
 // up-down walking sprites.
 // ak-47 carry graphic
 // bazooka graphic
-// recoil in correct dir.
 // muzzle flash adjusts to precise placement of gun (e.g. north rocket)
 
 // ammo bar beneath health

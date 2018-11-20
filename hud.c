@@ -103,9 +103,12 @@ void sort_ints(Lem *a, size_t n) {
     qsort(a, n, sizeof *a, &compare_ints);
 }
 
-const int firstLine = 2;
-const int secondLine = 10;
+const int firstLine = 3;
+const int secondLine = 11;
 const int scoreY = 100;
+double pickupY = 0;
+
+const int MSG_TIME = 2000;
 
 void hudRenderFrame(void) {
 	Lem lem = lemmings[PLAYER_INDEX];
@@ -114,7 +117,7 @@ void hudRenderFrame(void) {
 
 	// print who player killed
 	if(usePlayer && lastPlayerKillIndex > -1) {
-		if(isDue(clock(), lastPlayerKillTime, 1000)) {
+		if(isDue(clock(), lastPlayerKillTime, MSG_TIME)) {
 			lastPlayerKillIndex = -1;
 			lastPlayerKillTime = 0;
 		}else{
@@ -127,7 +130,7 @@ void hudRenderFrame(void) {
 
 	// print who killed us (unless we hit someone when dead! then show that instead)
 	// additional logic is when showing at endgame, it goes away eventually.
-	if(usePlayer && lem.dead && lastPlayerKillTime < lem.deadTime && !isDue(clock(), lem.deadTime, 3000)) {
+	if(usePlayer && lem.dead && lastPlayerKillTime < lem.deadTime && !isDue(clock(), lem.deadTime, MSG_TIME)) {
 		char killer[30];
 		sprintf(killer, "fragged by %s",lemmings[lem.killer].name);
 		writeFontFull(killer, makeCoord(135, firstLine), true, false);
@@ -173,12 +176,16 @@ void hudRenderFrame(void) {
 		writeFontFull(msg, makeCoord(135, secondLine), true, false);
 	}
 
-	// ammo
 	Lem p = lemmings[PLAYER_INDEX];
+
+	// health
+	writeFont("health", makeCoord(3, 3));
+	writeAmount(p.active ? p.health : 0, makeCoord(30, 3));
+
+	// ammo count
 	if(p.weap > 0 && p.ammo > 0) {
-		// static counter in the corner
-		writeFont("ammo", makeCoord(3, 3));
-		writeAmount(p.ammo, makeCoord(23, 3));
+		writeFont("ammo", makeCoord(55, 3));
+		writeAmount(p.ammo, makeCoord(76, 3));
 	}
 
 	// frags
@@ -198,6 +205,19 @@ void hudRenderFrame(void) {
 	// first and second placements
 	writeAmount(scores[0].frags, makeCoord(282, 3));
 	writeAmount(boardPosition != 0 ? lem.frags : scores[1].frags, makeCoord(302, 3));
+
+	// pickup plume
+	if(!isDue(clock(), p.lastPickup, 500)) {
+		pickupY += 0.5;
+	
+		if(p.weap == W_ROCK) {
+			writeFontFull("bazooka", deriveCoord(p.pickupCoord, 0, -5 - (int)pickupY), false, true);
+		}else{
+			writeFontFull("ak 47", deriveCoord(p.pickupCoord, 0, -5 - (int)pickupY), false, true);
+		}
+	}else{
+		pickupY = 0;
+	}
 
 	// Scoreboard
 	if(lem.dead || checkCommand(CMD_SCORES) || gameover) {

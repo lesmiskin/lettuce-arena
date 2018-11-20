@@ -17,8 +17,6 @@ Coord spawns[MAX_SPAWNS];
 int xTween = 0;
 
 const int PAIN_DURATION = 200;
-const int AMMO_PICKUP_ROCK = 5;
-const int AMMO_PICKUP_MACH = 50;
 const int RESPAWN_TIME = 2000;
 const int LEM_HEALTH = 100;
 const int BAR_WIDTH = 8;
@@ -157,6 +155,7 @@ int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 		1, 				// animInc
 		false,			// isWalking
 		-1,				// lastHIt
+		0,
 
 		// weapons
 		0,
@@ -267,7 +266,9 @@ void lemGameFrame() {
 			if(inBounds(lemmings[i].coord, makeSquareBounds(weapons[j].coord, WEAP_BOUND))) {
 				lemmings[i].weap = weapons[j].type;
 				lemmings[i].lastWeap = weapons[j].type;
-				lemmings[i].ammo = weapons[j].type == W_ROCK ? AMMO_PICKUP_ROCK : AMMO_PICKUP_MACH;
+				lemmings[i].ammo = getMaxAmmo(weapons[j].type);
+				lemmings[i].lastPickup = clock();
+				lemmings[i].pickupCoord = weapons[j].coord;
 				weapons[j].pickedUp = true;
 				weapons[j].lastPickup = clock();
 			}
@@ -396,12 +397,12 @@ void weaponCarryFrame(int i) {
 	if(lemmings[i].lastWeap == W_MACH) {
 		if(!isDue(clock(), lemmings[i].lastShot, 25)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
-			drawSpriteFull(makeSimpleSprite("exp-01.png"), muzzPos, 0.5, 0.5, degToRad(randomMq(0,360)), true);
+			drawSpriteFull(makeSimpleSprite("exp-01.png"), muzzPos, 0.5, 0.5, chance(50) ? 0 : 180, true);
 			recoil = 2;
 		}
 		else if(!isDue(clock(), lemmings[i].lastShot, 25*2)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
-			drawSpriteFull(makeSimpleSprite("exp-01.png"), muzzPos, 0.5, 0.5, degToRad(randomMq(0,360)), true);
+			drawSpriteFull(makeSimpleSprite("exp-01.png"), muzzPos, 0.5, 0.5, chance(50) ? 45 : 45*3, true);
 			recoil = 1;
 		}
 	}else if(lemmings[i].lastWeap == W_ROCK) {
@@ -534,9 +535,9 @@ void lemRenderFrame() {
 		if(lem.weap > 0 || !isDue(clock(), lem.lastShot, getReloadTime(i)) )
 			weaponCarryFrame(i);
 
-		// show ammo counter
+		// show nearby ammo counter if low
 		Lem p = lemmings[PLAYER_INDEX];
-		if(p.weap > 0 && p.ammo > 0) {
+		if(p.weap > 0 && p.ammo <= getMaxAmmo(p.weap)/4) {
 			// show temporary counter next to player when firing
 			if(!isDue(clock(), p.lastShot, 500)) {
 				writeAmount(p.ammo, deriveCoord(lemmings[PLAYER_INDEX].coord, 7, 7));

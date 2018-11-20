@@ -23,6 +23,8 @@ typedef struct {
     int animInc;
     bool isWalking;
 	long lastHit;
+	long lastPickup;
+	Coord pickupCoord;
 
     // weapons
     long lastShot;
