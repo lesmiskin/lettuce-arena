@@ -389,7 +389,8 @@ void weaponCarryFrame(int i) {
 	Coord wc = deriveCoord(lemmings[i].coord, derive.x, derive.y);
 	wc = deriveCoord(wc, xoff, yoff);
 
-	const double ROCK_SCALE = 0.75;
+	const double MACH_SCALE = 0.5;
+	const double ROCK_SCALE = 0.9;
 
 	int recoil = 0;
 
@@ -397,31 +398,31 @@ void weaponCarryFrame(int i) {
 	if(lemmings[i].lastWeap == W_MACH) {
 		if(!isDue(clock(), lemmings[i].lastShot, 25)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
-			drawSpriteFull(makeSimpleSprite("exp-01.png"), muzzPos, 0.5, 0.5, chance(50) ? 0 : 180, true);
+			drawSpriteFull(makeSimpleSprite("exp-01.png"), muzzPos, MACH_SCALE, MACH_SCALE, chance(50) ? 0 : 180, true);
 			recoil = 2;
 		}
 		else if(!isDue(clock(), lemmings[i].lastShot, 25*2)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
-			drawSpriteFull(makeSimpleSprite("exp-01.png"), muzzPos, 0.5, 0.5, chance(50) ? 45 : 45*3, true);
+			drawSpriteFull(makeSimpleSprite("exp-01.png"), muzzPos, MACH_SCALE, MACH_SCALE, chance(50) ? 45 : 45*3, true);
 			recoil = 1;
 		}
 	}else if(lemmings[i].lastWeap == W_ROCK) {
-		if(!isDue(clock(), lemmings[i].lastShot, 75)) {
+		if(!isDue(clock(), lemmings[i].lastShot, 100)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
 			drawSpriteFull(makeSimpleSprite("exp-04.png"), muzzPos, ROCK_SCALE, ROCK_SCALE, radToDeg(randomAngle()), true);
 			recoil = 6;
 		}
-		else if(!isDue(clock(), lemmings[i].lastShot, 100)) {
+		else if(!isDue(clock(), lemmings[i].lastShot, 150)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
 			drawSpriteFull(makeSimpleSprite("exp-05.png"), muzzPos, ROCK_SCALE, ROCK_SCALE, radToDeg(randomAngle()), true);
 			recoil = 3;
 		}
-		else if(!isDue(clock(), lemmings[i].lastShot, 125)) {
+		else if(!isDue(clock(), lemmings[i].lastShot, 200)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
 			drawSpriteFull(makeSimpleSprite("exp-06.png"), muzzPos, ROCK_SCALE, ROCK_SCALE, radToDeg(randomAngle()), true);
 			recoil = 2;
 		}
-		else if(!isDue(clock(), lemmings[i].lastShot, 150)) {
+		else if(!isDue(clock(), lemmings[i].lastShot, 250)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
 			drawSpriteFull(makeSimpleSprite("exp-06.png"), muzzPos, ROCK_SCALE, ROCK_SCALE, radToDeg(randomAngle()), true);
 			recoil = 1;
@@ -558,7 +559,7 @@ void lemRenderFrame() {
 		int barWidth = (int)(((double)lem.health / LEM_HEALTH) * BAR_WIDTH);
 		if(barWidth < 1) barWidth = 1;	// always show something (otherwise invisible)!
 
-		drawSpriteFull(makeSimpleSprite("black.png"), deriveCoord(h, -1, -1), barWidth+2, 3, 0, false);
+		drawSpriteFull(makeSimpleSprite("black.png"), deriveCoord(h, 1, 1), barWidth+1, 3, 0, false);
 		drawSpriteFull(makeSimpleSprite(healthFile), h, barWidth, 1, 0, false);
 	}
 }

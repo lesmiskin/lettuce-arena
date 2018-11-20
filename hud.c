@@ -103,8 +103,8 @@ void sort_ints(Lem *a, size_t n) {
     qsort(a, n, sizeof *a, &compare_ints);
 }
 
-const int firstLine = 3;
-const int secondLine = 11;
+const int firstLine = 2;
+const int secondLine = 80;
 const int scoreY = 100;
 double pickupY = 0;
 
@@ -114,6 +114,10 @@ void hudRenderFrame(void) {
 	Lem lem = lemmings[PLAYER_INDEX];
 
 	bool showPosition = usePlayer && (checkCommand(CMD_SCORES) || gameover);
+
+	// status bar background
+	drawSpriteFull(makeSimpleSprite("bar.png"), zeroCoord(), 1, 1, 0, false);
+	// drawSpriteFull(makeSimpleSprite("black.png"), zeroCoord(), screenBounds.x, 14, 0, false);
 
 	// print who player killed
 	if(usePlayer && lastPlayerKillIndex > -1) {
@@ -179,41 +183,45 @@ void hudRenderFrame(void) {
 	Lem p = lemmings[PLAYER_INDEX];
 
 	// health
-	writeFont("health", makeCoord(3, 3));
-	writeAmount(p.active ? p.health : 0, makeCoord(30, 3));
+	writeAmount(p.active ? p.health : 0, makeCoord(10, firstLine));
 
 	// ammo count
 	if(p.weap > 0 && p.ammo > 0) {
-		writeFont("ammo", makeCoord(55, 3));
-		writeAmount(p.ammo, makeCoord(76, 3));
+		// writeFont("ammo", makeCoord(55, firstLine));
+		if(p.weap == W_MACH) {
+			drawSpriteFull(makeSimpleSprite("w_mach-0.png"), makeCoord(55,-3), 1, 1, 0, false);
+		}else{
+			drawSpriteFull(makeSimpleSprite("w_rock3-0.png"), makeCoord(55,-3), 1, 1, 0, false);
+		}
+		writeAmount(p.ammo, makeCoord(76, firstLine));
 	}
 
 	// frags
-	writeText(fraglimit, makeCoord(262, 3), false);
+	writeText(fraglimit, makeCoord(262, firstLine), false);
 
 	// highlight us if we are first, or second
 	
 	// in the lead.
 	if(boardPosition == 0) {
-		drawSpriteFull(makeSimpleSprite("white.png"), makeCoord(279,0), 16, 13, 0, false);
-		drawSpriteFull(makeSimpleSprite("score.png"), makeCoord(280,1), 14, 11, 0, false);
+		drawSpriteFull(makeSimpleSprite("white.png"), makeCoord(279,0), 16, 10, 0, false);
+		drawSpriteFull(makeSimpleSprite("score.png"), makeCoord(280,1), 14, 8, 0, false);
 	} else {
-		drawSpriteFull(makeSimpleSprite("white.png"), makeCoord(299,0), 16, 13, 0, false);
-		drawSpriteFull(makeSimpleSprite("score-2.png"), makeCoord(300,1), 14, 11, 0, false);
+		drawSpriteFull(makeSimpleSprite("white.png"), makeCoord(299,0), 16, 10, 0, false);
+		drawSpriteFull(makeSimpleSprite("score-2.png"), makeCoord(300,1), 14, 8, 0, false);
 	}
 
 	// first and second placements
-	writeAmount(scores[0].frags, makeCoord(282, 3));
-	writeAmount(boardPosition != 0 ? lem.frags : scores[1].frags, makeCoord(302, 3));
+	writeAmount(scores[0].frags, makeCoord(282, firstLine));
+	writeAmount(boardPosition != 0 ? lem.frags : scores[1].frags, makeCoord(302, firstLine));
 
 	// pickup plume
 	if(!isDue(clock(), p.lastPickup, 500)) {
 		pickupY += 0.5;
 	
 		if(p.weap == W_ROCK) {
-			writeFontFull("bazooka", deriveCoord(p.pickupCoord, 0, -5 - (int)pickupY), false, true);
+			writeFontFull("rocket launcher", deriveCoord(p.pickupCoord, 0, -5 - (int)pickupY), false, true);
 		}else{
-			writeFontFull("ak 47", deriveCoord(p.pickupCoord, 0, -5 - (int)pickupY), false, true);
+			writeFontFull("machine gun", deriveCoord(p.pickupCoord, 0, -5 - (int)pickupY), false, true);
 		}
 	}else{
 		pickupY = 0;

@@ -9,7 +9,7 @@
 
 // DEBUG SETTINGS
 bool CHEAT_GIVE_MACH = false;
-bool CHEAT_GIVE_ROCK = false;
+bool CHEAT_GIVE_ROCK = true;
 bool CHEAT_GOD = false;
 bool DEBUG_SKIP_INTRO = false;
 bool DEBUG_NO_ENEMIES = false;

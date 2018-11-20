@@ -91,7 +91,6 @@ void weaponGameFrame() {
 					lemmings[e].deadTime = clock();
 					lemmings[e].active = false;
 					lemmings[e].killer = shots[i].shooter;
-					// lemmings[e].weap = 0;
 
 					// trigger three explosions in short sequence (looks good)
 					spawnExpDelay(deriveCoord(lemmings[e].coord, 0, -8), false, 0);

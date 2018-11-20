@@ -93,6 +93,7 @@ static void loadImages(void) {
         { "base-tile.png", false },
         { "base-ne.png", false },
 
+        { "bar.png", false },
         { "space.png", false },
 		{ "star-bright.png", false },
 		{ "star-dim.png", false },

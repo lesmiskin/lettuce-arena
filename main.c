@@ -15,36 +15,31 @@
 #include "hud.h"
 #include "state.h"
 
-// weapons in CRATES
+// machinegun carry sprite
 
+// pistol when starting
+// nicer floors
+
+// middle floor is transparent with "shine" graphic (NO ALPHA)
+// crate drops with powerups
+
+// quadrants you can move into, stepping over threshold.
+
+// weapons in crates
 // jump and bounce if machinegun death.
 // BOUNCING PIXELS on explosion.
-
-// show weap on last shot.
-
-// text when picking up weapons
 // "you fragged x" text is not actually centered.
-
 // reinstate nice green indicator arrows (bounce).
 // double animation frames
 // up-down walking sprites.
 // ak-47 carry graphic
 // bazooka graphic
-// muzzle flash adjusts to precise placement of gun (e.g. north rocket)
-
-// ammo bar beneath health
-
 // large white puffs for rockets.
 // rocket more solid and vivid.
 
 // enemies not explode if just shot.
 
-// weapons to recoil in correct direction (up/down, left/right - isVert, isHor; isLeft, isUp)
-
-// pistol when starting
 // spawn point textures
-// nicer floors
-// quadrants you can move into, stepping over threshold.
 
 // strafe button.
 // random crates drops with powerups
@@ -235,7 +230,7 @@
 // b) if weapon is available, higher chance to walk to it.
 // c) if detect opponent within X threshold (random), then change direction AWAY from him.
 
-static const char *GAME_TITLE = "Lettuce Arena v0.1";
+static const char *GAME_TITLE = "Lettuce Arena TEST";
 const int ANIMATION_HZ = 1000 / 8;		//12fps
 const int RENDER_HZ = 1000 / 60;		//60fps
 const int GAME_HZ = 1000 / 60;			//60fps
