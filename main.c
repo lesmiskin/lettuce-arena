@@ -15,22 +15,19 @@
 #include "hud.h"
 #include "state.h"
 
-// ammo bar
-// picking up ammo replenishes, not add
-// hide ammo hud
-// fix green indicator arrows (bounce).
+// reinstate nice green indicator arrows (bounce).
 
-// colored smoke puff when shot hits.
-// larger, more vivid rocket sprite.
+// picking up ammo replenishes, not add
+// ammo bar
+
 // larger, white puffs.
 
+// larger, more vivid rocket sprite.
 // weapons in crates (more obvious, random)
 
+// crates are evenly-spaced per-spawn distance.
+
 // enemies KEEP AIMING IN THAT DIRECTION after firing (prevents "flicking")
-
-// bouncing pixel gibs
-
-
 
 // weapons to recoil in correct direction (up/down, left/right - isVert, isHor; isLeft, isUp)
 

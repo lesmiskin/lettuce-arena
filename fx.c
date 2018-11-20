@@ -56,6 +56,8 @@ typedef struct {
     long spawnTime;
 	int duration;
 	bool isLemExp;
+	bool isLemHurt;
+	int density;
 } Tele;
 
 #define PARTICLE_DENSITY 20
@@ -106,7 +108,7 @@ void fxGameFrame() {
 			continue;
 		}
 
-		for(int j=0; j < PARTICLE_DENSITY; j++) {
+		for(int j=0; j < teleporters[i].density; j++) {
 			Particle p = teleporters[i].particles[j];
 			teleporters[i].particles[j].coord = deriveCoord(p.coord, p.step.x, p.step.y);
 		}
@@ -135,9 +137,9 @@ void fxRenderFrame() {
 	for(int i=0; i < MAX_TELE; i++) {
 		if(!teleporters[i].valid) continue;
 
-		for(int j=0; j < PARTICLE_DENSITY; j++) {
+		for(int j=0; j < teleporters[i].density; j++) {
 			char file[11];
-			if(teleporters[i].isLemExp) {
+			if(teleporters[i].isLemExp || teleporters[i].isLemHurt) {
 				// pick exp color based on lemming
 				Particle part = teleporters[i].particles[j];
 				switch(part.lemColor) {
@@ -163,6 +165,33 @@ void fxRenderFrame() {
 	}
 }
 
+void spawnHurt(Coord c, int lemColor) {
+	for(int i=0; i < MAX_TELE; i++) {
+		if(teleporters[i].valid) continue;
+		const int density = 7;
+		const int time = 300;
+		const int dur_min = 5;
+		const int dur_max = 10;
+
+		Particle *points = malloc(sizeof(Particle) * density);
+
+		// make points
+		for(int j=0; j < density; j++) {
+			// calculate step here since much faster.
+			double angle = randomMq(0, 360);
+			Coord step = getAngleStep(angle, randomMq(dur_min, dur_max) / 10.0, false);
+
+			// when choosing color, only samll percentage should be hair.
+			Particle p = { true, c, step, randomMq(1,3), lemColor };
+			points[j] = p;
+		}
+
+		Tele t = { true, points, clock(), time, true, true, density };
+		teleporters[i] = t;
+		break;
+	}
+}
+
 void spawnTele(Coord c) {
 
 	for(int i=0; i < MAX_TELE; i++) {
@@ -180,7 +209,7 @@ void spawnTele(Coord c) {
 			points[j] = p;
 		}
 
-		Tele t = { true, points, clock(), 250, false };
+		Tele t = { true, points, clock(), 250, false, false, PARTICLE_DENSITY };
 		teleporters[i] = t;
 		break;
 	}
@@ -204,7 +233,7 @@ void spawnLemExp(Coord c, int lemColor) {
 			points[j] = p;
 		}
 
-		Tele t = { true, points, clock(), 650, true };
+		Tele t = { true, points, clock(), 650, true, false, PARTICLE_DENSITY };
 		teleporters[i] = t;
 		break;
 	}

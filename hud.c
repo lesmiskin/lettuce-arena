@@ -205,12 +205,8 @@ void hudRenderFrame(void) {
 		}
 	}
 
-	// ammo
+	// draw crosshair
 	if(lem.weap > 0 && lem.active) {
-		drawSprite(makeSimpleSprite("rocket-e.png"), makeCoord(10,6));
-		writeAmount(lem.ammo, makeCoord(19, 3));
-
-		// draw crosshair
 		drawSpriteFull(
 			makeSimpleSprite("cross.png"), 
 			extendOnAngle(lem.coord, lem.angle, 35), 

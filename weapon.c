@@ -100,6 +100,8 @@ void weaponGameFrame() {
 					if(shots[i].type == W_ROCK)
 						spawnExp(shots[i].coord, false);
 
+					spawnHurt(lemmings[e].coord, lemmings[e].color);
+
 					// push them back.
 //					double blastAngle = getAngle(shots[i].coord, lemmings[e].coord);
 					double blastAngle = degToRad(shots[i].angle);
