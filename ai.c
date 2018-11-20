@@ -184,6 +184,13 @@ void aiSmartFrame(int enemyInc) {
 
 	bool takingBreather = havingBreather(enemyInc);
 
+	Lem l = lemmings[enemyInc];
+	
+	// lem stops for a bit after firing the launcher, otherwise looks too frenzied.
+	if(l.weap == W_ROCK && !isDue(clock(), lemmings[enemyInc].lastShot, 250)) {
+		return;
+	}
+
 	// Time to change direction?
 	if (timer(&lemmings[enemyInc].en_lastDirTime, lemmings[enemyInc].en_nextDirTime)) {
 		// Start a breather.
@@ -217,4 +224,4 @@ void aiSmartFrame(int enemyInc) {
 	if(!m.freeDir.left) 	lemmings[enemyInc].angle = avoidLeft();
 	if(!m.freeDir.right) 	lemmings[enemyInc].angle = avoidRight();
 	// printf("%f - %f\n", lemmings[0].angle.x, lemmings[0].angle.y);
-}
+}	

@@ -13,9 +13,7 @@ bool CHEAT_GIVE_ROCK = true;
 bool CHEAT_GOD = true;
 bool DEBUG_SKIP_INTRO = true;
 bool DEBUG_NO_ENEMIES = false;
-
-// GENERAL SETTINGS
-bool PLAYER_INDICATOR = false;
+bool PLAYER_INDICATOR = true;
 
 static const double RADIAN_CIRCLE = 6.28;
 

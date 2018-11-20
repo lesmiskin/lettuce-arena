@@ -15,27 +15,42 @@
 #include "hud.h"
 #include "state.h"
 
-// new character ip
-// bazooka
-// ak-47
-// muzzle flashes
+// ammo bar
+// picking up ammo replenishes, not add
+// hide ammo hud
+// fix green indicator arrows (bounce).
 
-// spawn point textures
-// strafe button.
+// colored smoke puff when shot hits.
+// larger, more vivid rocket sprite.
+// larger, white puffs.
+
+// weapons in crates (more obvious, random)
+
+// enemies KEEP AIMING IN THAT DIRECTION after firing (prevents "flicking")
+
+// bouncing pixel gibs
 
 
-// white rocket puffs, larger, more obvious
-// puff of colored smoke when machinegun hits
+
+// weapons to recoil in correct direction (up/down, left/right - isVert, isHor; isLeft, isUp)
 
 // pistol when starting
-// random crate drops with powerups
-// quadrants with doorways, basic architecture.
-// space quadrants linked by paths, q3dm7 / tower assault arch
+// spawn point textures
+// nicer floors
+// quadrants you can move into, stepping over threshold.
 
-// bouncing gravestone after explosion.
-// original animal IP rather than lemming.
+// strafe button.
+// random crates drops with powerups
+
+// new bazooka sprite (pipe)
 // ak-47 carry sprite
+// new character ip
 
+// double character animation.
+// up/down sprites
+// palette swap for skins
+
+// model map off q3dm from top-down
 
 // "killed x" to be in blue
 // "fragged by x" to be in red
@@ -55,10 +70,6 @@
 // Fade in / fade out
 
 // up/down movement gif's
-
-// MAP ------------------------------
-// starry sky "out the window" (scrolling ala hexxagon)
-// q3dm7 style, metal platforms with edges.
 
 // WALLS -----------------------------
 // wall segments in middle of the map.

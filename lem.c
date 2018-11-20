@@ -383,17 +383,17 @@ void weaponCarryFrame(int i) {
 			xoff += 1;
 		}
 	}else if(lemmings[i].weap == W_ROCK) {
-		if(!isDue(clock(), lemmings[i].lastShot, 50)) {
+		if(!isDue(clock(), lemmings[i].lastShot, 75)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
 			drawSpriteFull(makeSimpleSprite("exp-04.png"), muzzPos, 1, 1, radToDeg(randomAngle()), true);
 			xoff += 3;
 		}
-		else if(!isDue(clock(), lemmings[i].lastShot, 100)) {
+		else if(!isDue(clock(), lemmings[i].lastShot, 75*2)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
 			drawSpriteFull(makeSimpleSprite("exp-05.png"), muzzPos, 1, 1, radToDeg(randomAngle()), true);
 			xoff += 2;
 		}
-		else if(!isDue(clock(), lemmings[i].lastShot, 250)) {
+		else if(!isDue(clock(), lemmings[i].lastShot, 75*3)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
 			drawSpriteFull(makeSimpleSprite("exp-06.png"), muzzPos, 1, 1, radToDeg(randomAngle()), true);
 			xoff += 1;
@@ -410,7 +410,7 @@ void weaponCarryFrame(int i) {
 }
 
 int getReloadTime(int i) {
-	if(lemmings[i].weap == W_ROCK ? ROCK_RELOAD : MACH_RELOAD);
+	if(lemmings[i].weap == W_ROCK ? (int)ROCK_RELOAD : (int)MACH_RELOAD);
 }
 
 bool canShoot(int i) {
