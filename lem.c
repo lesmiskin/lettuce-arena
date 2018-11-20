@@ -17,7 +17,8 @@ Coord spawns[MAX_SPAWNS];
 int xTween = 0;
 
 const int PAIN_DURATION = 200;
-const int AMMO_PICKUP = 100;
+const int AMMO_PICKUP_ROCK = 5;
+const int AMMO_PICKUP_MACH = 50;
 const int RESPAWN_TIME = 2000;
 const int LEM_HEALTH = 100;
 const int BAR_WIDTH = 8;
@@ -264,7 +265,7 @@ void lemGameFrame() {
 
 			if(inBounds(lemmings[i].coord, makeSquareBounds(weapons[j].coord, WEAP_BOUND))) {
 				lemmings[i].weap = weapons[j].type;
-				lemmings[i].ammo = AMMO_PICKUP;
+				lemmings[i].ammo = weapons[j].type == W_ROCK ? AMMO_PICKUP_ROCK : AMMO_PICKUP_MACH;
 				weapons[j].pickedUp = true;
 				weapons[j].lastPickup = clock();
 			}
@@ -300,42 +301,51 @@ void weaponCarryFrame(int i) {
 	Coord derive;
 	double angle = 0;
 	int xoff, yoff;
+	Coord fireDerive = zeroCoord();
 
 	// weapon rotation and position.
 	switch((int)radToDeg(lemmings[i].angle)+90) {
 		case 360:
 			sprintf(file, "w_rock-n.png");
-			derive = makeCoord(1, -5);
+			derive = makeCoord(3, -4);
+			fireDerive = makeCoord(0, 1);
 			break;
 		case 90:
 			sprintf(file, "w_rock-e.png");
 			derive = makeCoord(3, 1);
+			fireDerive = makeCoord(-1, 0);
 			break;
 		case 270:
 			sprintf(file, "w_rock-w.png");
 			derive = makeCoord(-3, 1);
+			fireDerive = makeCoord(1, 0);
 			break;
 		case 180:
 			sprintf(file, "w_rock-s.png");
-			derive = makeCoord(-4, 5);
+			derive = makeCoord(-2, 5);
+			fireDerive = makeCoord(0, -1);
 			break;
 
 		case 405://ne
 			sprintf(file, "w_rock-ne.png");
 			derive = makeCoord(4, -3);
+			fireDerive = makeCoord(-1, 1);
 			break;
 		case 135://se
 			sprintf(file, "w_rock-se.png");
 			derive = makeCoord(2, 3);
+			fireDerive = makeCoord(-1, -1);
 			break;
 		case 225://sw
 			sprintf(file, "w_rock-sw.png");
 			derive = makeCoord(-2, 3);
+			fireDerive = makeCoord(1, -1);
 			break;
 		default:
 		case 315://nw
 			sprintf(file, "w_rock-nw.png");
 			derive = makeCoord(-4, -3);
+			fireDerive = makeCoord(1, 1);
 			break;
 	}
 
@@ -374,38 +384,42 @@ void weaponCarryFrame(int i) {
 
 	// Establish weapon origin.
 	Coord wc = deriveCoord(lemmings[i].coord, derive.x, derive.y);
+	wc = deriveCoord(wc, xoff, yoff);
 
 	const double ROCK_SCALE = 0.75;
+
+	int recoil = 0;
 
 	// muzzle flash
 	if(lemmings[i].weap == W_MACH) {
 		if(!isDue(clock(), lemmings[i].lastShot, 50)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
 			drawSpriteFull(makeSimpleSprite("exp-01.png"), muzzPos, 0.5, 0.5, radToDeg(randomAngle()), true);
-			xoff += 1;
+			recoil = 1;
 		}
 	}else if(lemmings[i].weap == W_ROCK) {
 		if(!isDue(clock(), lemmings[i].lastShot, 75)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
 			drawSpriteFull(makeSimpleSprite("exp-04.png"), muzzPos, ROCK_SCALE, ROCK_SCALE, radToDeg(randomAngle()), true);
-			xoff += 3;
+			recoil = 3;
 		}
 		else if(!isDue(clock(), lemmings[i].lastShot, 75*2)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
 			drawSpriteFull(makeSimpleSprite("exp-05.png"), muzzPos, ROCK_SCALE, ROCK_SCALE, radToDeg(randomAngle()), true);
-			xoff += 2;
+			recoil = 2;
 		}
 		else if(!isDue(clock(), lemmings[i].lastShot, 75*3)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
 			drawSpriteFull(makeSimpleSprite("exp-06.png"), muzzPos, ROCK_SCALE, ROCK_SCALE, radToDeg(randomAngle()), true);
-			xoff += 1;
+			recoil = 1;
 		}
 	}
 
 	// weapon recoil
-	wc = deriveCoord(wc, xoff, yoff);
+	if(recoil > 0)
+		wc = deriveCoord(wc, fireDerive.x * recoil, fireDerive.y * recoil);
 
-	// draw weapon
+	// draw weapon (yes, weapon should flash too :p)
 	AssetVersion spriteVersion = inPain(i) ? ASSET_WHITE : ASSET_DEFAULT;
 	Sprite lemSprite = makeSprite(getTextureVersion(file, spriteVersion), zeroCoord(), SDL_FLIP_NONE);
 	drawSprite(lemSprite, wc);
@@ -508,6 +522,18 @@ void lemRenderFrame() {
 		if(lem.weap > 0) 
 			weaponCarryFrame(i);
 
+		// show ammo counter
+		Lem p = lemmings[PLAYER_INDEX];
+		if(p.weap > 0 && p.ammo > 0) {
+			// static counter in the corner
+			writeFont("ammo", makeCoord(10, 10));
+			writeAmount(p.ammo, makeCoord(30, 10));
+
+			// show temporary counter next to player when firing
+			if(!isDue(clock(), p.lastShot, 500)) {
+				writeAmount(p.ammo, deriveCoord(lemmings[PLAYER_INDEX].coord, 7, 7));
+			}
+		}
 
 		// -----------
 		// health bars
@@ -523,7 +549,7 @@ void lemRenderFrame() {
 		int barWidth = (int)(((double)lem.health / LEM_HEALTH) * BAR_WIDTH);
 		if(barWidth < 1) barWidth = 1;	// always show something (otherwise invisible)!
 
-		drawSpriteFull(makeSimpleSprite("black.png"), deriveCoord(h, -1, -1), barWidth+1, 3, 0, false);
+		drawSpriteFull(makeSimpleSprite("black.png"), deriveCoord(h, -1, -1), barWidth+2, 3, 0, false);
 		drawSpriteFull(makeSimpleSprite(healthFile), h, barWidth, 1, 0, false);
 	}
 }

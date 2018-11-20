@@ -16,15 +16,12 @@
 #include "state.h"
 
 // weapons in CRATES
-// health bar outline is not stretched properly
-
-
 
 // jump and bounce if machinegun death.
 // BOUNCING PIXELS on explosion.
 
 
-
+// machinegun muzzle should be incremental switch between 0 and 90 degree, not random.
 
 // reinstate nice green indicator arrows (bounce).
 // double animation frames
