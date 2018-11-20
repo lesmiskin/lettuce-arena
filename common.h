@@ -10,6 +10,8 @@ extern bool CHEAT_GOD;
 extern bool DEBUG_SKIP_INTRO;
 extern bool DEBUG_NO_ENEMIES;
 extern bool PLAYER_INDICATOR;
+extern bool DEBUG_STILL_ENEMIES;
+extern bool DEBUG_ONE_SHOT_KILLS;
 
 typedef struct {
     double x, y;

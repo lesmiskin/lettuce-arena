@@ -70,6 +70,9 @@ void weaponGameFrame() {
 				lemmings[e].health -= shots[i].type == W_ROCK ? ROCK_DAMAGE : MACH_DAMAGE;
 				lemmings[e].lastHit = clock();
 
+				// hack for one-shot kills
+				if(DEBUG_ONE_SHOT_KILLS) lemmings[e].health = 0;
+
 				// if hit lemming is dead.
 				if(lemmings[e].health <=0) {
 					lemmings[shots[i].shooter].frags++;
@@ -79,8 +82,12 @@ void weaponGameFrame() {
 					lemmings[e].killer = shots[i].shooter;
 					lemmings[e].weap = 0;
 
-					spawnExp(shots[i].coord, false);
-					spawnLemExp(shots[i].coord, lemmings[e].color);
+					// trigger three explosions in short sequence (looks good)
+					spawnExpDelay(deriveCoord(lemmings[e].coord, 0, -8), false, 0);
+					spawnExpDelay(deriveCoord(lemmings[e].coord, -8, 8), false, 100);
+					spawnExpDelay(deriveCoord(lemmings[e].coord, 8, 8), false, 200);
+
+					spawnLemExp(lemmings[e].coord, lemmings[e].color);
 
 					if(lemmings[shots[i].shooter].isPlayer) {
 						lastPlayerKillTime = clock();

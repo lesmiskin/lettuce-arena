@@ -13,6 +13,8 @@ typedef struct {
 	Coord coord;
 	int animInc;
 	bool smallExp;
+	long spawnTime;
+	int delay;
 } Exp;
 
 #define MAX_EXP 20
@@ -88,6 +90,7 @@ void fxGameFrame() {
     if(timer(&lastExpFrame, 1000/12)) {
 		for(int i=0; i < MAX_EXP; i++) {
 			if(!explosions[i].valid) continue;
+			if(!isDue(clock(), explosions[i].spawnTime, explosions[i].delay)) continue;
 
 			// finish explosion
 			if(explosions[i].animInc == 5) {
@@ -127,6 +130,8 @@ void fxRenderFrame() {
 	// draw explosions
 	for(int i=0; i < MAX_EXP; i++) {
 		if(!explosions[i].valid) continue;
+		if(!isDue(clock(), explosions[i].spawnTime, explosions[i].delay)) continue;
+
 		char file[10];
 		double scale = explosions[i].smallExp ? 0.5 : 1;
 		sprintf(file, "exp-0%d.png", explosions[i].animInc+1);
@@ -225,7 +230,7 @@ void spawnLemExp(Coord c, int lemColor) {
 		for(int j=0; j < PARTICLE_DENSITY; j++) {
 			// calculate step here since much faster.
 			double angle = randomMq(0, 360);
-			Coord step = getAngleStep(angle, randomMq(1, 2), false);
+			Coord step = getAngleStep(angle, randomMq(5, 10) / 10.0, false);
 
 			// when choosing color, only samll percentage should be hair.
 			// int color = chance(90) ? randomMq(2,3) : 1;
@@ -233,23 +238,27 @@ void spawnLemExp(Coord c, int lemColor) {
 			points[j] = p;
 		}
 
-		Tele t = { true, points, clock(), 650, true, false, PARTICLE_DENSITY };
+		Tele t = { true, points, clock(), 1000, true, false, PARTICLE_DENSITY };
 		teleporters[i] = t;
 		break;
 	}
 }
 
-void spawnExp(Coord c, bool smallExp) {
+void spawnExpDelay(Coord c, bool smallExp, int delay) {
 	// find a place to put it in our explosion array.
 	for(int i=0; i < MAX_EXP; i++) {
 		if(explosions[i].valid) continue;
 
 		// make it
-		Exp e = { true, c, 0, smallExp };
+		Exp e = { true, c, 0, smallExp, clock(), delay };
 		explosions[i] = e;
 
 		return;
 	}
+}
+
+void spawnExp(Coord c, bool smallExp) {
+	spawnExpDelay(c, smallExp, 0);
 }
 
 void spawnPuff(Coord c) {

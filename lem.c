@@ -264,7 +264,7 @@ void lemGameFrame() {
 
 			if(inBounds(lemmings[i].coord, makeSquareBounds(weapons[j].coord, WEAP_BOUND))) {
 				lemmings[i].weap = weapons[j].type;
-				lemmings[i].ammo += AMMO_PICKUP;
+				lemmings[i].ammo = AMMO_PICKUP;
 				weapons[j].pickedUp = true;
 				weapons[j].lastPickup = clock();
 			}
@@ -375,6 +375,8 @@ void weaponCarryFrame(int i) {
 	// Establish weapon origin.
 	Coord wc = deriveCoord(lemmings[i].coord, derive.x, derive.y);
 
+	const double ROCK_SCALE = 0.75;
+
 	// muzzle flash
 	if(lemmings[i].weap == W_MACH) {
 		if(!isDue(clock(), lemmings[i].lastShot, 50)) {
@@ -385,17 +387,17 @@ void weaponCarryFrame(int i) {
 	}else if(lemmings[i].weap == W_ROCK) {
 		if(!isDue(clock(), lemmings[i].lastShot, 75)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
-			drawSpriteFull(makeSimpleSprite("exp-04.png"), muzzPos, 1, 1, radToDeg(randomAngle()), true);
+			drawSpriteFull(makeSimpleSprite("exp-04.png"), muzzPos, ROCK_SCALE, ROCK_SCALE, radToDeg(randomAngle()), true);
 			xoff += 3;
 		}
 		else if(!isDue(clock(), lemmings[i].lastShot, 75*2)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
-			drawSpriteFull(makeSimpleSprite("exp-05.png"), muzzPos, 1, 1, radToDeg(randomAngle()), true);
+			drawSpriteFull(makeSimpleSprite("exp-05.png"), muzzPos, ROCK_SCALE, ROCK_SCALE, radToDeg(randomAngle()), true);
 			xoff += 2;
 		}
 		else if(!isDue(clock(), lemmings[i].lastShot, 75*3)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
-			drawSpriteFull(makeSimpleSprite("exp-06.png"), muzzPos, 1, 1, radToDeg(randomAngle()), true);
+			drawSpriteFull(makeSimpleSprite("exp-06.png"), muzzPos, ROCK_SCALE, ROCK_SCALE, radToDeg(randomAngle()), true);
 			xoff += 1;
 		}
 	}

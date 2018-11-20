@@ -15,19 +15,31 @@
 #include "hud.h"
 #include "state.h"
 
+// weapons in CRATES
+// health bar outline is not stretched properly
+
+
+
+// jump and bounce if machinegun death.
+// BOUNCING PIXELS on explosion.
+
+
+
+
 // reinstate nice green indicator arrows (bounce).
+// double animation frames
+// up-down walking sprites.
+// ak-47 carry graphic
+// bazooka graphic
+// recoil in correct dir.
+// muzzle flash adjusts to precise placement of gun (e.g. north rocket)
 
-// picking up ammo replenishes, not add
-// ammo bar
+// ammo bar beneath health
 
-// larger, white puffs.
+// large white puffs for rockets.
+// rocket more solid and vivid.
 
-// larger, more vivid rocket sprite.
-// weapons in crates (more obvious, random)
-
-// crates are evenly-spaced per-spawn distance.
-
-// enemies KEEP AIMING IN THAT DIRECTION after firing (prevents "flicking")
+// enemies not explode if just shot.
 
 // weapons to recoil in correct direction (up/down, left/right - isVert, isHor; isLeft, isUp)
 

@@ -8,11 +8,13 @@
 // #include "player.h"
 
 // DEBUG SETTINGS
-bool CHEAT_GIVE_MACH = true;
-bool CHEAT_GIVE_ROCK = false;
+bool CHEAT_GIVE_MACH = false;
+bool CHEAT_GIVE_ROCK = true;
 bool CHEAT_GOD = true;
 bool DEBUG_SKIP_INTRO = true;
 bool DEBUG_NO_ENEMIES = false;
+bool DEBUG_STILL_ENEMIES = false;
+bool DEBUG_ONE_SHOT_KILLS = false;
 bool PLAYER_INDICATOR = true;
 
 static const double RADIAN_CIRCLE = 6.28;

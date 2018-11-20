@@ -8,6 +8,7 @@ extern void spawnTele(Coord c);
 extern void fxGameFrame();
 extern void fxRenderFrame();
 extern void spawnExp(Coord c, bool smallExp);
+extern void spawnExpDelay(Coord c, bool smallExp, int delay);
 extern void spawnHurt(Coord c, int lemColor);
 extern void spawnLemExp(Coord c, int lemColor);
 
