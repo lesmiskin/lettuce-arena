@@ -173,6 +173,14 @@ void hudRenderFrame(void) {
 		writeFontFull(msg, makeCoord(135, secondLine), true, false);
 	}
 
+	// ammo
+	Lem p = lemmings[PLAYER_INDEX];
+	if(p.weap > 0 && p.ammo > 0) {
+		// static counter in the corner
+		writeFont("ammo", makeCoord(3, 3));
+		writeAmount(p.ammo, makeCoord(23, 3));
+	}
+
 	// frags
 	writeText(fraglimit, makeCoord(262, 3), false);
 

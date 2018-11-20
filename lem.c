@@ -160,6 +160,7 @@ int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 
 		// weapons
 		0,
+		0,
 		false,
 		false,
 		0,
@@ -265,6 +266,7 @@ void lemGameFrame() {
 
 			if(inBounds(lemmings[i].coord, makeSquareBounds(weapons[j].coord, WEAP_BOUND))) {
 				lemmings[i].weap = weapons[j].type;
+				lemmings[i].lastWeap = weapons[j].type;
 				lemmings[i].ammo = weapons[j].type == W_ROCK ? AMMO_PICKUP_ROCK : AMMO_PICKUP_MACH;
 				weapons[j].pickedUp = true;
 				weapons[j].lastPickup = clock();
@@ -391,24 +393,34 @@ void weaponCarryFrame(int i) {
 	int recoil = 0;
 
 	// muzzle flash
-	if(lemmings[i].weap == W_MACH) {
-		if(!isDue(clock(), lemmings[i].lastShot, 50)) {
+	if(lemmings[i].lastWeap == W_MACH) {
+		if(!isDue(clock(), lemmings[i].lastShot, 25)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
-			drawSpriteFull(makeSimpleSprite("exp-01.png"), muzzPos, 0.5, 0.5, radToDeg(randomAngle()), true);
+			drawSpriteFull(makeSimpleSprite("exp-01.png"), muzzPos, 0.5, 0.5, degToRad(randomMq(0,360)), true);
+			recoil = 2;
+		}
+		else if(!isDue(clock(), lemmings[i].lastShot, 25*2)) {
+			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
+			drawSpriteFull(makeSimpleSprite("exp-01.png"), muzzPos, 0.5, 0.5, degToRad(randomMq(0,360)), true);
 			recoil = 1;
 		}
-	}else if(lemmings[i].weap == W_ROCK) {
+	}else if(lemmings[i].lastWeap == W_ROCK) {
 		if(!isDue(clock(), lemmings[i].lastShot, 75)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
 			drawSpriteFull(makeSimpleSprite("exp-04.png"), muzzPos, ROCK_SCALE, ROCK_SCALE, radToDeg(randomAngle()), true);
-			recoil = 3;
+			recoil = 6;
 		}
-		else if(!isDue(clock(), lemmings[i].lastShot, 75*2)) {
+		else if(!isDue(clock(), lemmings[i].lastShot, 100)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
 			drawSpriteFull(makeSimpleSprite("exp-05.png"), muzzPos, ROCK_SCALE, ROCK_SCALE, radToDeg(randomAngle()), true);
+			recoil = 3;
+		}
+		else if(!isDue(clock(), lemmings[i].lastShot, 125)) {
+			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
+			drawSpriteFull(makeSimpleSprite("exp-06.png"), muzzPos, ROCK_SCALE, ROCK_SCALE, radToDeg(randomAngle()), true);
 			recoil = 2;
 		}
-		else if(!isDue(clock(), lemmings[i].lastShot, 75*3)) {
+		else if(!isDue(clock(), lemmings[i].lastShot, 150)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
 			drawSpriteFull(makeSimpleSprite("exp-06.png"), muzzPos, ROCK_SCALE, ROCK_SCALE, radToDeg(randomAngle()), true);
 			recoil = 1;
@@ -519,16 +531,12 @@ void lemRenderFrame() {
 		drawSprite(lemSprite, lem.coord);
 
 		// draw carrying weapon
-		if(lem.weap > 0) 
+		if(lem.weap > 0 || !isDue(clock(), lem.lastShot, getReloadTime(i)) )
 			weaponCarryFrame(i);
 
 		// show ammo counter
 		Lem p = lemmings[PLAYER_INDEX];
 		if(p.weap > 0 && p.ammo > 0) {
-			// static counter in the corner
-			writeFont("ammo", makeCoord(10, 10));
-			writeAmount(p.ammo, makeCoord(30, 10));
-
 			// show temporary counter next to player when firing
 			if(!isDue(clock(), p.lastShot, 500)) {
 				writeAmount(p.ammo, deriveCoord(lemmings[PLAYER_INDEX].coord, 7, 7));

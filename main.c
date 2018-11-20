@@ -20,6 +20,7 @@
 // jump and bounce if machinegun death.
 // BOUNCING PIXELS on explosion.
 
+// show weap on last shot.
 
 // machinegun muzzle should be incremental switch between 0 and 90 degree, not random.
 

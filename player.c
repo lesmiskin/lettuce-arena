@@ -92,10 +92,12 @@ void initPlayer() {
 	// lemmings[0].hasRock = true;
 	if(CHEAT_GIVE_MACH) {
 		lemmings[PLAYER_INDEX].weap = W_MACH;
+		lemmings[PLAYER_INDEX].lastWeap = W_MACH;
 		lemmings[PLAYER_INDEX].ammo = 999;
 	}
 	else if(CHEAT_GIVE_ROCK) {
 		lemmings[PLAYER_INDEX].weap = W_ROCK;
+		lemmings[PLAYER_INDEX].lastWeap = W_MACH;
 		lemmings[PLAYER_INDEX].ammo = 999;
 	}
 }
