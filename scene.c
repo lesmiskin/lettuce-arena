@@ -35,6 +35,47 @@ const double WEAP_RESPAWN_TIME = 5000;
 long lastFlash;
 bool flash;
 
+const int ITEM_TIME_MIN = 10000;
+const int ITEM_TIME_MAX = 30000;
+long lastPowerupPickup;
+long nextPowerupPickup;
+
+int randomPowerupTime() {
+	// NB: weird multiplication causes better spacing out of random instances.
+	// i.e. we randomise on a lower set of sequences, then raise the time up again.
+	return randomMq(ITEM_TIME_MIN / 1000, ITEM_TIME_MAX / 1000) * 1000;
+}
+
+void powerupPickup() {
+	lastPowerupPickup = clock();
+	nextPowerupPickup = randomPowerupTime();
+}
+
+bool isPowerupOnscreen() {
+	for(int i=0; i < MAX_WEAPONS; i++) {
+		if(!weapons[i].valid) continue;
+		if(weapons[i].type == I_AMMO || weapons[i].type == I_HEALTH)
+			return true;
+	}
+	return false;
+}
+
+void itemSpawn() {
+	// find a slot
+	for(int i=0; i < MAX_WEAPONS; i++) {
+		if(weapons[i].valid) continue;
+
+		// spawn it
+		Weapon item = { true, false, 0, 
+			makeCoord(
+				randomMq(TILE_SIZE_X, screenBounds.x-TILE_SIZE_X), 
+				randomMq(TILE_SIZE_X, screenBounds.y-TILE_SIZE_X)), 
+			chance(50) ? I_HEALTH : I_AMMO
+		};
+		weapons[i] = item;
+		break;
+	}
+}
 
 static void makeGroundTexture() {
 	//Init the SDL texture
@@ -103,6 +144,12 @@ void sceneAnimateFrame() {
 }
 
 void sceneGameFrame() {
+
+	// spawn powerups randomly
+	if(!isPowerupOnscreen() && isDue(clock(), lastPowerupPickup, nextPowerupPickup)) {
+		itemSpawn();
+	}
+
 	// respawn weapons
 	for(int i=0; i < MAX_WEAPONS; i++) {
 		if(!weapons[i].valid || !weapons[i].pickedUp) continue;
@@ -193,6 +240,7 @@ void sceneRenderFrame() {
 
 //Should happen each time the scene is shown.
 void initScene() {
+	// default weapon spawns.
 	Weapon rock = { true, false, 0,  makeCoord(screenBounds.x/2, 35), W_MACH };
 	weapons[0] = rock;
 	Weapon rock4 = { true, false, 0, makeCoord(screenBounds.x/2, screenBounds.y-35), W_MACH };
@@ -203,11 +251,14 @@ void initScene() {
 	Weapon rock3 = { true, false, 0, makeCoord(screenBounds.x-35, screenBounds.y/2), W_ROCK };
 	weapons[2] = rock3;
 
-	Weapon health = { true, false, 0, makeCoord(screenBounds.x-60, screenBounds.y/2), I_HEALTH };
-	weapons[4] = health;
-	Weapon amm = { true, false, 0, makeCoord(screenBounds.x-60, screenBounds.y-35), I_AMMO };
-	weapons[5] = amm;
+	// Weapon health = { true, false, 0, makeCoord(screenBounds.x-60, screenBounds.y/2), I_HEALTH };
+	// weapons[4] = health;
+	// Weapon amm = { true, false, 0, makeCoord(screenBounds.x-60, screenBounds.y-35), I_AMMO };
+	// weapons[5] = amm;
 
 	starsInit();
 	makeGroundTexture();
+
+	// seed the powerup counter
+ 	powerupPickup();
 }

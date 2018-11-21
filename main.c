@@ -15,8 +15,13 @@
 #include "hud.h"
 #include "state.h"
 
-// health packs and ammo
-// items spawn randomly throughout game.
+// powerups should blink on and off (like weapons)
+// show ammo indicator when pickup ammo powerup
+// show lemming as green when healed
+// stop spawning powerups outside map bounds
+
+// enemies home to powerups if nearby
+
 
 // quadrants you can move into, stepping over threshold.
 // nicer floors

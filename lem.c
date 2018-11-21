@@ -272,29 +272,36 @@ void lemGameFrame() {
 			if(inBounds(lemmings[i].coord, makeSquareBounds(weapons[j].coord, WEAP_BOUND))) {
 				char name[15];
 
+				// NB: Powerups we invalidate immediately, whereas respawning weapons we just
+				// temporarily disable. This lets powerups spawn *anywhere*
+
 				// pickup weap
 				if(w.type == W_ROCK || w.type == W_MACH) {
 					lemmings[i].weap = w.type;
 					lemmings[i].lastWeap = w.type;
 					lemmings[i].ammo = getMaxAmmo(w.type);
+					weapons[j].pickedUp = true;
+					weapons[j].lastPickup = clock();
 					if(w.type == W_ROCK) 
 						sprintf(name, "rocket launcher");
 					else
 						sprintf(name, "machine gun");
 				// health
 				} else if(w.type == I_HEALTH) {
-					lemmings[i].health = LEM_HEALTH;
-					sprintf(name, "healed");
+					lemmings[i].health = LEM_HEALTH * 2;
+					sprintf(name, "very health");
+					weapons[j].valid = false;
+					powerupPickup();
 				// ammo
 				} else if(w.type == I_AMMO) {
-					lemmings[i].ammo = getMaxAmmo(j);
-					sprintf(name, "ammo");
+					lemmings[i].ammo = getMaxAmmo(lemmings[i].weap) * 2;
+					sprintf(name, "very ammo");
+					weapons[j].valid = false;
+					powerupPickup();
 				}
 
-				weapons[j].pickedUp = true;
 				lemmings[i].lastPickup = clock();
 				lemmings[i].pickupCoord = w.coord;
-				weapons[j].lastPickup = clock();
 				strcpy(lemmings[i].lastItem, name);
 			}
 		}

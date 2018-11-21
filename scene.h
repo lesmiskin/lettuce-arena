@@ -22,5 +22,6 @@ typedef struct {
 #define MAX_WEAPONS 8
 extern const int WEAP_ROCKET;
 extern Weapon weapons[MAX_WEAPONS];
+extern void powerupPickup();
 
 #endif
