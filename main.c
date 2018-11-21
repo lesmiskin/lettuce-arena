@@ -15,15 +15,18 @@
 #include "hud.h"
 #include "state.h"
 
-// machinegun carry sprite
+// health packs and ammo
+// items spawn randomly throughout game.
 
-// pistol when starting
+// quadrants you can move into, stepping over threshold.
 // nicer floors
-
 // middle floor is transparent with "shine" graphic (NO ALPHA)
 // crate drops with powerups
 
-// quadrants you can move into, stepping over threshold.
+// pistol when starting
+// machinegun carry sprite
+
+// enemy: home on items IF NEARBY
 
 // weapons in crates
 // jump and bounce if machinegun death.

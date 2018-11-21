@@ -156,12 +156,14 @@ int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 		false,			// isWalking
 		-1,				// lastHIt
 		0,
+		zeroCoord(0,0),	// pickup coord
+		"",
 
 		// weapons
 		0,
+		false,
+		false,
 		0,
-		false,
-		false,
 		0,
 		0,
 
@@ -185,6 +187,9 @@ int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 		0,
 		0
 	};
+
+	l.lastItem = malloc(sizeof(char) * 15);
+	strcpy(l.lastItem, "");
 
 	// add them
 	lemmings[insertIndex] = l;
@@ -262,15 +267,35 @@ void lemGameFrame() {
 		// did we pick up a weapon?
 		for(int j=0; j < MAX_WEAPONS; j++) {
 			if(!weapons[j].valid || weapons[j].pickedUp) continue;
+			Weapon w = weapons[j];
 
 			if(inBounds(lemmings[i].coord, makeSquareBounds(weapons[j].coord, WEAP_BOUND))) {
-				lemmings[i].weap = weapons[j].type;
-				lemmings[i].lastWeap = weapons[j].type;
-				lemmings[i].ammo = getMaxAmmo(weapons[j].type);
-				lemmings[i].lastPickup = clock();
-				lemmings[i].pickupCoord = weapons[j].coord;
+				char name[15];
+
+				// pickup weap
+				if(w.type == W_ROCK || w.type == W_MACH) {
+					lemmings[i].weap = w.type;
+					lemmings[i].lastWeap = w.type;
+					lemmings[i].ammo = getMaxAmmo(w.type);
+					if(w.type == W_ROCK) 
+						sprintf(name, "rocket launcher");
+					else
+						sprintf(name, "machine gun");
+				// health
+				} else if(w.type == I_HEALTH) {
+					lemmings[i].health = LEM_HEALTH;
+					sprintf(name, "healed");
+				// ammo
+				} else if(w.type == I_AMMO) {
+					lemmings[i].ammo = getMaxAmmo(j);
+					sprintf(name, "ammo");
+				}
+
 				weapons[j].pickedUp = true;
+				lemmings[i].lastPickup = clock();
+				lemmings[i].pickupCoord = w.coord;
 				weapons[j].lastPickup = clock();
+				strcpy(lemmings[i].lastItem, name);
 			}
 		}
 

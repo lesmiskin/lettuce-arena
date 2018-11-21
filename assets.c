@@ -93,6 +93,10 @@ static void loadImages(void) {
         { "base-tile.png", false },
         { "base-ne.png", false },
 
+        { "ammo-bullets.png", false },
+        { "ammo-rocket.png", false },
+        { "health-pack.png", false },
+
         { "bar.png", false },
         { "space.png", false },
 		{ "star-bright.png", false },

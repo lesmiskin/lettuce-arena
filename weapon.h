@@ -27,6 +27,8 @@ typedef struct {
 extern int getMaxAmmo(int weap);
 extern const int W_ROCK;
 extern const int W_MACH;
+extern const int I_HEALTH;
+extern const int I_AMMO;
 extern void weaponGameFrame();
 extern void weaponRenderFrame();
 extern void shoot(int i, double deg);

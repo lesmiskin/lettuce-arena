@@ -19,7 +19,7 @@ typedef struct {
 	int type;
 } Weapon;
 
-#define MAX_WEAPONS 4
+#define MAX_WEAPONS 8
 extern const int WEAP_ROCKET;
 extern Weapon weapons[MAX_WEAPONS];
 

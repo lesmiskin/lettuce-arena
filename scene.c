@@ -172,11 +172,15 @@ void sceneRenderFrame() {
 
 		if(timer(&lastFlash, 500)) flash = !flash;
 
-		char file[12];
+		char file[20];
 		if(weapons[i].type == W_MACH) 
 			sprintf(file, "w_mach-%d.png", flash);
-		else
+		else if(weapons[i].type == W_ROCK)
 			sprintf(file, "w_rock3-%d.png", flash);
+		else if(weapons[i].type == I_HEALTH)
+			sprintf(file, "health-pack.png");
+		else if(weapons[i].type == I_AMMO)
+			sprintf(file, "ammo-bullets.png");
 
 		// dancing weapons
 		// Coord c = !flash ? weapons[i].coord : deriveCoord(weapons[i].coord, 0, 1);
@@ -185,21 +189,6 @@ void sceneRenderFrame() {
 		Coord c = !flash ? weapons[i].coord : deriveCoord(weapons[i].coord, 0, 1);
 		drawSprite(makeSimpleSprite(file), weapons[i].coord);
 	}
-
-	// ROCKS
-	const int BRICK = 10;
-
-	// drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(BRICK*13, BRICK*8), 1, 1, 0, false);
-	// drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(BRICK*13, BRICK*9), 1, 1, 0, false);
-	// drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(BRICK*13, BRICK*10), 1, 1, 0, false);
-	// drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(BRICK*13, BRICK*11), 1, 1, 0, false);
-    // 32 x 24
-	// for(int i=0; i < screenBounds.x; i += 10) {
-	// 	drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(i, 1), 1, 1, 0, false);
-	// }
-	// for(int i=0; i < screenBounds.x; i += 10) {
-	// 	drawSpriteFull(makeSimpleSprite("rock7.png"), makeCoord(i, 240-10), 1, 1, 0, false);
-	// }
 }
 
 //Should happen each time the scene is shown.
@@ -213,6 +202,11 @@ void initScene() {
 	weapons[1] = rock2;
 	Weapon rock3 = { true, false, 0, makeCoord(screenBounds.x-35, screenBounds.y/2), W_ROCK };
 	weapons[2] = rock3;
+
+	Weapon health = { true, false, 0, makeCoord(screenBounds.x-60, screenBounds.y/2), I_HEALTH };
+	weapons[4] = health;
+	Weapon amm = { true, false, 0, makeCoord(screenBounds.x-60, screenBounds.y-35), I_AMMO };
+	weapons[5] = amm;
 
 	starsInit();
 	makeGroundTexture();

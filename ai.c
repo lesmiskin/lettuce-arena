@@ -149,6 +149,9 @@ void aiSmartFrame(int enemyInc) {
 		for(int i=0; i < MAX_WEAPONS; i++) {
 			if(!weapons[i].valid || weapons[i].pickedUp) continue;
 
+			// don't home on items (yet!)
+			if(weapons[i].type != W_ROCK && weapons[i].type != W_MACH) continue;
+
 			// find out which enemy we're closest to
 			Coord themPos = weapons[i].coord;
 			double distance = getDistance(usPos, themPos);

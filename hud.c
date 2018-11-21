@@ -183,17 +183,17 @@ void hudRenderFrame(void) {
 	Lem p = lemmings[PLAYER_INDEX];
 
 	// health
-	writeAmount(p.active ? p.health : 0, makeCoord(10, firstLine));
+	writeAmount(p.active ? p.health : 0, makeCoord(20, firstLine));
 
 	// ammo count
 	if(p.weap > 0 && p.ammo > 0) {
 		// writeFont("ammo", makeCoord(55, firstLine));
 		if(p.weap == W_MACH) {
-			drawSpriteFull(makeSimpleSprite("w_mach-0.png"), makeCoord(55,-3), 1, 1, 0, false);
+			drawSpriteFull(makeSimpleSprite("w_mach-0.png"), makeCoord(40,-3), 1, 1, 0, false);
 		}else{
-			drawSpriteFull(makeSimpleSprite("w_rock3-0.png"), makeCoord(55,-3), 1, 1, 0, false);
+			drawSpriteFull(makeSimpleSprite("w_rock3-0.png"), makeCoord(40,-3), 1, 1, 0, false);
 		}
-		writeAmount(p.ammo, makeCoord(76, firstLine));
+		writeAmount(p.ammo, makeCoord(60, firstLine));
 	}
 
 	// frags
@@ -215,14 +215,12 @@ void hudRenderFrame(void) {
 	writeAmount(boardPosition != 0 ? lem.frags : scores[1].frags, makeCoord(302, firstLine));
 
 	// pickup plume
-	if(!isDue(clock(), p.lastPickup, 500)) {
-		pickupY += 0.5;
-	
-		if(p.weap == W_ROCK) {
-			writeFontFull("rocket launcher", deriveCoord(p.pickupCoord, 0, -5 - (int)pickupY), false, true);
-		}else{
-			writeFontFull("machine gun", deriveCoord(p.pickupCoord, 0, -5 - (int)pickupY), false, true);
-		}
+	if(!isDue(clock(), p.lastPickup, 300)) {
+		// stop at the top for a little bit.
+		// if(!isDue(clock(), p.lastPickup, 250)) {
+			pickupY += 0.5;
+		// }
+		writeFontFull(p.lastItem, deriveCoord(p.pickupCoord, 0, -5 - (int)pickupY), false, true);
 	}else{
 		pickupY = 0;
 	}

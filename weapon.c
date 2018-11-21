@@ -7,6 +7,10 @@
 #include "hud.h"
 #include "state.h"
 
+// PICKUPS
+const int I_AMMO = 3;
+const int I_HEALTH = 4;
+
 // ROCKET LAUNCHER
 const int W_ROCK = 2;
 const double ROCK_SPEED = 1.75;

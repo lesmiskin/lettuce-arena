@@ -25,6 +25,7 @@ typedef struct {
 	long lastHit;
 	long lastPickup;
 	Coord pickupCoord;
+	char* lastItem;
 
     // weapons
     long lastShot;
