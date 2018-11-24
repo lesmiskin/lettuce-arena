@@ -93,9 +93,16 @@ static void loadImages(void) {
         { "base-tile.png", false },
         { "base-ne.png", false },
 
+        { "shadow-1.png", false },
+        { "shadow-2.png", false },
+
         { "ammo-bullets.png", false },
         { "ammo-rocket.png", false },
         { "health-pack.png", false },
+        { "powerup-health-3.png", false },
+        { "powerup-health-4.png", false },
+        { "powerup-health-6.png", false },
+        { "powerup-ammo-2.png", false },
 
         { "bar.png", false },
         { "space.png", false },
@@ -243,6 +250,7 @@ static void loadImages(void) {
 
         { "white.png", false },
         { "cross.png", false },
+        { "cross-2.png", false },
         { "score.png", false },
         { "score-2.png", false },
 

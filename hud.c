@@ -113,6 +113,8 @@ const int MSG_TIME = 2000;
 void hudRenderFrame(void) {
 	Lem lem = lemmings[PLAYER_INDEX];
 
+	writeAmount(currentQuadrant, makeCoord(30, 30));
+
 	bool showPosition = usePlayer && (checkCommand(CMD_SCORES) || gameover);
 
 	// status bar background
@@ -242,7 +244,7 @@ void hudRenderFrame(void) {
 	// draw crosshair
 	if(lem.weap > 0 && lem.active) {
 		drawSpriteFull(
-			makeSimpleSprite("cross.png"), 
+			makeSimpleSprite("cross-2.png"), 
 			extendOnAngle(lem.coord, lem.angle, 35), 
 			1, 1, 0, true
 		);

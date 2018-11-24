@@ -57,12 +57,17 @@ Move tryMove(Coord target, Coord origin, int selfIndex) {
 		target.x < origin.x, target.x > origin.x,
 	};
 
+	// quadrant shifting
+	if(target.x > screenBounds.x-BORDER_X && currentQuadrant < 1) {
+		
+	}
+
 	// --------------------
 	// block screen borders
 	// --------------------
 	if(target.x <= BORDER_X) 
 		allowDir.left = false;
-	if(target.x > screenBounds.x-BORDER_X)
+	if(target.x > screenBounds.x-BORDER_X && currentQuadrant < 1)
 		allowDir.right = false;
 	if(target.y <= BORDER_Y)
 		allowDir.up = false;
@@ -289,13 +294,13 @@ void lemGameFrame() {
 				// health
 				} else if(w.type == I_HEALTH) {
 					lemmings[i].health = LEM_HEALTH * 2;
-					sprintf(name, "very health");
+					sprintf(name, "health bonus");
 					weapons[j].valid = false;
 					powerupPickup();
 				// ammo
 				} else if(w.type == I_AMMO) {
 					lemmings[i].ammo = getMaxAmmo(lemmings[i].weap) * 2;
-					sprintf(name, "very ammo");
+					sprintf(name, "ammo bonus");
 					weapons[j].valid = false;
 					powerupPickup();
 				}
@@ -559,6 +564,9 @@ void lemRenderFrame() {
 			writeFontFull(lem.name, deriveCoord(lem.coord, 0, -18), false, true);
 		}
 
+		// lemming "shadows"
+		drawSpriteFull(makeSimpleSprite("shadow-1.png"), deriveCoord(lemmings[i].coord, 0, 5), 1, 1, 0, true);
+
 		// draw the sprite
 		AssetVersion spriteVersion = inPain(i) ? ASSET_WHITE : ASSET_DEFAULT;
 		Sprite lemSprite = makeSprite(getTextureVersion(frameFile, spriteVersion), zeroCoord(), flip);
@@ -591,7 +599,7 @@ void lemRenderFrame() {
 		int barWidth = (int)(((double)lem.health / LEM_HEALTH) * BAR_WIDTH);
 		if(barWidth < 1) barWidth = 1;	// always show something (otherwise invisible)!
 
-		drawSpriteFull(makeSimpleSprite("black.png"), deriveCoord(h, 1, 1), barWidth+1, 3, 0, false);
+		drawSpriteFull(makeSimpleSprite("black.png"), deriveCoord(h, 1, 1), barWidth, 1, 0, false);
 		drawSpriteFull(makeSimpleSprite(healthFile), h, barWidth, 1, 0, false);
 	}
 }

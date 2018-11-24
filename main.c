@@ -15,52 +15,69 @@
 #include "hud.h"
 #include "state.h"
 
-// powerups should blink on and off (like weapons)
-// show ammo indicator when pickup ammo powerup
-// show lemming as green when healed
-// stop spawning powerups outside map bounds
+// lemming shadow. dedicated sprite that changes shape on animation frame.
+// up/down animation frame.
+// double the animation frames.
+// pallete swap rather than recolor
+// weapons to have shadows, or to bob slightly.
+// powerups to blink and bob (like on mouse quest)
+// differt color for powerup pickup text.
+// pickup text stays onscreen for longer.
+// shell flip animatino when firing machinegun.
 
+// show local ammo indicator when pickup ammo powerup
+// align powerups with tile (e.g. middle of tile)
 // enemies home to powerups if nearby
-
 
 // quadrants you can move into, stepping over threshold.
 // nicer floors
 // middle floor is transparent with "shine" graphic (NO ALPHA)
-// crate drops with powerups
+
+
+// powerup: uzi (double speed, fast projectile)
+// powerup: cluster rockets (three rockets at a time)
+
+// strafe button / auto-strafe
+// default pistol or fist (enlarges ala Alex Kidd)
+// bazooka sprite
+// ak-47 or chaingun
+
+// cast of characters: lettuce, vampire, octopus, eyeball, yorp/garg, frank, skullman, deepone, hairball,  (orbb), mib
+// character select screen
+// intro mode cuts between action shots in different arenas.
+// ctf mode
+// split screen mode
+// 30 maps (get friends to make)
+// themes (e.g. graveyard, space)
 
 // pistol when starting
 // machinegun carry sprite
+// large white puffs for rockets.
+// rocket more solid and vivid.
+// different death on machinegun.
+// BOUNCING PIXELS on explosion.
+// reinstate nice green indicator arrows (bounce).
+// strafe button.
 
-// enemy: home on items IF NEARBY
+// double animation frames
+// up-down walking sprites.
 
 // weapons in crates
 // jump and bounce if machinegun death.
-// BOUNCING PIXELS on explosion.
 // "you fragged x" text is not actually centered.
-// reinstate nice green indicator arrows (bounce).
-// double animation frames
-// up-down walking sprites.
 // ak-47 carry graphic
 // bazooka graphic
-// large white puffs for rockets.
-// rocket more solid and vivid.
-
-// enemies not explode if just shot.
-
 // spawn point textures
 
-// strafe button.
 // random crates drops with powerups
-
 // new bazooka sprite (pipe)
 // ak-47 carry sprite
 // new character ip
-
 // double character animation.
 // up/down sprites
 // palette swap for skins
-
 // model map off q3dm from top-down
+// sounds
 
 // "killed x" to be in blue
 // "fragged by x" to be in red

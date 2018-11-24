@@ -10,5 +10,6 @@ extern void startGame();
 extern bool practice;
 extern const int PRACTICE_WAIT;
 extern bool usePlayer;
+extern int currentQuadrant;
 
 #endif

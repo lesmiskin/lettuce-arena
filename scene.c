@@ -8,6 +8,7 @@
 const int TILE_SIZE_X = 10;
 const int TILE_SIZE_Y = 10;
 static Sprite ground;
+int currentQuadrant = 0;
 
 typedef struct {
 	Coord position;
@@ -35,8 +36,8 @@ const double WEAP_RESPAWN_TIME = 5000;
 long lastFlash;
 bool flash;
 
-const int ITEM_TIME_MIN = 10000;
-const int ITEM_TIME_MAX = 30000;
+const int ITEM_TIME_MIN = 1000;
+const int ITEM_TIME_MAX = 3000;
 long lastPowerupPickup;
 long nextPowerupPickup;
 
@@ -225,9 +226,9 @@ void sceneRenderFrame() {
 		else if(weapons[i].type == W_ROCK)
 			sprintf(file, "w_rock3-%d.png", flash);
 		else if(weapons[i].type == I_HEALTH)
-			sprintf(file, "health-pack.png");
+			sprintf(file, "powerup-health-6.png");
 		else if(weapons[i].type == I_AMMO)
-			sprintf(file, "ammo-bullets.png");
+			sprintf(file, "powerup-health-6.png");
 
 		// dancing weapons
 		// Coord c = !flash ? weapons[i].coord : deriveCoord(weapons[i].coord, 0, 1);
