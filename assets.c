@@ -101,8 +101,10 @@ static void loadImages(void) {
         { "health-pack.png", false },
         { "powerup-health-3.png", false },
         { "powerup-health-4.png", false },
+        { "powerup-health-5.png", false },
         { "powerup-health-6.png", false },
         { "powerup-ammo-2.png", false },
+        { "powerup-ammo-3.png", false },
 
         { "bar.png", false },
         { "space.png", false },

@@ -19,7 +19,7 @@ int xTween = 0;
 const int PAIN_DURATION = 200;
 const int RESPAWN_TIME = 2000;
 const int LEM_HEALTH = 100;
-const int BAR_WIDTH = 8;
+const int BAR_WIDTH = 10;
 
 static int MUZZLE_DIST = 7;
 
@@ -597,9 +597,9 @@ void lemRenderFrame() {
 
 		Coord h = deriveCoord(lem.coord, -4, -10);
 		int barWidth = (int)(((double)lem.health / LEM_HEALTH) * BAR_WIDTH);
-		if(barWidth < 1) barWidth = 1;	// always show something (otherwise invisible)!
+		if(barWidth < 2) barWidth = 2;	// always show something (otherwise invisible)!
 
-		drawSpriteFull(makeSimpleSprite("black.png"), deriveCoord(h, 1, 1), barWidth, 1, 0, false);
+		drawSpriteFull(makeSimpleSprite("black.png"), deriveCoord(h, 1, 1), barWidth, 2, 0, false);
 		drawSpriteFull(makeSimpleSprite(healthFile), h, barWidth, 1, 0, false);
 	}
 }

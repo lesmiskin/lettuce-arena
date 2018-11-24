@@ -130,7 +130,6 @@ void hudRenderFrame(void) {
 			char killer[30];
 			sprintf(killer, "you fragged %s", lemmings[lastPlayerKillIndex].name);
 			writeFontFull(killer, makeCoord(135, firstLine), true, false);
-			showPosition = true;
 		}
 	}
 

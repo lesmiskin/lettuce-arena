@@ -35,7 +35,7 @@ typedef struct {
 const double PUFF_FREQ = 75;
 const double PUFF_DURATION = 1000;
 const int PUFF_FADE_TIME = 200;
-const int PUFF_FRAMES = 3;
+const int PUFF_FRAMES = 2;
 long lastExpFrame;
 Puff puffs[MAX_PUFFS];
 bool enablePuffs = false;
@@ -82,7 +82,7 @@ void fxGameFrame() {
 		}
 
 		// fade out puff anim (note "clever" math at end to do incremental fade)
-	    if(puff.animInc < 2 && isDue(clock(), puff.spawnTime, PUFF_FADE_TIME * (puff.animInc+1)))
+	    if(puff.animInc < PUFF_FRAMES && isDue(clock(), puff.spawnTime, PUFF_FADE_TIME * (puff.animInc+1)))
 			puffs[i].animInc++;
 	}
 

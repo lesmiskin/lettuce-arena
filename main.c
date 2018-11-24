@@ -25,6 +25,7 @@
 // pickup text stays onscreen for longer.
 // shell flip animatino when firing machinegun.
 
+// restore gibs and blood when monsters come back.
 // show local ammo indicator when pickup ammo powerup
 // align powerups with tile (e.g. middle of tile)
 // enemies home to powerups if nearby

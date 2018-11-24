@@ -226,9 +226,9 @@ void sceneRenderFrame() {
 		else if(weapons[i].type == W_ROCK)
 			sprintf(file, "w_rock3-%d.png", flash);
 		else if(weapons[i].type == I_HEALTH)
-			sprintf(file, "powerup-health-6.png");
+			sprintf(file, "powerup-health-5.png");
 		else if(weapons[i].type == I_AMMO)
-			sprintf(file, "powerup-health-6.png");
+			sprintf(file, "powerup-ammo-3.png");
 
 		// dancing weapons
 		// Coord c = !flash ? weapons[i].coord : deriveCoord(weapons[i].coord, 0, 1);

@@ -191,7 +191,7 @@ void aiSmartFrame(int enemyInc) {
 	Lem l = lemmings[enemyInc];
 	
 	// lem stops for a bit after firing the launcher, otherwise looks too frenzied.
-	if(chance(75) ? !isDue(clock(), lemmings[enemyInc].lastShot, 250) : false) {
+	if(l.weap == W_ROCK && !isDue(clock(), lemmings[enemyInc].lastShot, 300)) {
 		return;
 	}
 
