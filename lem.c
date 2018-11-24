@@ -561,7 +561,7 @@ void lemRenderFrame() {
 
 		// names
 		if(lemmings[PLAYER_INDEX].dead || checkCommand(CMD_SCORES) || (showName && !isDue(clock(), lem.spawnTime, PRACTICE_WAIT))) {
-			writeFontFull(lem.name, deriveCoord(lem.coord, 0, -18), false, true);
+			writeFontFull(lem.name, deriveCoord(lem.coord, 0, -17), false, true);
 		}
 
 		// lemming "shadows"
@@ -590,14 +590,17 @@ void lemRenderFrame() {
 		// -----------
 		char healthFile[] = "health-r.png";	// need enough chars for NULL terminator!!
 
-		// show as green if 2 or above.
-		if(lem.health >= (double)LEM_HEALTH / 2) {
+		bool isBonus = lem.health > LEM_HEALTH;
+
+		// show as gold if bonus, or green if 2 or above.
+		if(isBonus) {
+			healthFile[7] = 'y';
+		}else if(lem.health >= (double)LEM_HEALTH / 2) {
 			healthFile[7] = 'g';
 		}
 
-		Coord h = deriveCoord(lem.coord, -4, -10);
-		int barWidth = (int)(((double)lem.health / LEM_HEALTH) * BAR_WIDTH);
-		if(barWidth < 2) barWidth = 2;	// always show something (otherwise invisible)!
+		Coord h = deriveCoord(lem.coord, -5, -10);
+		int barWidth = isBonus ? BAR_WIDTH : (int)(((double)lem.health / LEM_HEALTH) * BAR_WIDTH);
 
 		drawSpriteFull(makeSimpleSprite("black.png"), deriveCoord(h, 1, 1), barWidth, 2, 0, false);
 		drawSpriteFull(makeSimpleSprite(healthFile), h, barWidth, 1, 0, false);
