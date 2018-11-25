@@ -67,7 +67,7 @@ void itemSpawn() {
 		if(weapons[i].valid) continue;
 
 		// spawn it
-		Weapon item = { true, false, 0, 
+		Weapon item = { randomMq(0,1), true, false, 0, 
 			makeCoord(
 				randomMq(TILE_SIZE_X, screenBounds.x-TILE_SIZE_X), 
 				randomMq(TILE_SIZE_X, screenBounds.y-TILE_SIZE_X)), 
@@ -217,6 +217,7 @@ void sceneRenderFrame() {
 	// Draw weapons
 	for(int i=0; i < MAX_WEAPONS; i++) {
 		if(!weapons[i].valid || weapons[i].pickedUp) continue;
+		if(weapons[i].quadrant != currentQuadrant) continue;
 
 		if(timer(&lastFlash, 500)) flash = !flash;
 
@@ -242,14 +243,14 @@ void sceneRenderFrame() {
 //Should happen each time the scene is shown.
 void initScene() {
 	// default weapon spawns.
-	Weapon rock = { true, false, 0,  makeCoord(screenBounds.x/2, 35), W_MACH };
+	Weapon rock = { 0, true, false, 0,  makeCoord(screenBounds.x/2, 35), W_MACH };
 	weapons[0] = rock;
-	Weapon rock4 = { true, false, 0, makeCoord(screenBounds.x/2, screenBounds.y-35), W_MACH };
+	Weapon rock4 = { 0, true, false, 0, makeCoord(screenBounds.x/2, screenBounds.y-35), W_MACH };
 	weapons[3] = rock4;
 
-	Weapon rock2 = { true, false, 0, makeCoord(35, screenBounds.y/2), W_ROCK };
+	Weapon rock2 = { 1, true, false, 0, makeCoord(35, screenBounds.y/2), W_ROCK };
 	weapons[1] = rock2;
-	Weapon rock3 = { true, false, 0, makeCoord(screenBounds.x-35, screenBounds.y/2), W_ROCK };
+	Weapon rock3 = { 1, true, false, 0, makeCoord(screenBounds.x-35, screenBounds.y/2), W_ROCK };
 	weapons[2] = rock3;
 
 	// Weapon health = { true, false, 0, makeCoord(screenBounds.x-60, screenBounds.y/2), I_HEALTH };

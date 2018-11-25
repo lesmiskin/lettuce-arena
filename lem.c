@@ -75,6 +75,12 @@ Move tryMove(Coord target, Coord origin, int selfIndex) {
 	// --------------------
 	// block screen borders
 	// --------------------
+	int q = lemmings[selfIndex].quadrant;
+	if(q == 0 && target.x <= BORDER_X) 					allowDir.left = false;
+	if(q == 1 && target.x >= screenBounds.x-BORDER_X) 	allowDir.right = false;
+	if(target.y <= BORDER_Y) 							allowDir.up = false;
+	if(target.y >= screenBounds.y-BORDER_Y) 			allowDir.down = false;
+
 	// if(target.x <= BORDER_X) 
 	// 	allowDir.left = false;
 	// if(target.x > screenBounds.x/*-BORDER_X*/ && currentQuadrant < 1)
@@ -283,6 +289,7 @@ void lemGameFrame() {
 		// did we pick up a weapon?
 		for(int j=0; j < MAX_WEAPONS; j++) {
 			if(!weapons[j].valid || weapons[j].pickedUp) continue;
+			if(weapons[j].quadrant != lemmings[i].quadrant) continue;
 			Weapon w = weapons[j];
 
 			if(inBounds(lemmings[i].coord, makeSquareBounds(weapons[j].coord, WEAP_BOUND))) {

@@ -13,7 +13,7 @@ bool CHEAT_GIVE_ROCK = true;
 bool CHEAT_GOD = false;
 bool DEBUG_SKIP_INTRO = true;
 bool DEBUG_NO_ENEMIES = false;
-bool DEBUG_STILL_ENEMIES = true;
+bool DEBUG_STILL_ENEMIES = false;
 bool DEBUG_ONE_SHOT_KILLS = false;
 bool PLAYER_INDICATOR = false;
 

@@ -148,6 +148,7 @@ void aiSmartFrame(int enemyInc) {
 		// What weapon are we closest to?
 		for(int i=0; i < MAX_WEAPONS; i++) {
 			if(!weapons[i].valid || weapons[i].pickedUp) continue;
+			if(weapons[i].quadrant != lemmings[enemyInc].quadrant) continue;
 
 			// don't home on items (yet!)
 			if(weapons[i].type != W_ROCK && weapons[i].type != W_MACH) continue;
@@ -228,4 +229,4 @@ void aiSmartFrame(int enemyInc) {
 	if(!m.freeDir.left) 	lemmings[enemyInc].angle = avoidLeft();
 	if(!m.freeDir.right) 	lemmings[enemyInc].angle = avoidRight();
 	// printf("%f - %f\n", lemmings[0].angle.x, lemmings[0].angle.y);
-}	
+}

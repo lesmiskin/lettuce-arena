@@ -12,6 +12,7 @@ extern void sceneGameFrame();
 extern void initScene();
 
 typedef struct {
+	int quadrant;
 	bool valid;
 	bool pickedUp;
 	long lastPickup;
