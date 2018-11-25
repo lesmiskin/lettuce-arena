@@ -90,6 +90,7 @@ static void loadImages(void) {
     //Define assets to be loaded.
     AssetDef definitions[] = {
 
+        { "light.png", false },
         { "base-tile.png", false },
         { "base-ne.png", false },
 

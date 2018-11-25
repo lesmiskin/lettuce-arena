@@ -15,6 +15,10 @@
 #include "hud.h"
 #include "state.h"
 
+// nicer powerup bubbles (flashing and bobbing)
+// weapons should be in powerup bubbles too (obvious)
+// more ammo, ammo powerup gives rapid fire.
+
 // restore rocket spinning
 // rockets have shadows
 // double the animation frames.

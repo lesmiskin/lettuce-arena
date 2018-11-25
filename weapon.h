@@ -14,6 +14,7 @@ extern const double ROCK_PUSH;
 extern const double MACH_PUSH;
 
 typedef struct {
+	int quadrant;
 	bool valid;
     Coord coord;
     Coord target;

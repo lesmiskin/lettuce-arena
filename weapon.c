@@ -77,6 +77,7 @@ void weaponGameFrame() {
 			if(!lemmings[e].valid) continue;
 			if(shots[i].shooter == e) continue;		// don't hit ourselves :p
 			if(lemmings[e].dead) continue;			// don't hit corpses
+			if(lemmings[e].quadrant != shots[i].quadrant) continue;
 
 			if(inBounds(shots[i].coord, makeSquareBounds(lemmings[e].coord, LEM_BOUND))) {
 				shots[i].valid = false;
@@ -97,11 +98,11 @@ void weaponGameFrame() {
 					lemmings[e].killer = shots[i].shooter;
 
 					// trigger three explosions in short sequence (looks good)
-					spawnExpDelay(deriveCoord(lemmings[e].coord, 0, -8), false, 0);
-					spawnExpDelay(deriveCoord(lemmings[e].coord, -8, 8), false, 100);
-					spawnExpDelay(deriveCoord(lemmings[e].coord, 8, 8), false, 200);
+					spawnExpDelay(deriveCoord(lemmings[e].coord, 0, -8), false, 0, lemmings[e].quadrant);
+					spawnExpDelay(deriveCoord(lemmings[e].coord, -8, 8), false, 100, lemmings[e].quadrant);
+					spawnExpDelay(deriveCoord(lemmings[e].coord, 8, 8), false, 200, lemmings[e].quadrant);
 
-					spawnLemExp(lemmings[e].coord, lemmings[e].color);
+					spawnLemExp(lemmings[e].coord, lemmings[e].color, lemmings[e].quadrant);
 
 					if(lemmings[shots[i].shooter].isPlayer) {
 						lastPlayerKillTime = clock();
@@ -112,16 +113,16 @@ void weaponGameFrame() {
 					if(lemmings[shots[i].shooter].frags >= fraglimit) {
 						for(int j=0; j < MAX_LEM; j++) {
 							lemmings[j].active = false;
-							spawnTele(lemmings[j].coord);	// flash everyone out of existence.
+							spawnTele(lemmings[j].coord, lemmings[j].quadrant);	// flash everyone out of existence.
 						}
 						gameOver();
 					}
 				// small explosion if we just hit them, but didn't kill 'em
 				}else{
 					if(shots[i].type == W_ROCK)
-						spawnExp(shots[i].coord, false);
+						spawnExp(shots[i].coord, false, lemmings[e].quadrant);
 
-					spawnHurt(lemmings[e].coord, lemmings[e].color);
+					spawnHurt(lemmings[e].coord, lemmings[e].color, lemmings[e].quadrant);
 
 					// push them back.
 //					double blastAngle = getAngle(shots[i].coord, lemmings[e].coord);
@@ -135,7 +136,7 @@ void weaponGameFrame() {
 
 		// spawn a puff
 		if(shots[i].type == W_ROCK && timer(&shots[i].lastPuff, PUFF_FREQ)) {
-			spawnPuff(shots[i].coord);
+			spawnPuff(shots[i].coord, shots[i].quadrant);
 		}
 	}
 }
@@ -143,13 +144,16 @@ void weaponGameFrame() {
 void weaponRenderFrame() {
 	// draw shots 
 	for(int i=0; i < MAX_SHOTS; i++) {
-		if(!shots[i].valid) continue;
+		if(!shots[i].valid || shots[i].quadrant != currentQuadrant) continue;
 		char file[15];
 
 		if(shots[i].type == W_MACH) {
 			drawSprite(makeSimpleSprite("bullet.png"), shots[i].coord);
+			drawSprite(makeSimpleSprite("shadow-2.png"), deriveCoord(shots[i].coord, 0, 10));
 			continue;
 		}
+
+		// drawSprite(makeSimpleSprite("light.png"), shots[i].coord);
 
 		switch((int)shots[i].angle+90) {
 			case 360:
@@ -188,6 +192,9 @@ void weaponRenderFrame() {
 				drawSprite(makeSimpleSprite(file), shots[i].coord);
 				break;
 		}
+
+		// rocket shadow
+		drawSprite(makeSimpleSprite("shadow-1.png"), deriveCoord(shots[i].coord, 0, 10));
 	}
 }
 
@@ -207,7 +214,7 @@ void shootMach(int i, double deg) {
 
 		Coord origin = extendOnAngle(lemmings[i].coord, lemmings[i].angle, SHOT_DIST);
 		Coord shotStep = getAngleStep(rad, MACH_SPEED, false);
-		Shot s = { true, origin, shotStep, deg, 0, i, 0, W_MACH };
+		Shot s = { lemmings[i].quadrant, true, origin, shotStep, deg, 0, i, 0, W_MACH };
 		shots[j] = s;
 		break;
 	}
@@ -229,7 +236,7 @@ void shootRock(int i, double deg) {
 
 		Coord origin = extendOnAngle(lemmings[i].coord, lemmings[i].angle, SHOT_DIST);
 		Coord shotStep = getAngleStep(rad, ROCK_SPEED, false);
-		Shot s = { true, origin, shotStep, deg, 0, i, 0, W_ROCK };
+		Shot s = { lemmings[i].quadrant, true, origin, shotStep, deg, 0, i, 0, W_ROCK };
 		shots[j] = s;
 		break;
 	}

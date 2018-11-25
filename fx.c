@@ -4,11 +4,13 @@
 #include "time.h"
 #include "scene.h"
 #include "renderer.h"
+#include "state.h"
 
 // ----------
 // Explosions
 // ----------
 typedef struct {
+	int quadrant;
 	bool valid;
 	Coord coord;
 	int animInc;
@@ -26,6 +28,7 @@ long lastExpFrame;
 // Puffs
 // ----------
 typedef struct {
+	int quadrant;
 	bool valid;
 	Coord coord;
 	long spawnTime;
@@ -53,6 +56,7 @@ typedef struct {
 } Particle;
 
 typedef struct {
+	int quadrant;
     bool valid;
     Particle* particles;
     long spawnTime;
@@ -121,7 +125,7 @@ void fxGameFrame() {
 void fxRenderFrame() {
 	// draw puffs
 	for(int p=0; p < MAX_PUFFS; p++){
-		if(!puffs[p].valid) continue;
+		if(!puffs[p].valid || puffs[p].quadrant != currentQuadrant) continue;
 		char file[12];
 		sprintf(file, "puff-0%d.png", puffs[p].animInc+1);
 		drawSprite(makeSimpleSprite(file), puffs[p].coord);
@@ -129,7 +133,7 @@ void fxRenderFrame() {
 
 	// draw explosions
 	for(int i=0; i < MAX_EXP; i++) {
-		if(!explosions[i].valid) continue;
+		if(!explosions[i].valid || explosions[i].quadrant != currentQuadrant) continue;
 		if(!isDue(clock(), explosions[i].spawnTime, explosions[i].delay)) continue;
 
 		char file[10];
@@ -138,9 +142,9 @@ void fxRenderFrame() {
 		drawSpriteFull(makeSimpleSprite(file), explosions[i].coord, scale, scale, 0.0, true);
 	}
 
-	// teleportations
+	// particles
 	for(int i=0; i < MAX_TELE; i++) {
-		if(!teleporters[i].valid) continue;
+		if(!teleporters[i].valid || teleporters[i].quadrant != currentQuadrant) continue;
 
 		for(int j=0; j < teleporters[i].density; j++) {
 			char file[11];
@@ -170,7 +174,7 @@ void fxRenderFrame() {
 	}
 }
 
-void spawnHurt(Coord c, int lemColor) {
+void spawnHurt(Coord c, int lemColor, int quadrant) {
 	for(int i=0; i < MAX_TELE; i++) {
 		if(teleporters[i].valid) continue;
 		const int density = 7;
@@ -191,13 +195,13 @@ void spawnHurt(Coord c, int lemColor) {
 			points[j] = p;
 		}
 
-		Tele t = { true, points, clock(), time, true, true, density };
+		Tele t = { quadrant, true, points, clock(), time, true, true, density };
 		teleporters[i] = t;
 		break;
 	}
 }
 
-void spawnTele(Coord c) {
+void spawnTele(Coord c, int quadrant) {
 
 	for(int i=0; i < MAX_TELE; i++) {
 		if(teleporters[i].valid) continue;
@@ -214,13 +218,13 @@ void spawnTele(Coord c) {
 			points[j] = p;
 		}
 
-		Tele t = { true, points, clock(), 250, false, false, PARTICLE_DENSITY };
+		Tele t = { quadrant, true, points, clock(), 250, false, false, PARTICLE_DENSITY };
 		teleporters[i] = t;
 		break;
 	}
 }
 
-void spawnLemExp(Coord c, int lemColor) {
+void spawnLemExp(Coord c, int lemColor, int quadrant) {
 	for(int i=0; i < MAX_TELE; i++) {
 		if(teleporters[i].valid) continue;
 
@@ -238,33 +242,33 @@ void spawnLemExp(Coord c, int lemColor) {
 			points[j] = p;
 		}
 
-		Tele t = { true, points, clock(), 1000, true, false, PARTICLE_DENSITY };
+		Tele t = { quadrant, true, points, clock(), 1000, true, false, PARTICLE_DENSITY };
 		teleporters[i] = t;
 		break;
 	}
 }
 
-void spawnExpDelay(Coord c, bool smallExp, int delay) {
+void spawnExpDelay(Coord c, bool smallExp, int delay, int quadrant) {
 	// find a place to put it in our explosion array.
 	for(int i=0; i < MAX_EXP; i++) {
 		if(explosions[i].valid) continue;
 
 		// make it
-		Exp e = { true, c, 0, smallExp, clock(), delay };
+		Exp e = { quadrant, true, c, 0, smallExp, clock(), delay };
 		explosions[i] = e;
 
 		return;
 	}
 }
 
-void spawnExp(Coord c, bool smallExp) {
-	spawnExpDelay(c, smallExp, 0);
+void spawnExp(Coord c, bool smallExp, int quadrant) {
+	spawnExpDelay(c, smallExp, 0, quadrant);
 }
 
-void spawnPuff(Coord c) {
+void spawnPuff(Coord c, int quadrant) {
 	for(int p=0; p < MAX_PUFFS; p++){
 		if(puffs[p].valid) continue;
-		Puff puff = { true, c, clock(), 0 };
+		Puff puff = { quadrant, true, c, clock(), 0 };
 		puffs[p] = puff;
 		break;
 	}

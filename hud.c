@@ -113,7 +113,8 @@ const int MSG_TIME = 2000;
 void hudRenderFrame(void) {
 	Lem lem = lemmings[PLAYER_INDEX];
 
-	writeAmount(currentQuadrant, makeCoord(30, 30));
+	writeFont("zone", makeCoord(10, 12));
+	writeAmount(currentQuadrant, makeCoord(30, 12));
 
 	bool showPosition = usePlayer && (checkCommand(CMD_SCORES) || gameover);
 

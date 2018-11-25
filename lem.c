@@ -58,27 +58,37 @@ Move tryMove(Coord target, Coord origin, int selfIndex) {
 	};
 
 	// quadrant shifting
-	if(target.x > screenBounds.x-BORDER_X && currentQuadrant < 1) {
-		
+	if(target.x > screenBounds.x && currentQuadrant < 1) {
+		if(lemmings[selfIndex].isPlayer)
+			currentQuadrant = 1;
+		lemmings[selfIndex].coord.x = 0;
+		lemmings[selfIndex].quadrant = 1;
+		return tryMove(makeCoord(0, target.y), lemmings[selfIndex].coord, selfIndex);
+	}else if(target.x < 0 && currentQuadrant == 1) {
+		if(lemmings[selfIndex].isPlayer)
+			currentQuadrant = 0;
+		lemmings[selfIndex].coord.x = screenBounds.x;
+		lemmings[selfIndex].quadrant = 0;
+		return tryMove(makeCoord(screenBounds.x, target.y), lemmings[selfIndex].coord, selfIndex);
 	}
 
 	// --------------------
 	// block screen borders
 	// --------------------
-	if(target.x <= BORDER_X) 
-		allowDir.left = false;
-	if(target.x > screenBounds.x-BORDER_X && currentQuadrant < 1)
-		allowDir.right = false;
-	if(target.y <= BORDER_Y)
-		allowDir.up = false;
-	if(target.y > screenBounds.y-BORDER_Y)
-		allowDir.down = false;
+	// if(target.x <= BORDER_X) 
+	// 	allowDir.left = false;
+	// if(target.x > screenBounds.x/*-BORDER_X*/ && currentQuadrant < 1)
+	// 	allowDir.right = false;
+	// if(target.y <= BORDER_Y)
+	// 	allowDir.up = false;
+	// if(target.y > screenBounds.y/*-BORDER_Y*/)
+	// 	allowDir.down = false;
 
 	// ------------------
 	// block other actors
 	// ------------------
 	for(int i=0; i < MAX_LEM; i++) {
-		if(i == selfIndex || !lemmings[i].active) continue;
+		if(i == selfIndex || !lemmings[i].active || lemmings[i].quadrant != lemmings[selfIndex].quadrant) continue;
 
 		int halfBound = LEM_BOUND/2;
 		if(inBounds(target, makeSquareBounds(lemmings[i].coord, LEM_BOUND))) {
@@ -119,7 +129,7 @@ Move tryMove(Coord target, Coord origin, int selfIndex) {
 }
 
 int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
-	spawnTele(coord);
+	spawnTele(coord, 0 /*FIXME*/);
 
 	// player is always at index zero.
 	int insertIndex = 0;
@@ -142,6 +152,7 @@ int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 
 	// Set up the LEM object with all his properties.
 	Lem l = {
+		0,
 		-1,
 		name,
 		frags,
@@ -294,13 +305,13 @@ void lemGameFrame() {
 				// health
 				} else if(w.type == I_HEALTH) {
 					lemmings[i].health = LEM_HEALTH * 2;
-					sprintf(name, "health bonus");
+					sprintf(name, "healed!");
 					weapons[j].valid = false;
 					powerupPickup();
 				// ammo
 				} else if(w.type == I_AMMO) {
 					lemmings[i].ammo = getMaxAmmo(lemmings[i].weap) * 2;
-					sprintf(name, "ammo bonus");
+					sprintf(name, "max ammo!");
 					weapons[j].valid = false;
 					powerupPickup();
 				}
@@ -436,6 +447,7 @@ void weaponCarryFrame(int i) {
 		if(!isDue(clock(), lemmings[i].lastShot, 25)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
 			drawSpriteFull(makeSimpleSprite("exp-01.png"), muzzPos, MACH_SCALE, MACH_SCALE, chance(50) ? 0 : 180, true);
+			drawSpriteFull(makeSimpleSprite("exp-01.png"), muzzPos, MACH_SCALE, MACH_SCALE, chance(50) ? 0 : 180, true);
 			recoil = 2;
 		}
 		else if(!isDue(clock(), lemmings[i].lastShot, 25*2)) {
@@ -503,6 +515,7 @@ void lemRenderFrame() {
 	for(int i=0; i < MAX_LEM; i++) {
 		Lem lem = lemmings[i];
 		if(!lem.valid || !lem.active) continue;
+		if(!lem.isPlayer && lem.quadrant != currentQuadrant) continue;
 
 		// are we traveling left or right?
 		double deg = radToDeg(lem.angle);
@@ -566,6 +579,11 @@ void lemRenderFrame() {
 
 		// lemming "shadows"
 		drawSpriteFull(makeSimpleSprite("shadow-1.png"), deriveCoord(lemmings[i].coord, 0, 5), 1, 1, 0, true);
+
+		// lighting effect when shooting
+		// if(!isDue(clock(), lemmings[i].lastShot, 25)) {
+		// 	drawSprite(makeSimpleSprite("light.png"), lem.coord);
+		// }
 
 		// draw the sprite
 		AssetVersion spriteVersion = inPain(i) ? ASSET_WHITE : ASSET_DEFAULT;

@@ -5,6 +5,7 @@
 #define LEM_H
 
 typedef struct {
+	int quadrant;
 	int killer;
 	char* name;
 	int frags;

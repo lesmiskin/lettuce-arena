@@ -4,16 +4,16 @@
 #ifndef FX_H
 #define FX_H
 
-extern void spawnTele(Coord c);
+extern void spawnTele(Coord c, int quadrant);
 extern void fxGameFrame();
 extern void fxRenderFrame();
-extern void spawnExp(Coord c, bool smallExp);
-extern void spawnExpDelay(Coord c, bool smallExp, int delay);
-extern void spawnHurt(Coord c, int lemColor);
-extern void spawnLemExp(Coord c, int lemColor);
+extern void spawnExp(Coord c, bool smallExp, int quadrant);
+extern void spawnExpDelay(Coord c, bool smallExp, int delay, int quadrant);
+extern void spawnHurt(Coord c, int lemColor, int quadrant);
+extern void spawnLemExp(Coord c, int lemColor, int quadrant);
 
 #define MAX_PUFFS 100
 extern const double PUFF_FREQ;
-extern void spawnPuff(Coord c);
+extern void spawnPuff(Coord c, int quadrant);
 
 #endif
