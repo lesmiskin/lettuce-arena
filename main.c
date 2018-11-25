@@ -15,8 +15,8 @@
 #include "hud.h"
 #include "state.h"
 
-// lemming shadow. dedicated sprite that changes shape on animation frame.
-// up/down animation frame.
+// restore rocket spinning
+// rockets have shadows
 // double the animation frames.
 // pallete swap rather than recolor
 // weapons to have shadows, or to bob slightly.
