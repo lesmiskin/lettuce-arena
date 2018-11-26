@@ -202,6 +202,7 @@ void spawnHurt(Coord c, int lemColor, int quadrant) {
 }
 
 void spawnTele(Coord c, int quadrant) {
+	// if(quadrant == currentQuadrant) play("teleport2.wav");
 
 	for(int i=0; i < MAX_TELE; i++) {
 		if(teleporters[i].valid) continue;
@@ -225,7 +226,9 @@ void spawnTele(Coord c, int quadrant) {
 }
 
 void spawnLemExp(Coord c, int lemColor, int quadrant) {
-	play("expdeath.wav");
+	if(quadrant == currentQuadrant)
+		play("expdeath.wav");
+
 	for(int i=0; i < MAX_TELE; i++) {
 		if(teleporters[i].valid) continue;
 

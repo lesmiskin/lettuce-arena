@@ -298,11 +298,11 @@ void lemGameFrame() {
 				// NB: Powerups we invalidate immediately, whereas respawning weapons we just
 				// temporarily disable. This lets powerups spawn *anywhere*
 
-				if(lemmings[i].quadrant == currentQuadrant)
-					play("pickup.wav");
-
 				// pickup weap
 				if(w.type == W_ROCK || w.type == W_MACH) {
+					if(lemmings[i].quadrant == currentQuadrant)
+						play("pickup.wav");
+
 					lemmings[i].weap = w.type;
 					lemmings[i].lastWeap = w.type;
 					lemmings[i].ammo = getMaxAmmo(w.type);
@@ -314,12 +314,14 @@ void lemGameFrame() {
 						sprintf(name, "machine gun");
 				// health
 				} else if(w.type == I_HEALTH) {
+					if(lemmings[i].quadrant == currentQuadrant) play("health.wav");
 					lemmings[i].health = LEM_HEALTH * 2;
 					sprintf(name, "healed!");
 					weapons[j].valid = false;
 					powerupPickup();
 				// ammo
 				} else if(w.type == I_AMMO) {
+					if(lemmings[i].quadrant == currentQuadrant) play("pickup.wav");
 					lemmings[i].ammo = getMaxAmmo(lemmings[i].weap) * 2;
 					sprintf(name, "max ammo!");
 					weapons[j].valid = false;

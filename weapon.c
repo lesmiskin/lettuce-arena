@@ -21,7 +21,7 @@ const double ROCK_PUSH = 3;
 // MACHINE GUN
 const int W_MACH = 1;
 const double MACH_SPEED = 2.5;
-const double MACH_RELOAD = 150;
+const double MACH_RELOAD = 125;
 const double MACH_DAMAGE = 5;
 const double MACH_PUSH = 0.5;
 
@@ -80,6 +80,9 @@ void weaponGameFrame() {
 			if(lemmings[e].quadrant != shots[i].quadrant) continue;
 
 			if(inBounds(shots[i].coord, makeSquareBounds(lemmings[e].coord, LEM_BOUND))) {
+				// if(shots[i].shooter == PLAYER_INDEX) play("hit.wav");
+				// if(lemmings[e].isPlayer) play("hit2.wav");
+
 				shots[i].valid = false;
 				if(lemmings[e].isPlayer && CHEAT_GOD) continue;
 
@@ -200,7 +203,7 @@ void weaponRenderFrame() {
 
 void shootMach(int i, double deg) {
 	if(lemmings[i].quadrant == currentQuadrant)
-		play("mach.wav");
+		play("mach2.wav");
 
 	double rad = degToRad(deg);
 

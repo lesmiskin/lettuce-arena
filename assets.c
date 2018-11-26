@@ -322,6 +322,14 @@ static void loadSounds(void) {
        { "pickup.wav", SOUND_VOLUME },
        { "exp.wav", SOUND_VOLUME },
        { "expdeath.wav", SOUND_VOLUME },
+       { "mach2.wav", SOUND_VOLUME },
+       { "teleport.wav", SOUND_VOLUME },
+       { "teleport2.wav", SOUND_VOLUME },
+       { "health.wav", SOUND_VOLUME },
+       { "hit.wav", SOUND_VOLUME },
+       { "hit2.wav", SOUND_VOLUME },
+       { "powerup.wav", SOUND_VOLUME },
+       { "mach2.wav", SOUND_VOLUME },
        { "mach.wav", 64 },
        { "rocket.wav", 64 }
     };
