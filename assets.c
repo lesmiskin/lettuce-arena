@@ -316,10 +316,14 @@ static void loadImages(void) {
 }
 
 static void loadSounds(void) {
-    const int SOUND_VOLUME = 12;
+    const int SOUND_VOLUME = 128;
 
     SoundDef defs[] = {
-//        { "bell.wav", SOUND_VOLUME }
+       { "pickup.wav", SOUND_VOLUME },
+       { "exp.wav", SOUND_VOLUME },
+       { "expdeath.wav", SOUND_VOLUME },
+       { "mach.wav", 64 },
+       { "rocket.wav", 64 }
     };
 
     soundCount = sizeof(defs) / sizeof(SoundDef);

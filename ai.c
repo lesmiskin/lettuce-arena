@@ -85,6 +85,7 @@ void shootAtOpponent(int enemyInc) {
 		if(i == enemyInc) continue;				// don't shoot ourselves! :p
 		if(lemmings[i].coord.x == 0) continue;
 		if(lemmings[i].dead) continue;			// don't shoot corpses
+		if(lemmings[i].quadrant != lemmings[enemyInc].quadrant) continue;
 
 		// find out which enemy we're closest to
 		Coord themPos = lemmings[i].coord;

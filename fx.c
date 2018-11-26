@@ -225,6 +225,7 @@ void spawnTele(Coord c, int quadrant) {
 }
 
 void spawnLemExp(Coord c, int lemColor, int quadrant) {
+	play("expdeath.wav");
 	for(int i=0; i < MAX_TELE; i++) {
 		if(teleporters[i].valid) continue;
 
@@ -262,6 +263,9 @@ void spawnExpDelay(Coord c, bool smallExp, int delay, int quadrant) {
 }
 
 void spawnExp(Coord c, bool smallExp, int quadrant) {
+	if(quadrant == currentQuadrant)
+		play("exp.wav");
+
 	spawnExpDelay(c, smallExp, 0, quadrant);
 }
 

@@ -133,7 +133,7 @@ Move tryMove(Coord target, Coord origin, int selfIndex) {
 }
 
 int spawnLem(Spawn spawn, int color, bool isPlayer, int frags, char* name) {
-	spawnTele(spawn.coord, 0 /*FIXME*/);
+	spawnTele(spawn.coord, spawn.quadrant);
 
 	// player is always at index zero.
 	int insertIndex = 0;
@@ -145,13 +145,15 @@ int spawnLem(Spawn spawn, int color, bool isPlayer, int frags, char* name) {
 			insertIndex	= i;
 			break;
 		}
-
 	}
 
-	// reset player marker (set at opposing ends so we can see it come in - whole idea!)
 	if(isPlayer){
+		// reset player marker (set at opposing ends so we can see it come in - whole idea!)
 		arrowXOrigin = spawn.coord.x < screenBounds.x/2 ? screenBounds.x : 0;
 		arrowYOrigin = spawn.coord.y < screenBounds.y/2 ? screenBounds.y : 0;
+
+		// change our "currentQuadrant" marker
+		currentQuadrant = spawn.quadrant;
 	}
 
 	// Set up the LEM object with all his properties.
@@ -295,6 +297,9 @@ void lemGameFrame() {
 
 				// NB: Powerups we invalidate immediately, whereas respawning weapons we just
 				// temporarily disable. This lets powerups spawn *anywhere*
+
+				if(lemmings[i].quadrant == currentQuadrant)
+					play("pickup.wav");
 
 				// pickup weap
 				if(w.type == W_ROCK || w.type == W_MACH) {

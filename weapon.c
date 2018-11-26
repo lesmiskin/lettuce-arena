@@ -199,6 +199,9 @@ void weaponRenderFrame() {
 }
 
 void shootMach(int i, double deg) {
+	if(lemmings[i].quadrant == currentQuadrant)
+		play("mach.wav");
+
 	double rad = degToRad(deg);
 
 	// turn enemy TOWARDS where he's shooting
@@ -221,6 +224,9 @@ void shootMach(int i, double deg) {
 }
 
 void shootRock(int i, double deg) {
+	if(lemmings[i].quadrant == currentQuadrant)
+		play("rocket.wav");
+
 	double rad = degToRad(deg);
 
 	// turn enemy TOWARDS where he's shooting

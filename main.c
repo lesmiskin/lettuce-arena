@@ -15,12 +15,74 @@
 #include "hud.h"
 #include "state.h"
 
-// spawn in different quadrants.
-// a weapon in every quadrant, in every home.
-// idle around in own quadrant, for certain amount of time.
-// if noone is in our own quadrant, look in another quadrant.
-// stay in our own quadrant until we decide to go elsewhere (e.g. stay away from edges)
+// dots represent where enemy is on opposing screens.
+// thin walkways for tunnel, space in background.
+// large corner arenas for battles
+// center pathway has powerup (precarious)
+// bumpers that push onto powerup platform
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// map definitions are text with INSERT key turned on
+
+// teleporters?r
+// layout with 5 quads:
+// /---+---+---\
+// |   |   |   |
+// +---+---+---+
+// |   | P |   |
+// +---+---+---+
+// |   |   |   |
+// \---+---+---/
+
+// ---------------------------------
+// |                                |
+// |                                |
+// |        .      P     .          |
+// |                                |
+// |                                |
+// |                                |
+// |      R        P         R      |
+// |                                |
+// |                                |
+// |                                |
+// |                                |
+// |      R        P         R      |
+// |                                |
+// |                                |
+// |---------------------------------
+
+// 32 cells
+// 14 cells
 
 
 
@@ -33,34 +95,13 @@
 	// - low health and there are enemies there which could kill us
 	// - no weapon (i.e. decided against a home on original screen)
 
-
-
-
-
-
-
-
-
-
-
-
-// - likely to stay onscreen 
-
-
 // - if enemies onscreen and have weap / weapon is onscreen, 75% chance to stay onscreen (combat logic).
 
 // if health 
 
-
-
-
-
 // - home to weapon if have none.								SETUP
 // - 50/50 chance home to other screen if have none.			SETUP
 // - noone in quadrant -> go to another							HUNT
-
-
-
 
 // lemming decides to visit other quadrant in these situations:
 // - when in that half of the screen (50/50 chance)
