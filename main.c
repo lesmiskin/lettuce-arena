@@ -15,16 +15,70 @@
 #include "hud.h"
 #include "state.h"
 
+// spawn in different quadrants.
+// a weapon in every quadrant, in every home.
+// idle around in own quadrant, for certain amount of time.
+// if noone is in our own quadrant, look in another quadrant.
+// stay in our own quadrant until we decide to go elsewhere (e.g. stay away from edges)
+
+
+
+
+// - will home to weapon onscreen if:
+	// - no weapon currently.
+
+// - will move to another quadrant if:
+	// - been there for ages (look around for different action, powerups etc).
+	// - no lemming is in the quadrant, and wouldn't benefit from getting any weapon or powerup here.
+	// - low health and there are enemies there which could kill us
+	// - no weapon (i.e. decided against a home on original screen)
+
+
+
+
+
+
+
+
+
+
+
+
+// - likely to stay onscreen 
+
+
+// - if enemies onscreen and have weap / weapon is onscreen, 75% chance to stay onscreen (combat logic).
+
+// if health 
+
+
+
+
+
+// - home to weapon if have none.								SETUP
+// - 50/50 chance home to other screen if have none.			SETUP
+// - noone in quadrant -> go to another							HUNT
+
+
+
+
+// lemming decides to visit other quadrant in these situations:
+// - when in that half of the screen (50/50 chance)
+// - when been in current quadrant for a while (10 seconds)
+// - when low health (wanting to escape + no health powerup in this screen)
+// - when no weapon (wanting to escape + no weapon in this screen)
+// - when noone to fight (wanting a fight)
+// - when most players are elsewhere (wanting a bigger fight)
+
+
 // nicer powerup bubbles (flashing and bobbing)
 // weapons should be in powerup bubbles too (obvious)
 // more ammo, ammo powerup gives rapid fire.
 
 // restore rocket spinning
-// rockets have shadows
 // double the animation frames.
 // pallete swap rather than recolor
 // weapons to have shadows, or to bob slightly.
-// powerups to blink and bob (like on mouse quest)
 // differt color for powerup pickup text.
 // pickup text stays onscreen for longer.
 // shell flip animatino when firing machinegun.

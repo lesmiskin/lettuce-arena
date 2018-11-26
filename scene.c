@@ -26,6 +26,12 @@ static Star stars[MAX_STARS];
 static long lastStarTime = 0;
 static int starInc = 0;
 
+Spawn spawns[MAX_SPAWNS];
+
+Spawn makeSpawn(int quadrant, Coord coord) {
+	Spawn s = { quadrant, coord };
+	return s;
+}
 
 // ----------
 // Weapons

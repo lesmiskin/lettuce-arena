@@ -12,8 +12,6 @@
 #include "state.h"
 #include "input.h"
 
-Coord spawns[MAX_SPAWNS];
-
 int xTween = 0;
 
 const int PAIN_DURATION = 200;
@@ -134,8 +132,8 @@ Move tryMove(Coord target, Coord origin, int selfIndex) {
 	return makeMove(permitted, allowDir);
 }
 
-int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
-	spawnTele(coord, 0 /*FIXME*/);
+int spawnLem(Spawn spawn, int color, bool isPlayer, int frags, char* name) {
+	spawnTele(spawn.coord, 0 /*FIXME*/);
 
 	// player is always at index zero.
 	int insertIndex = 0;
@@ -152,13 +150,13 @@ int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 
 	// reset player marker (set at opposing ends so we can see it come in - whole idea!)
 	if(isPlayer){
-		arrowXOrigin = coord.x < screenBounds.x/2 ? screenBounds.x : 0;
-		arrowYOrigin = coord.y < screenBounds.y/2 ? screenBounds.y : 0;
+		arrowXOrigin = spawn.coord.x < screenBounds.x/2 ? screenBounds.x : 0;
+		arrowYOrigin = spawn.coord.y < screenBounds.y/2 ? screenBounds.y : 0;
 	}
 
 	// Set up the LEM object with all his properties.
 	Lem l = {
-		0,
+		spawn.quadrant,
 		-1,
 		name,
 		frags,
@@ -171,7 +169,7 @@ int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 		isPlayer,
 		!isPlayer,
 		true,
-		coord,
+		spawn.coord,
 		color,
 		LEM_HEALTH,		// health
 		1, 				// animInc
@@ -201,7 +199,7 @@ int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name) {
 
 		// SDL_RendererFlip flip = deg > 90 && deg < 270 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
-		coord.x > screenBounds.x/2 ? 3.14 : 0, 	// face inwards if on right side of screen
+		spawn.coord.x > screenBounds.x/2 ? 3.14 : 0, 	// face inwards if on right side of screen
 		0, 
 		0, 
 		0,

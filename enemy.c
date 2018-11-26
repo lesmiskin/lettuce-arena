@@ -4,13 +4,14 @@
 #include "player.h"
 #include <time.h>
 #include "state.h"
+#include "scene.h"
 
 #define INITIAL_ENEMIES 3
 #define LEMMINGS 4
 
-void spawnEnemy(Coord point, int color, char* name) {
+void spawnEnemy(Spawn spawn, int color, char* name) {
 	// spawn them.
-	int lindex = spawnLem(point, color, false, 0, name);
+	int lindex = spawnLem(spawn, color, false, 0, name);
 
 	// set enemy-specific properties.
 	// lemmings[lindex].angle = randomAngle();
@@ -71,10 +72,10 @@ char* randomName() {
 }
 
 void initEnemy(void) {
-	spawns[0] = makeCoord(20, 35);
-	spawns[1] = makeCoord(300, 220);
-	spawns[2] = makeCoord(20, 220);
-	spawns[3] = makeCoord(300, 40);
+	spawns[0] = makeSpawn(0, makeCoord(20, 35));
+	spawns[1] = makeSpawn(0, makeCoord(300, 220));
+	spawns[2] = makeSpawn(1, makeCoord(20, 220));
+	spawns[3] = makeSpawn(1, makeCoord(300, 40));
 
 	// reset
 	for(int i=0; i < INITIAL_ENEMIES; i++) {

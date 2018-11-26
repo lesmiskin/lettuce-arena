@@ -1,8 +1,8 @@
-#include <stdbool.h>
-#include "common.h"
-
 #ifndef WEAP_H
 #define WEAP_H
+
+#include <stdbool.h>
+#include "common.h"
 
 #define MAX_SHOTS 50
 

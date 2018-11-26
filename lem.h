@@ -1,8 +1,9 @@
-#include <stdbool.h>
-#include "common.h"
-
 #ifndef LEM_H
 #define LEM_H
+
+#include <stdbool.h>
+#include "common.h"
+#include "scene.h"
 
 typedef struct {
 	int quadrant;
@@ -49,10 +50,19 @@ typedef struct {
     long en_lastDirTime;
     int en_nextDirTime;
     long en_lastBreather;
+	long en_lastDecision;
+	int en_nextDecisionTime;
+	int en_decision;
 
 	double pushAngle;
 	double pushAmount;
 } Lem;
+
+// IMPORTANT AI DECISIONS
+// const int DC_IDLE = 0;	 			// longer periods of walking.
+// const int DC_FIND_WEAPON = 1; 		// if no weapon, do this.
+// const int DC_FIND_OPPONENT = 2; 	// noone onscreen? go and find them.
+// const int DC_FRESH_QUADRANT = 3; 	// been here too long, find somewhere new.
 
 typedef struct {
 	bool up;
@@ -67,7 +77,6 @@ typedef struct {
 } Move;
 
 #define MAX_LEM 4
-#define MAX_SPAWNS 4
 
 extern const int PLAYER_INDEX;
 
@@ -77,14 +86,12 @@ extern void respawn(int color);
 extern Lem lemmings[MAX_LEM];
 extern void lemGameFrame();
 extern void lemRenderFrame();
-extern int spawnLem(Coord coord, int color, bool isPlayer, int frags, char* name);
+extern int spawnLem(Spawn spawn, int color, bool isPlayer, int frags, char* name);
 extern void lemAnimateFrame();
 extern bool havingBreather(int i);
 extern bool canShoot(int i);
 extern const double LEM_SPEED;
 extern const double LEM_BOUND;
 extern void respawn(int i);
-
-extern Coord spawns[MAX_SPAWNS];
 
 #endif

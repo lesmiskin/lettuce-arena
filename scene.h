@@ -3,13 +3,12 @@
 
 #include "common.h"
 #include "renderer.h"
-
 #include <stdbool.h>
 
-extern void sceneRenderFrame(void);
-extern void sceneAnimateFrame(void);
-extern void sceneGameFrame();
-extern void initScene();
+typedef struct {
+	int quadrant;
+	Coord coord;
+} Spawn;
 
 typedef struct {
 	int quadrant;
@@ -19,6 +18,15 @@ typedef struct {
 	Coord coord;
 	int type;
 } Weapon;
+
+#define MAX_SPAWNS 4
+extern Spawn spawns[MAX_SPAWNS];
+
+extern void sceneRenderFrame(void);
+extern void sceneAnimateFrame(void);
+extern void sceneGameFrame();
+extern void initScene();
+extern Spawn makeSpawn(int quadrant, Coord coord);
 
 #define MAX_WEAPONS 8
 extern const int WEAP_ROCKET;

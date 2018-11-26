@@ -1,8 +1,8 @@
-#include <stdbool.h>
-#include "common.h"
-
 #ifndef FX_H
 #define FX_H
+
+#include <stdbool.h>
+#include "common.h"
 
 extern void spawnTele(Coord c, int quadrant);
 extern void fxGameFrame();
