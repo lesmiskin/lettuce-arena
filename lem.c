@@ -293,7 +293,7 @@ void lemGameFrame() {
 			Weapon w = weapons[j];
 
 			if(inBounds(lemmings[i].coord, makeSquareBounds(weapons[j].coord, WEAP_BOUND))) {
-				char name[15];
+				char name[16];
 
 				// NB: Powerups we invalidate immediately, whereas respawning weapons we just
 				// temporarily disable. This lets powerups spawn *anywhere*
@@ -360,7 +360,7 @@ void lemAnimateFrame() {
 }
 
 void weaponCarryFrame(int i) {
-	char file[13];
+	char file[14];
 	Coord derive;
 	double angle = 0;
 	int xoff, yoff;

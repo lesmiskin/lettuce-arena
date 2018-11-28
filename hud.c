@@ -31,7 +31,7 @@ void writeText(int amount, Coord pos, bool centered) {
 }
 
 void writeAmount(int amount, Coord pos) {
-	char text[3];
+	char text[4];
 	sprintf(text, "%d", amount);
 
 	for(int i=0; i < strlen(text); i++) {

@@ -136,7 +136,7 @@ void fxRenderFrame() {
 		if(!explosions[i].valid || explosions[i].quadrant != currentQuadrant) continue;
 		if(!isDue(clock(), explosions[i].spawnTime, explosions[i].delay)) continue;
 
-		char file[10];
+		char file[11];
 		double scale = explosions[i].smallExp ? 0.5 : 1;
 		sprintf(file, "exp-0%d.png", explosions[i].animInc+1);
 		drawSpriteFull(makeSimpleSprite(file), explosions[i].coord, scale, scale, 0.0, true);
@@ -147,7 +147,7 @@ void fxRenderFrame() {
 		if(!teleporters[i].valid || teleporters[i].quadrant != currentQuadrant) continue;
 
 		for(int j=0; j < teleporters[i].density; j++) {
-			char file[11];
+			char file[22];
 			if(teleporters[i].isLemExp || teleporters[i].isLemHurt) {
 				// pick exp color based on lemming
 				Particle part = teleporters[i].particles[j];

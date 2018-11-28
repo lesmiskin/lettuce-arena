@@ -260,6 +260,7 @@ static void loadImages(void) {
         { "score.png", false },
         { "score-2.png", false },
 
+        { "font--.png", false },
         { "font-0.png", false },
         { "font-1.png", false },
         { "font-2.png", false },

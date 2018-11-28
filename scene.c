@@ -227,7 +227,7 @@ void sceneRenderFrame() {
 
 		if(timer(&lastFlash, 500)) flash = !flash;
 
-		char file[20];
+		char file[23];
 		if(weapons[i].type == W_MACH) 
 			sprintf(file, "w_mach-%d.png", flash);
 		else if(weapons[i].type == W_ROCK)
