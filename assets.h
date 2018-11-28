@@ -25,6 +25,7 @@ extern SDL_Texture *getTextureVersion(char *path, AssetVersion version);
 extern Asset getAsset(char *path);
 extern void shutdownAssets(void);
 extern SoundAsset getSound(char *path);
+extern void playOn(char* path, int channel);
 extern void play(char* path);
 extern SDL_Texture *getTexture(char *path);
 

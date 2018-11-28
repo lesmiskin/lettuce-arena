@@ -15,6 +15,14 @@
 #include "hud.h"
 #include "state.h"
 
+// shotgun (very satisfying SFX for this)
+// pistol or fist
+
+// auto-lock angle when fire button is held.
+// toy with strafe key (current structure map be too limiting)
+
+
+
 // dots represent where enemy is on opposing screens.
 // thin walkways for tunnel, space in background.
 // large corner arenas for battles

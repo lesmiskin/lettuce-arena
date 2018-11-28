@@ -324,6 +324,10 @@ static void loadSounds(void) {
        { "exp.wav", SOUND_VOLUME },
        { "expdeath.wav", SOUND_VOLUME },
        { "mach2.wav", SOUND_VOLUME },
+       { "mach6-rapid.wav", SOUND_VOLUME },
+       { "mach6-end.wav", SOUND_VOLUME },
+       { "mach7.wav", 64 },
+       { "mach8.wav", 64 },
        { "teleport.wav", SOUND_VOLUME },
        { "teleport2.wav", SOUND_VOLUME },
        { "health.wav", SOUND_VOLUME },
@@ -359,6 +363,10 @@ static void loadSounds(void) {
 void initAssets(void) {
     loadImages();
     loadSounds();
+}
+
+void playOn(char* path, int channel) {
+    Mix_PlayChannel(channel, getSound(path).sound, 0);
 }
 
 void play(char* path) {
