@@ -248,8 +248,10 @@ void shootMach(int i, double deg) {
 }
 
 void shootRock(int i, double deg) {
-	if(lemmings[i].quadrant == currentQuadrant)
+	if(lemmings[i].quadrant == currentQuadrant){
+		play("exp.wav");
 		play("rocket.wav");
+	}
 
 	double rad = degToRad(deg);
 
@@ -277,6 +279,8 @@ bool isReloading(int i) {
 }
 
 void shoot(int i, double deg) {
+
+	// play("asdjknaskdn/");
 	// only shoot if we have ammo.
 	if(!lemmings[i].active || lemmings[i].ammo == 0 || isReloading(i)) return;
 

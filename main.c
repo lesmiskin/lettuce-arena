@@ -15,6 +15,13 @@
 #include "hud.h"
 #include "state.h"
 
+// sprite crouches down when firing.
+// muzzle flash DURING machinegun firing sequence.
+// give enemies ability to use machinegun properly.
+
+// fist punch (with whapping sound)
+// alex Kidd punch animation (left and right)
+
 // shotgun (very satisfying SFX for this)
 // pistol or fist
 
