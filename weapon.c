@@ -21,8 +21,7 @@ const double ROCK_PUSH = 3;
 // MACHINE GUN
 const int W_MACH = 1;
 const double MACH_SPEED = 2.5;
-const double MACH_RELOAD = 750;
-//const double MACH_RELOAD = 101;
+const double MACH_RELOAD = 101;
 const double MACH_DAMAGE = 8;
 const double MACH_PUSH = 0.5;
 
@@ -61,44 +60,7 @@ bool onScreen(Coord coord, double threshold) {
 	));
 }
 
-int machInc = -1;
-int machDelay = 90;
-long lastMachBullet = 0;
-
-void machBullet(int i) {
-	double rad = lemmings[i].angle;
-	double deg = radToDeg(rad);
-
-	// turn enemy TOWARDS where he's shooting
-	if(lemmings[i].isEnemy){
-		lemmings[i].angle = rad;
-		lemmings[i].en_lastDirTime = clock();
-		lemmings[i].en_nextDirTime = 30;		// quick dir change so we don't collide.
-	}
-
-	// find a spare projectile 
-	for(int j=0; j < MAX_SHOTS; j++) {
-		if(shots[j].valid) continue;
-
-		Coord origin = extendOnAngle(lemmings[i].coord, lemmings[i].angle, SHOT_DIST);
-		Coord shotStep = getAngleStep(rad, MACH_SPEED, false);
-		Shot s = { lemmings[i].quadrant, true, origin, shotStep, deg, 0, i, 0, W_MACH };
-		shots[j] = s;
-		break;
-	}
-
-	lastMachBullet = clock();
-	machInc++;
-	if(machInc > 2) machInc = -1;
-}
-
 void weaponGameFrame() {
-	for(int i=0; i < MAX_LEM; i++) {
-		if(machInc > -1 && isDue(clock(), lastMachBullet, machDelay)) {
-			machBullet(i);
-		}
-	}
-
 	for(int i=0; i < MAX_SHOTS; i++) {
 		if(!shots[i].valid) continue;
 
@@ -242,9 +204,27 @@ void weaponRenderFrame() {
 void shootMach(int i, double deg) {
 	if(lemmings[i].quadrant == currentQuadrant)
 		// play("mach6-rapid.wav");
-		playOn("mach8.wav", 1);
+		playOn("mach7.wav", 1);
 
-	machBullet(i);
+	double rad = degToRad(deg);
+
+	// turn enemy TOWARDS where he's shooting
+	if(lemmings[i].isEnemy){
+		lemmings[i].angle = rad;
+		lemmings[i].en_lastDirTime = clock();
+		lemmings[i].en_nextDirTime = 30;		// quick dir change so we don't collide.
+	}
+
+	// find a spare projectile 
+	for(int j=0; j < MAX_SHOTS; j++) {
+		if(shots[j].valid) continue;
+
+		Coord origin = extendOnAngle(lemmings[i].coord, lemmings[i].angle, SHOT_DIST);
+		Coord shotStep = getAngleStep(rad, MACH_SPEED, false);
+		Shot s = { lemmings[i].quadrant, true, origin, shotStep, deg, 0, i, 0, W_MACH };
+		shots[j] = s;
+		break;
+	}
 }
 
 void shootRock(int i, double deg) {
