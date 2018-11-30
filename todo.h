@@ -1,34 +1,53 @@
-// restore regular machinegun mode (normal trailing sound effect)
 
-// burst mode kind of silly, maybe try regular shooting with trailing sound effect again.
-
-// sprite crouches down when firing.
-// muzzle flash DURING machinegun firing sequence.
-// give enemies ability to use machinegun properly.
-
-// fist punch (with whapping sound)
-// alex Kidd punch animation (left and right)
-
-// shotgun (very satisfying SFX for this)
-// pistol or fist
-
-// auto-lock angle when fire button is held.
-// toy with strafe key (current structure map be too limiting)
+// * logic to "pause" after a shot is broken. only affects shooting decision, not whether to stand still.
 
 
 
+// FUN TO DO
 // dots represent where enemy is on opposing screens.
-// thin walkways for tunnel, space in background.
+// WALLS ON THE MAPS: different maps, different walls.
+// different floor texture
+
+// INTERESTING
+// special devices like lemmings/quake: spring pushers, crushers.
+// weapon tube outputs (innovation)
+// launcher spring (devices like lemmings)
+
+// GOOD
+// better machinegun handling for enemies (stop when shooting)
+// weapons have shadows to give contrast.
+// powerups and weapons bob.
+// 3-way shotgun with satisfying SFX
+// bumpers that push onto powerup platform
+// toy with strafe key (current structure map be too limiting)
+// jumping (causes fast)
+// sprite crouches down when firing.
+// thin walkways to fall off, space in background.
+// pistol weapon
+// melee fist (alex kidd whapping)
+// show local ammo indicator when pickup ammo powerup
+// shell flip animatino when firing machinegun.
+// differt color for powerup pickup text.
+// up/down walking animations
+
+// MUST BE DONE
+// machinegun sprite
+
+// MEH
+// bazooka sprite
+// middle floor is transparent with "shine" graphic (NO ALPHA)
+// restore rocket spinning
+// larger rocket puffs
+// monster cast of characters (innovation)
+// map themes, graveyeard, space (innovation)
+// secondary weapon (e.g. trap, pipe bomb)
+// dance dungeon-style indicators
+
+// ARCHIVE
 // large corner arenas for battles
 // center pathway has powerup (precarious)
-// bumpers that push onto powerup platform
 
-
-
-
-// map definitions are text with INSERT key turned on
-
-// teleporters?r
+// teleporters?
 // layout with 5 quads:
 // /---+---+---\
 // |   |   |   |
@@ -58,8 +77,6 @@
 // 32 cells
 // 14 cells
 
-
-
 // - will home to weapon onscreen if:
 	// - no weapon currently.
 
@@ -85,27 +102,19 @@
 // - when noone to fight (wanting a fight)
 // - when most players are elsewhere (wanting a bigger fight)
 
-
 // nicer powerup bubbles (flashing and bobbing)
 // weapons should be in powerup bubbles too (obvious)
 // more ammo, ammo powerup gives rapid fire.
 
-// restore rocket spinning
 // double the animation frames.
 // pallete swap rather than recolor
-// weapons to have shadows, or to bob slightly.
-// differt color for powerup pickup text.
 // pickup text stays onscreen for longer.
-// shell flip animatino when firing machinegun.
-
 // restore gibs and blood when monsters come back.
-// show local ammo indicator when pickup ammo powerup
 // align powerups with tile (e.g. middle of tile)
 // enemies home to powerups if nearby
 
 // quadrants you can move into, stepping over threshold.
 // nicer floors
-// middle floor is transparent with "shine" graphic (NO ALPHA)
 
 
 // powerup: uzi (double speed, fast projectile)
@@ -292,7 +301,6 @@
 // [easy] up/down walking sprites.
 // player bumps back if part of an explosion.
 // splash damage?
-
 
 
 

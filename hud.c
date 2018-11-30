@@ -5,6 +5,7 @@
 #include "input.h"
 #include "weapon.h"
 #include "state.h"
+#include "enemy.h"
 
 static Sprite letters[10];
 static const int LETTER_WIDTH = 4;
@@ -247,6 +248,24 @@ void hudRenderFrame(void) {
 			makeSimpleSprite("cross-2.png"), 
 			extendOnAngle(lem.coord, lem.angle, 35), 
 			1, 1, 0, true
+		);
+	}
+
+	// draw enemy indicators
+	for(int i=0; i < MAX_LEM; i++) {
+		int xPos = 3;
+		int flip = SDL_FLIP_NONE;
+		if(lemmings[i].quadrant > currentQuadrant){
+			flip = SDL_FLIP_HORIZONTAL;
+			xPos = screenBounds.x-3;
+		} 
+		else if(lemmings[i].quadrant < currentQuadrant){
+			xPos = 3;
+		} 
+		else continue;
+
+		drawSprite(
+			makeFlippedSprite("indicator.png", flip), makeCoord(xPos, lemmings[i].coord.y)
 		);
 	}
 }

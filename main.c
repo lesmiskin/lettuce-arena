@@ -24,7 +24,7 @@ const int FX_HZ = 1000 / 12;            //24fps
 bool running = true;
 SDL_Window *window = NULL;
 
-Coord windowSize = { 320*2, 240*2 };   // 320x240
+Coord windowSize = { 320*3, 240*3 };   // 320x240
 
 static void initSDL(void) {
     SDL_Init(SDL_INIT_AUDIO);

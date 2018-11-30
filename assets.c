@@ -299,6 +299,8 @@ static void loadImages(void) {
         { "font-y.png", false },
         { "font-z.png", false },
         { "font-bang.png", false },
+
+        { "indicator.png", false },
     };
 
     //Infer asset path from current directory.

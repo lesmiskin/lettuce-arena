@@ -38,7 +38,7 @@ Shot shots[MAX_SHOTS];
 int getMaxAmmo(int weap) {
 	switch(weap) {
 		case 1: // stupid C!
-			return 50;
+			return 25;
 		case 2:
 			return 5;
 		default:
