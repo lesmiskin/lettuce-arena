@@ -1,4 +1,7 @@
 
+// learnings: 
+// install freebsd on thinkpad et al.
+
 // * logic to "pause" after a shot is broken. only affects shooting decision, not whether to stand still.
 
 
