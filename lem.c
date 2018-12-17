@@ -360,57 +360,76 @@ void lemAnimateFrame() {
 }
 
 void weaponCarryFrame(int i) {
+	char weap[5];
+	char dir[3];
 	char file[14];
+	bool angled = false;
+	int flip = SDL_FLIP_NONE;
+	int rotate = 0;
+
 	Coord derive;
 	double angle = 0;
 	int xoff, yoff;
 	Coord fireDerive = zeroCoord();
 
+	if(lemmings[i].weap == W_ROCK) sprintf(weap, "rock");
+	if(lemmings[i].weap == W_MACH) sprintf(weap, "mach");
+
 	// weapon rotation and position.
 	switch((int)radToDeg(lemmings[i].angle)+90) {
+		// n
 		case 360:
-			sprintf(file, "w_rock-n.png");
 			derive = makeCoord(3, -4);
 			fireDerive = makeCoord(0, 1);
+			rotate = 270;
 			break;
+		// e
 		case 90:
-			sprintf(file, "w_rock-e.png");
-			derive = makeCoord(3, 1);
+			sprintf(file, "w_mach.png");
+			derive = makeCoord(3, 2);
 			fireDerive = makeCoord(-1, 0);
 			break;
+		// w
 		case 270:
 			sprintf(file, "w_rock-w.png");
-			derive = makeCoord(-3, 1);
+			derive = makeCoord(-3, 2);
 			fireDerive = makeCoord(1, 0);
+			flip = SDL_FLIP_HORIZONTAL;
 			break;
+		// s
 		case 180:
 			sprintf(file, "w_rock-s.png");
-			derive = makeCoord(-2, 5);
+			derive = makeCoord(2, 6);
 			fireDerive = makeCoord(0, -1);
+			rotate = 90;
 			break;
 
 		case 405://ne
-			sprintf(file, "w_rock-ne.png");
-			derive = makeCoord(4, -3);
-			fireDerive = makeCoord(-1, 1);
+			derive = makeCoord(4, 0);
+			fireDerive = makeCoord(-1, -1);
+			rotate = 315;
 			break;
 		case 135://se
-			sprintf(file, "w_rock-se.png");
 			derive = makeCoord(2, 3);
-			fireDerive = makeCoord(-1, -1);
+			fireDerive = makeCoord(2, 0);
+			rotate = 45;
 			break;
 		case 225://sw
-			sprintf(file, "w_rock-sw.png");
 			derive = makeCoord(-2, 3);
-			fireDerive = makeCoord(1, -1);
+			fireDerive = makeCoord(2, 0);
+			flip = SDL_FLIP_VERTICAL;
+			rotate = 135;
 			break;
 		default:
 		case 315://nw
-			sprintf(file, "w_rock-nw.png");
-			derive = makeCoord(-4, -3);
+			derive = makeCoord(-3, -1);
 			fireDerive = makeCoord(1, 1);
+			rotate = 45;
+			flip = SDL_FLIP_HORIZONTAL;
 			break;
 	}
+
+	sprintf(file, "w_%s.png", weap);
 
 	// weapon bob cycle.
 	switch((int)radToDeg(lemmings[i].angle)+90) {
@@ -496,8 +515,9 @@ void weaponCarryFrame(int i) {
 
 	// draw weapon (yes, weapon should flash too :p)
 	AssetVersion spriteVersion = inPain(i) ? ASSET_WHITE : ASSET_DEFAULT;
-	Sprite lemSprite = makeSprite(getTextureVersion(file, spriteVersion), zeroCoord(), SDL_FLIP_NONE);
-	drawSprite(lemSprite, wc);
+	Sprite lemSprite = makeSprite(getTextureVersion(file, spriteVersion), zeroCoord(), flip);
+	drawSpriteFull(lemSprite, wc, 1, 1, rotate, true);
+//	drawSprite(lemSprite, wc);
 }
 
 int getReloadTime(int i) {

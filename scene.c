@@ -229,9 +229,9 @@ void sceneRenderFrame() {
 
 		char file[23];
 		if(weapons[i].type == W_MACH) 
-			sprintf(file, "w_mach-%d.png", flash);
+			sprintf(file, "w_mach.png");
 		else if(weapons[i].type == W_ROCK)
-			sprintf(file, "w_rock3-%d.png", flash);
+			sprintf(file, "w_rock-e.png");
 		else if(weapons[i].type == I_HEALTH)
 			sprintf(file, "powerup-health-5-%d.png", flash);
 		else if(weapons[i].type == I_AMMO)

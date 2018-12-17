@@ -192,7 +192,7 @@ void hudRenderFrame(void) {
 	if(p.weap > 0 && p.ammo > 0) {
 		// writeFont("ammo", makeCoord(55, firstLine));
 		if(p.weap == W_MACH) {
-			drawSpriteFull(makeSimpleSprite("w_mach-0.png"), makeCoord(40,-3), 1, 1, 0, false);
+			drawSpriteFull(makeSimpleSprite("w_mach.png"), makeCoord(40,-3), 1, 1, 0, false);
 		}else{
 			drawSpriteFull(makeSimpleSprite("w_rock3-0.png"), makeCoord(40,-3), 1, 1, 0, false);
 		}

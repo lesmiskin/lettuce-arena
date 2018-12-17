@@ -123,9 +123,7 @@ static void loadImages(void) {
         { "dark-red.png", false },
         { "black.png", false },
 
-        { "w_mach-0.png", false },
-        { "w_mach-1.png", false },
-        { "w_mach-2.png", false },
+        { "w_mach.png", false },
         { "bullet.png", false },
 
 		// rocket carry
@@ -139,14 +137,9 @@ static void loadImages(void) {
         { "w_rock-sw.png", true },
 
 		// rocket pickup
-        { "w_rock2-0.png", false },
         { "w_rock3-0.png", false },
-        { "w_rock3-0-fire.png", false },
         { "w_rock3-1.png", false },
         { "w_rock3-2.png", false },
-        { "w_rock-0.png", false },
-        { "w_rock-1.png", false },
-        { "w_rock-0-fire.png", false },
 
         { "tele-0.png", false },
         { "tele-1.png", false },
@@ -300,6 +293,7 @@ static void loadImages(void) {
         { "font-z.png", false },
         { "font-bang.png", false },
 
+        { "w_mach.png", false },
         { "indicator.png", false },
     };
 
