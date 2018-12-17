@@ -123,7 +123,7 @@ static void loadImages(void) {
         { "dark-red.png", false },
         { "black.png", false },
 
-        { "w_mach.png", false },
+        { "w_mach.png", true },
         { "bullet.png", false },
 
 		// rocket carry

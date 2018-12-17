@@ -1,13 +1,26 @@
 
-// learnings: 
-// install freebsd on thinkpad et al.
+// melee fist
+
+// maps defined in text.
+// weapons and powerups bob with shadow.
+
+// up/down lemming animation
+// lemmings pallete swap
+
+// machinegun is ugly.
+// spinning rocket.
+
+// strafe key.
+
+
+
+
+
+
 
 // * logic to "pause" after a shot is broken. only affects shooting decision, not whether to stand still.
 
-
-
 // FUN TO DO
-// dots represent where enemy is on opposing screens.
 // WALLS ON THE MAPS: different maps, different walls.
 // different floor texture
 
@@ -18,8 +31,6 @@
 
 // GOOD
 // better machinegun handling for enemies (stop when shooting)
-// weapons have shadows to give contrast.
-// powerups and weapons bob.
 // 3-way shotgun with satisfying SFX
 // bumpers that push onto powerup platform
 // toy with strafe key (current structure map be too limiting)
