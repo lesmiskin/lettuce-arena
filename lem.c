@@ -372,8 +372,9 @@ void weaponCarryFrame(int i) {
 	int xoff, yoff;
 	Coord fireDerive = zeroCoord();
 
-	if(lemmings[i].weap == W_ROCK) sprintf(weap, "rock");
-	if(lemmings[i].weap == W_MACH) sprintf(weap, "mach");
+	int weapToDraw = lemmings[i].weap > 0 ? lemmings[i].weap : lemmings[i].lastWeap;
+	if(weapToDraw == W_ROCK) sprintf(weap, "rock-e");
+	if(weapToDraw == W_MACH) sprintf(weap, "mach");
 
 	// weapon rotation and position.
 	switch((int)radToDeg(lemmings[i].angle)+90) {
@@ -385,20 +386,17 @@ void weaponCarryFrame(int i) {
 			break;
 		// e
 		case 90:
-			sprintf(file, "w_mach.png");
 			derive = makeCoord(3, 2);
 			fireDerive = makeCoord(-1, 0);
 			break;
 		// w
 		case 270:
-			sprintf(file, "w_rock-w.png");
 			derive = makeCoord(-3, 2);
 			fireDerive = makeCoord(1, 0);
 			flip = SDL_FLIP_HORIZONTAL;
 			break;
 		// s
 		case 180:
-			sprintf(file, "w_rock-s.png");
 			derive = makeCoord(2, 6);
 			fireDerive = makeCoord(0, -1);
 			rotate = 90;
@@ -406,17 +404,17 @@ void weaponCarryFrame(int i) {
 
 		case 405://ne
 			derive = makeCoord(4, 0);
-			fireDerive = makeCoord(-1, -1);
+			fireDerive = makeCoord(-1, 1);
 			rotate = 315;
 			break;
 		case 135://se
 			derive = makeCoord(2, 3);
-			fireDerive = makeCoord(2, 0);
+			fireDerive = makeCoord(-1, -1);
 			rotate = 45;
 			break;
 		case 225://sw
 			derive = makeCoord(-2, 3);
-			fireDerive = makeCoord(2, 0);
+			fireDerive = makeCoord(1, -1);
 			flip = SDL_FLIP_VERTICAL;
 			rotate = 135;
 			break;
@@ -490,7 +488,7 @@ void weaponCarryFrame(int i) {
 		if(!isDue(clock(), lemmings[i].lastShot, 100)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
 			drawSpriteFull(makeSimpleSprite("exp-04.png"), muzzPos, ROCK_SCALE, ROCK_SCALE, radToDeg(randomAngle()), true);
-			recoil = 6;
+			recoil = 5;
 		}
 		else if(!isDue(clock(), lemmings[i].lastShot, 150)) {
 			Coord muzzPos = extendOnAngle(wc, lemmings[i].angle, MUZZLE_DIST);
