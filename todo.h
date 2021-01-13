@@ -5,12 +5,17 @@
 // weapons and powerups bob with shadow.
 
 // up/down lemming animation
+// double animation frames
 // lemmings pallete swap
 
-// machinegun is ugly.
+// chaingun instead of machinegun
 // spinning rocket.
 
-// strafe key.
+// colors for powerup text + frag text
+// skull icon on killer (whoever it is)
+// skull icon next to frags in bar.
+
+// machinegun icon in bar is off-center
 
 
 
@@ -41,7 +46,6 @@
 // melee fist (alex kidd whapping)
 // show local ammo indicator when pickup ammo powerup
 // shell flip animatino when firing machinegun.
-// differt color for powerup pickup text.
 // up/down walking animations
 
 // MUST BE DONE
