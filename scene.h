@@ -19,6 +19,10 @@ typedef struct {
 	int type;
 } Weapon;
 
+#define MAP_Y 15
+#define MAP_X 20
+extern int map[MAP_Y][MAP_X];
+
 #define MAX_SPAWNS 4
 extern Spawn spawns[MAX_SPAWNS];
 

@@ -6,6 +6,7 @@
 #include "fx.h"
 #include "hud.h"
 #include "state.h"
+#include "scene.h"
 
 // PICKUPS
 const int I_AMMO = 3;
@@ -71,6 +72,20 @@ void weaponGameFrame() {
 		// Turn off shot if outside window.
 		if(!onScreen(shots[i].coord, 0)) 
 			shots[i].valid = false;
+
+		// Checks for weapon impacts against walls.
+		for(int y=0; y < 15; y++) {
+			for(int x=0; x < 20; x++) {
+				if(map[y][x] == 1) {
+					if(inBounds(shots[i].coord, makeSquareBounds(makeCoord(x * 16, y * 16), 16))) {
+						shots[i].valid = false;
+						Coord c = makeCoord(x, y);
+						bool smallExp = shots[i].type == W_MACH;
+						spawnExpDelay(shots[i].coord, smallExp, 0, shots[i].quadrant);
+					}
+				}
+			}
+		}
 
 		// Did we hit a lemming?
 		for(int e=0; e < MAX_LEM; e++) {
