@@ -360,9 +360,9 @@ void lemAnimateFrame() {
 }
 
 void weaponCarryFrame(int i) {
-	char weap[5];
-	char dir[3];
-	char file[14];
+	char weap[6];
+	char dir[4];
+	char file[15];
 	bool angled = false;
 	int flip = SDL_FLIP_NONE;
 	int rotate = 0;
@@ -620,8 +620,8 @@ void lemRenderFrame() {
 		Sprite lemSprite = makeSprite(getTextureVersion(frameFile, spriteVersion), zeroCoord(), flip);
 		drawSprite(lemSprite, lem.coord);
 
-		// draw carrying weapon
-		if(lem.weap > 0 || !isDue(clock(), lem.lastShot, getReloadTime(i)) )
+		// draw carrying weapon (if have ammo, or if still showing  last shot animation)
+		if(lem.weap > 0 || (lem.lastWeap > 0 && !isDue(clock(), lem.lastShot, getReloadTime(i)) ))
 			weaponCarryFrame(i);
 
 		// show nearby ammo counter if low

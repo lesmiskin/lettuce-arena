@@ -295,6 +295,7 @@ static void loadImages(void) {
 
         { "w_mach.png", false },
         { "indicator.png", false },
+        { "wall.png", false }
     };
 
     //Infer asset path from current directory.
