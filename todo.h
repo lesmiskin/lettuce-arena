@@ -1,4 +1,49 @@
 
+// TODO: Game will sometimes freeze immediately upon launch (no rendered frame).
+// - A rebuild fixes it, after a while?
+// - Something to do with ground texture rendering. 
+
+// initial screen (basic state integer toggle)
+// - on keypress, changes to actual game.
+// - on esc press, changes to title.
+// - on changing to game, everything resets.
+
+// title:
+// - starry screen.
+// - logo slams down with explosions.
+// - two lemmings spawn and march around the logo.
+
+
+// title:
+// - starry screen with platform.
+// - 
+
+
+// - on title show, show screen with stars behind.
+// - on title show, little platform that lemmings spawn on.
+// - spawns happen repeatedly until at-most two, or at intervals.
+
+
+
+
+
+
+
+// holes in map, walls, weapons, spawn locations -- all defined in TEXT definition.
+// walls have shadowed edges to them.
+
+// lems cannot cross walls.
+// walls are defined per-quadrant.
+// lems will not fire across walls.
+// lems decide to move into other quadrant if bored.
+
+
+
+
+
+
+
+
 // melee fist
 
 // maps defined in text.

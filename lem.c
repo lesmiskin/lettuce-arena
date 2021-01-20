@@ -54,8 +54,12 @@ Move tryMove(Coord target, Coord origin, int selfIndex) {
 		target.y < origin.y, target.y > origin.y,
 		target.x < origin.x, target.x > origin.x,
 	};
+	Coord xTry = makeCoord(target.x, origin.y);
+	Coord yTry = makeCoord(origin.x, target.y);
 
-	// quadrant shifting
+	// -------------------------
+	// quadrant shift triggering
+	// -------------------------
 	if(target.x > screenBounds.x && currentQuadrant < 1) {
 		if(lemmings[selfIndex].isPlayer)
 			currentQuadrant = 1;
@@ -79,15 +83,6 @@ Move tryMove(Coord target, Coord origin, int selfIndex) {
 	if(target.y <= BORDER_Y) 							allowDir.up = false;
 	if(target.y >= screenBounds.y-BORDER_Y) 			allowDir.down = false;
 
-	// if(target.x <= BORDER_X) 
-	// 	allowDir.left = false;
-	// if(target.x > screenBounds.x/*-BORDER_X*/ && currentQuadrant < 1)
-	// 	allowDir.right = false;
-	// if(target.y <= BORDER_Y)
-	// 	allowDir.up = false;
-	// if(target.y > screenBounds.y/*-BORDER_Y*/)
-	// 	allowDir.down = false;
-
 	// ------------------
 	// block other actors
 	// ------------------
@@ -96,11 +91,11 @@ Move tryMove(Coord target, Coord origin, int selfIndex) {
 
 		int halfBound = LEM_BOUND/2;
 		if(inBounds(target, makeSquareBounds(lemmings[i].coord, LEM_BOUND))) {
-			// we've detected an obstruction. let's SEND BACK a coordinate that represents
-			// the LIMITED movement based on WHERE its obstructing.
+			// We've detected an obstruction. let's SEND BACK a coordinate that represents
+			// the LIMITED AXIAL movement based on whether it's the X or Y which is obstructing.
+			// Why do we do this? otherwise we would stop dead, and not be able to 'slide' along a wall.
 
 			// is the X AXIS free?
-			Coord xTry = makeCoord(target.x, origin.y);
 			for(int j=0; j < MAX_LEM; j++) {
 				if(j == selfIndex) continue;
 				// as soon as we encounter a visible obstruction - STOP ON THIS AXIS.
@@ -112,13 +107,46 @@ Move tryMove(Coord target, Coord origin, int selfIndex) {
 			}
 
 			// is the Y AXIS free?
-			Coord yTry = makeCoord(origin.x, target.y);
 			for(int j=0; j < MAX_LEM; j++) {
 				if(j == selfIndex) continue;
 				// as soon as we encounter a visible obstruction - STOP ON THIS AXIS.
 				if(inBounds(yTry, makeSquareBounds(lemmings[j].coord, LEM_BOUND))) {
 					if(intendDir.up) allowDir.up = false;
 					if(intendDir.down) allowDir.down = false;
+					break;
+				}
+			}
+		}
+	}
+
+	// --------------
+	// Block on walls
+	// --------------
+	bool breakWallOuterLoop = false;
+	bool stopXTest = false; 
+	bool stopYTest = false;
+	
+	for(int y=0; y < 15 && !breakWallOuterLoop; y++) {
+		for(int x=0; x < 20 && !breakWallOuterLoop; x++) {
+			if(map[y][x] == 1 && inBounds(target, makeSquareBounds(makeCoord(x * 16, y * 16), 16))) {
+				bool breakWallInnerLoop = false;
+
+				// halt on X axis
+				if(!stopXTest && inBounds(xTry, makeSquareBounds(makeCoord(x * 16, y * 16), 16))) {
+					if(intendDir.right) allowDir.right = false;
+					if(intendDir.left) allowDir.left = false;
+					stopXTest = true;
+				}
+				// halt on Y axis   
+				if(!stopYTest && inBounds(yTry, makeSquareBounds(makeCoord(x * 16, y * 16), 16))) {
+					if(intendDir.up) allowDir.up = false;
+					if(intendDir.down) allowDir.down = false;
+					stopYTest = true;
+				}
+				// if we are fully obstructed, we can abort rest of wall obstruction processing.
+				if(stopXTest && stopYTest) {
+					breakWallInnerLoop = true;
+					breakWallOuterLoop = true;
 					break;
 				}
 			}
