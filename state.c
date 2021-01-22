@@ -7,6 +7,7 @@
 #include "scene.h"
 #include "weapon.h"
 #include "fx.h"
+#include "hud.h"
 
 bool usePlayer = true;
 bool gameover = false;
@@ -17,6 +18,40 @@ long endTime;
 long startTime;
 const int GAMEOVER_WAIT = 1500;
 const int PRACTICE_WAIT = 1500;
+bool introReady = false;
+
+
+// INTRO SEQUENCE
+typedef enum {
+	INTRO_FALL,
+	INTRO_EXP,
+	INTRO_SHAKE,
+	INTRO_BEGIN
+} IntroSequence;
+
+IntroSequence introSeqNumber;
+bool introSeqStarted = false;
+long lastIntroSeqChange = 0;
+long introShakeTime = 0;
+long introTextFlashTime = 0;
+double logoYPos = 0;
+double logo2YPos = 0;
+double cosIncLogo = 0;
+double sineIncLogo = 0;
+const int SHAKE_AMT = 4;
+bool introTextFlash = false;
+
+void startIntro() {
+	introSeqNumber = 0;
+	introSeqStarted = false;
+	lastIntroSeqChange = clock();
+	introShakeTime = 0;
+	introTextFlashTime = 0;
+	cosIncLogo = 0;
+	sineIncLogo = 0;
+	logoYPos = 0;
+	introReady = false;
+}
 
 void gameOver() {
 	endTime = clock();
@@ -52,28 +87,6 @@ void restartGame() {
 	startMatch();
 }
 
-typedef enum {
-	INTRO_FALL,
-	INTRO_EXP,
-	INTRO_SHAKE,
-	INTRO_MARCH,
-	INTRO_BEGIN
-} IntroSequence;
-
-IntroSequence introSeqNumber;
-long lastIntroSeqChange = 0;
-double logoYPos = -50;
-int logoShake = 0;
-long lastIntroSeqEvent = 0;
-bool introSeqStarted = false;
-int SHAKE_AMT = 4;
-
-void startIntro() {
-	introSeqNumber = 0;
-	introSeqStarted = false;
-	lastIntroSeqChange = clock();
-}
-
 void nextIntroSeq() {
 	introSeqNumber++;
 	introSeqStarted = false;
@@ -84,16 +97,24 @@ void introFrame() {
 	switch(introSeqNumber) {
 		case INTRO_FALL:
 			// Scene change
-			if(logoYPos >= 100) {
+			if(logoYPos >= 91) {
 				nextIntroSeq();
 			} else {
-				logoYPos+=1.5;
+				logoYPos = 150 + cosInc(0, &cosIncLogo, 0.02, 0.25) * 600;
+				logo2YPos = 235 + sineInc(0, &sineIncLogo, 0.02, 0.25) * 600;
 			}
 			break;
 		case INTRO_EXP:
-			for(int i=0; i < 8; i++) {
-				spawnExpDelay(makeCoord(randomMq(130, 190),randomMq(logoYPos, logoYPos+30)), randomMq(0,1), randomMq(0, 50), 0);
-			}
+			// for(int i=0; i < 8; i++) {
+			// 	spawnExpDelay(makeCoord(randomMq(130, 190),randomMq(logoYPos, logoYPos+30)), randomMq(0,1), randomMq(0, 50), 0);
+			// }
+				spawnExpDelay(makeCoord(130, randomMq(logoYPos+5, logoYPos+7)), 0, randomMq(0, 50), 0);
+				spawnExpDelay(makeCoord(150, randomMq(logoYPos+5, logoYPos+7)), randomMq(0, 1), randomMq(0, 50), 0);
+				spawnExpDelay(makeCoord(170, randomMq(logoYPos+5, logoYPos+7)), randomMq(0, 1), randomMq(0, 50), 0);
+				spawnExpDelay(makeCoord(190, randomMq(logoYPos+5, logoYPos+7)), 0, randomMq(0, 50), 0);
+			// for(int i=0; i < 4; i++) {
+			// 	spawnExpDelay(makeCoord(randomMq(130, 190), randomMq(logoYPos+5, logoYPos+10)), randomMq(0,1), randomMq(0, 50), 0);
+			// }
 			nextIntroSeq();
 			break;
 		case INTRO_SHAKE:
@@ -102,33 +123,39 @@ void introFrame() {
 				viewOffsetY = SHAKE_AMT;
 				introSeqStarted = true;
 			// Scene change
-			}else if(isDue(clock(), lastIntroSeqChange, 250)) {
+			}else if(isDue(clock(), lastIntroSeqChange, 300)) {
 				nextIntroSeq();
-			}else if(timer(&lastIntroSeqEvent, 120)) {
+			}else if(timer(&introShakeTime, 120)) {
 				viewOffsetY = (viewOffsetY == SHAKE_AMT) ? 0 : SHAKE_AMT;
 			}
-			break;
-		case INTRO_MARCH:
-			if(!introSeqStarted) {
-				viewOffsetY = 0;
-				introSeqStarted = true;
-			}
+			introReady = true;
 			break;
 		case INTRO_BEGIN:
 			break;
 	}
 
-	drawSprite(makeSimpleSprite("la-title.png"), makeCoord(160, logoYPos));
+	if(introReady){
+		if(timer(&introTextFlashTime, 100)) {
+			introTextFlash = !introTextFlash;
+		}
+		if(introTextFlash) {
+			writeFontFull("press any key to start", makeCoord(121, 200), false, false);
+		}
+	}
+
+	drawSprite(makeSimpleSprite("la-title-a.png"), makeCoord(160, logoYPos));
+	drawSprite(makeSimpleSprite("la-title-b.png"), makeCoord(160, logo2YPos));
 }
 
 void gameFrame() {
+	// Game start
+	if(checkCommand(CMD_START)) {
+		changeMode(MODE_GAME);
 	// check for restart
-	if(checkCommand(CMD_RESTART)) {
+	} else if(checkCommand(CMD_RESTART)) {
 		restartGame();
-		return;
-	}
 	// end practice, and start play.
-	if(isDue(clock(), startTime, PRACTICE_WAIT)) {
+	}else if(isDue(clock(), startTime, PRACTICE_WAIT)) {
 		practice = false;
 	}
 }

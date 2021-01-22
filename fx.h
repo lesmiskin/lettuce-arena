@@ -15,5 +15,6 @@ extern void spawnLemExp(Coord c, int lemColor, int quadrant);
 #define MAX_PUFFS 100
 extern const double PUFF_FREQ;
 extern void spawnPuff(Coord c, int quadrant);
+extern void stopFx();
 
 #endif

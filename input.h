@@ -18,7 +18,8 @@ typedef enum {
 	CMD_PLAYER_UP,
 	CMD_SHOOT,
 	CMD_SCORES,
-	CMD_RESTART
+	CMD_RESTART,
+	CMD_START
 } Command;
 
 #endif

@@ -293,6 +293,8 @@ static void loadImages(void) {
         { "font-z.png", false },
         { "font-bang.png", false },
         { "la-title.png", false },
+        { "la-title-a.png", false },
+        { "la-title-b.png", false },
 
         { "w_mach.png", false },
         { "indicator.png", false },

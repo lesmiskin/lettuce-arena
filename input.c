@@ -51,8 +51,19 @@ void pollInput(void) {
 				}
 
 				//Exit to title.
-				if (keypress == SDL_SCANCODE_ESCAPE)
-					commands[CMD_QUIT] = true;
+				if(keypress == SDL_SCANCODE_ESCAPE) {
+					if(inGame) {
+						changeMode(MODE_TITLE);
+					}else{
+						commands[CMD_QUIT] = true;
+					}
+					return;
+				}
+
+				// Start the game from title screen.
+				if(!inGame && introReady) {
+					changeMode(MODE_GAME);
+				}
 			}
 		}
 	}

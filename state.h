@@ -13,5 +13,6 @@ extern bool usePlayer;
 extern int currentQuadrant;
 extern bool inGame;
 extern void startIntro();
+extern bool introReady;
 
 #endif

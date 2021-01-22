@@ -682,3 +682,10 @@ void lemRenderFrame() {
 		drawSpriteFull(makeSimpleSprite(healthFile), h, barWidth, 1, 0, false);
 	}
 }
+
+void stopLem() {
+	currentQuadrant = 0;
+	for(int i=0; i < MAX_LEM; i++) {
+		lemmings[i].valid = false;
+	}
+}

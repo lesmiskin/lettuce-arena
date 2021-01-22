@@ -7,16 +7,18 @@
 #include "scene.h"
 #include "player.h"
 #include "state.h"
+#include "lem.h"
+#include "fx.h"
 
 // DEBUG SETTINGS
 bool CHEAT_GIVE_MACH = false;
 bool CHEAT_GIVE_ROCK = false;
 bool CHEAT_GOD = false;
-bool DEBUG_SKIP_INTRO = true;
+bool DEBUG_SKIP_INTRO = false;
 bool DEBUG_NO_ENEMIES = false;
 bool DEBUG_STILL_ENEMIES = false;
 bool DEBUG_ONE_SHOT_KILLS = false;
-bool PLAYER_INDICATOR = false;
+bool PLAYER_INDICATOR = true;
 
 static const double RADIAN_CIRCLE = 6.28;
 
@@ -34,6 +36,8 @@ void changeMode(GameMode newMode) {
             startMatch();
             break;
         case MODE_TITLE:
+            stopLem();
+            stopFx();
             startIntro();
             break;
     }

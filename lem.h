@@ -93,5 +93,6 @@ extern bool canShoot(int i);
 extern const double LEM_SPEED;
 extern const double LEM_BOUND;
 extern void respawn(int i);
+extern void stopLem();
 
 #endif

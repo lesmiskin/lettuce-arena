@@ -280,3 +280,8 @@ void spawnPuff(Coord c, int quadrant) {
 		break;
 	}
 }
+
+void stopFx() {
+	for(int e=0; e < MAX_EXP; e++)
+		explosions[e].valid = false;
+}

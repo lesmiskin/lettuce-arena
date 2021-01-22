@@ -211,8 +211,8 @@ void starsInit() {
 }
 
 void renderStars() {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-	SDL_RenderClear(renderer);
+	// SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+	// SDL_RenderClear(renderer);
 
 	//Spawn stars based on designated density.
 	if(timer(&lastStarTime, STAR_DELAY)) {
@@ -225,7 +225,7 @@ void renderStars() {
 			randomMq(0, 2),		//brightness
 		};
 
-		starInc = starInc == MAX_STARS ? 0 : starInc++;
+		if(starInc == MAX_STARS) starInc = 0;
 		stars[starInc++] = star;
 	}
 
@@ -253,39 +253,37 @@ void drawMap() {
 }
 
 void sceneRenderFrame() {
-	if(inGame) {
+	if(/*introReady || */inGame){
 		renderStars();	// Bug: Game freezes (except mouse move if >10 stars on titlescreen after 4 seconds, or uncommented rendering)
-		drawMap();	
 	}
 
-	// 1. Ability to draw walls for *each* of the quadrants (hidden and clippable if not in visble quadrant).
-	// 2. Lem entities *cannot* move into square of a wall.
-	// 3. Enemies *do not* target other lems when there is a wall in the firing line.
+	if(inGame) {
+		drawMap();	
 
+		// Draw weapons
+		for(int i=0; i < MAX_WEAPONS; i++) {
+			if(!weapons[i].valid || weapons[i].pickedUp) continue;
+			if(weapons[i].quadrant != currentQuadrant) continue;
 
-	// Draw weapons
-	for(int i=0; i < MAX_WEAPONS; i++) {
-		if(!weapons[i].valid || weapons[i].pickedUp) continue;
-		if(weapons[i].quadrant != currentQuadrant) continue;
+			if(timer(&lastFlash, 500)) flash = !flash;
 
-		if(timer(&lastFlash, 500)) flash = !flash;
+			char file[23];
+			if(weapons[i].type == W_MACH) 
+				sprintf(file, "w_mach.png");
+			else if(weapons[i].type == W_ROCK)
+				sprintf(file, "w_rock-e.png");
+			else if(weapons[i].type == I_HEALTH)
+				sprintf(file, "powerup-health-5-%d.png", flash);
+			else if(weapons[i].type == I_AMMO)
+				sprintf(file, "powerup-ammo-3-%d.png", flash);
 
-		char file[23];
-		if(weapons[i].type == W_MACH) 
-			sprintf(file, "w_mach.png");
-		else if(weapons[i].type == W_ROCK)
-			sprintf(file, "w_rock-e.png");
-		else if(weapons[i].type == I_HEALTH)
-			sprintf(file, "powerup-health-5-%d.png", flash);
-		else if(weapons[i].type == I_AMMO)
-			sprintf(file, "powerup-ammo-3-%d.png", flash);
+			// dancing weapons
+			// Coord c = !flash ? weapons[i].coord : deriveCoord(weapons[i].coord, 0, 1);
+			// drawSprite(makeSimpleSprite(file), c);
 
-		// dancing weapons
-		// Coord c = !flash ? weapons[i].coord : deriveCoord(weapons[i].coord, 0, 1);
-		// drawSprite(makeSimpleSprite(file), c);
-
-		Coord c = !flash ? weapons[i].coord : deriveCoord(weapons[i].coord, 0, 1);
-		drawSprite(makeSimpleSprite(file), weapons[i].coord);
+			Coord c = !flash ? weapons[i].coord : deriveCoord(weapons[i].coord, 0, 1);
+			drawSprite(makeSimpleSprite(file), weapons[i].coord);
+		}
 	}
 }
 
