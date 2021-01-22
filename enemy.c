@@ -83,6 +83,9 @@ void initEnemy(void) {
 		chosenColors[i] = -1;
 	}
 
+}
+
+void startEnemy() {
 	// Pick a random player spawn point.
 	int playerOrder = randomMq(0, LEMMINGS-1);
 

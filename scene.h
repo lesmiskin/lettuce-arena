@@ -30,6 +30,7 @@ extern void sceneRenderFrame(void);
 extern void sceneAnimateFrame(void);
 extern void sceneGameFrame();
 extern void initScene();
+extern void startScene();
 extern Spawn makeSpawn(int quadrant, Coord coord);
 
 #define MAX_WEAPONS 8

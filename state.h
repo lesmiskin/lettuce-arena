@@ -6,10 +6,11 @@ extern int fraglimit;
 extern void restartGame();
 extern void stateFrame();
 extern void gameOver();
-extern void startGame();
+extern void startMatch();
 extern bool practice;
 extern const int PRACTICE_WAIT;
 extern bool usePlayer;
 extern int currentQuadrant;
+extern bool inGame;
 
 #endif

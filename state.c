@@ -10,6 +10,7 @@
 bool usePlayer = true;
 bool gameover = false;
 bool practice = false;
+bool inGame = false;
 int fraglimit = 25;
 long endTime;
 long startTime;
@@ -21,7 +22,7 @@ void gameOver() {
 	gameover = true;
 }
 
-void startGame() {
+void startMatch() {
 	startTime = clock();
 
 	// only bother doing practice if player is there.	
@@ -39,13 +40,15 @@ void restartGame() {
 		lemmings[i].valid = false;
 	}
 
+	// TODO: Reconcile these with common.h:changeMode
+
 	initScene();
 	initPlayer();
 	initEnemy();
 	initWeapon();
 	gameover = false;
 
-	startGame();
+	startMatch();
 }
 
 void stateFrame() {

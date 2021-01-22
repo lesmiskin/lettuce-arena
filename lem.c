@@ -388,7 +388,7 @@ void lemAnimateFrame() {
 }
 
 void weaponCarryFrame(int i) {
-	char weap[6];
+	char weap[7];
 	char dir[4];
 	char file[15];
 	bool angled = false;

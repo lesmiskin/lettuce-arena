@@ -282,6 +282,11 @@ void sceneRenderFrame() {
 
 //Should happen each time the scene is shown.
 void initScene() {
+	starsInit();
+	makeGroundTexture();
+}
+
+void startScene() {
 	// default weapon spawns.
 	Weapon rock = { 0, true, false, 0,  makeCoord(screenBounds.x/2, 35), W_MACH };
 	weapons[0] = rock;
@@ -297,9 +302,6 @@ void initScene() {
 	// weapons[4] = health;
 	// Weapon amm = { true, false, 0, makeCoord(screenBounds.x-60, screenBounds.y-35), I_AMMO };
 	// weapons[5] = amm;
-
-	starsInit();
-	makeGroundTexture();
 
 	// seed the powerup counter
  	powerupPickup();

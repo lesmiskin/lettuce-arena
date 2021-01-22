@@ -3,9 +3,10 @@
 #include <time.h>
 #include <unistd.h>
 // #include "assets.h"
-// #include "enemy.h"
-// #include "scene.h"
-// #include "player.h"
+#include "enemy.h"
+#include "scene.h"
+#include "player.h"
+#include "state.h"
 
 // DEBUG SETTINGS
 bool CHEAT_GIVE_MACH = false;
@@ -23,6 +24,15 @@ GameMode currentMode = MODE_GAME;
 
 void changeMode(GameMode newMode) {
 	currentMode = newMode;
+    if(newMode == MODE_GAME) {
+        startEnemy();
+        startScene();
+        startPlayer();
+    	startMatch();
+        inGame = true;
+    }else{
+        inGame = false;
+    }
 }
 
 double calcDistance(Coord a, Coord b) {

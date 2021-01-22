@@ -6,6 +6,7 @@
 extern void playerGameFrame(void);
 extern void playerShadowFrame(void);
 extern void initPlayer();
+extern void startPlayer();
 extern int health;
 extern bool playerWalking;
 extern bool playerDir;

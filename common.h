@@ -19,6 +19,7 @@ typedef struct {
 
 typedef enum {
 	MODE_GAME,
+	MODE_TITLE
 } GameMode;
 
 typedef struct {

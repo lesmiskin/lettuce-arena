@@ -112,6 +112,8 @@ double pickupY = 0;
 const int MSG_TIME = 2000;
 
 void hudRenderFrame(void) {
+	if(!inGame) return;
+
 	Lem lem = lemmings[PLAYER_INDEX];
 
 	writeFont("zone", makeCoord(10, 12));

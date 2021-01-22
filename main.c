@@ -67,24 +67,19 @@ static void shutdownMain(void) {
 }
 
 int main()  {
-    //Seed randomMq number generator
-    srand(time(NULL));
-
+    srand(time(NULL));          // Seed randomMq number generator
 	atexit(shutdownMain);
-
     initSDL();
     initWindow();
     initRenderer();
     initAssets();
-    initEnemy();
-    initScene();
-    initWeapon();
-    initHud();
-    initPlayer();
 
-	changeMode(MODE_GAME);
+    initEnemy();        // frame?
+    initScene();        // frame?
+    initWeapon();       // frame?
+    initHud();          // frame?
 
-	startGame();
+    // changeMode(MODE_GAME);
 
     long lastRenderFrameTime = clock();
     long lastGameFrameTime = lastRenderFrameTime;
