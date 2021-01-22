@@ -62,11 +62,11 @@ typedef enum {
 
 IntroSequence introSeqNumber;
 long lastIntroSeqChange = 0;
-double logoYPos = 0;
+double logoYPos = -50;
 int logoShake = 0;
 long lastIntroSeqEvent = 0;
 bool introSeqStarted = false;
-int SHAKE_AMT = 2;
+int SHAKE_AMT = 4;
 
 void startIntro() {
 	introSeqNumber = 0;
@@ -92,20 +92,20 @@ void introFrame() {
 			break;
 		case INTRO_EXP:
 			for(int i=0; i < 8; i++) {
-				spawnExpDelay(makeCoord(randomMq(130, 190),randomMq(logoYPos, logoYPos+30)), false, randomMq(0, 350), 0);
+				spawnExpDelay(makeCoord(randomMq(130, 190),randomMq(logoYPos, logoYPos+30)), randomMq(0,1), randomMq(0, 50), 0);
 			}
 			nextIntroSeq();
 			break;
 		case INTRO_SHAKE:
 			// Scene start
 			if(!introSeqStarted) {
-				viewOffsetY = -SHAKE_AMT;
+				viewOffsetY = SHAKE_AMT;
 				introSeqStarted = true;
 			// Scene change
-			}else if(isDue(clock(), lastIntroSeqChange, 500)) {
+			}else if(isDue(clock(), lastIntroSeqChange, 250)) {
 				nextIntroSeq();
-			}else if(timer(&lastIntroSeqEvent, 90)) {
-				viewOffsetY = (viewOffsetY == -SHAKE_AMT) ? SHAKE_AMT : -SHAKE_AMT;
+			}else if(timer(&lastIntroSeqEvent, 120)) {
+				viewOffsetY = (viewOffsetY == SHAKE_AMT) ? 0 : SHAKE_AMT;
 			}
 			break;
 		case INTRO_MARCH:
