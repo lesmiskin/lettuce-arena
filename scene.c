@@ -3,6 +3,7 @@
 #include "common.h"
 #include "assets.h"
 #include "weapon.h"
+#include "state.h"
 #include <time.h>
 
 // MAP
@@ -172,16 +173,18 @@ void sceneAnimateFrame() {
 
 void sceneGameFrame() {
 
-	// spawn powerups randomly
-	if(!isPowerupOnscreen() && isDue(clock(), lastPowerupPickup, nextPowerupPickup)) {
-		itemSpawn();
-	}
+	if(inGame) {
+		// spawn powerups randomly
+		if(!isPowerupOnscreen() && isDue(clock(), lastPowerupPickup, nextPowerupPickup)) {
+			itemSpawn();
+		}
 
-	// respawn weapons
-	for(int i=0; i < MAX_WEAPONS; i++) {
-		if(!weapons[i].valid || !weapons[i].pickedUp) continue;
-		if(isDue(clock(), weapons[i].lastPickup, WEAP_RESPAWN_TIME)) {
-			weapons[i].pickedUp = false;
+		// respawn weapons
+		for(int i=0; i < MAX_WEAPONS; i++) {
+			if(!weapons[i].valid || !weapons[i].pickedUp) continue;
+			if(isDue(clock(), weapons[i].lastPickup, WEAP_RESPAWN_TIME)) {
+				weapons[i].pickedUp = false;
+			}
 		}
 	}
 
@@ -236,8 +239,7 @@ void renderStars() {
 	}
 }
 
-void sceneRenderFrame() {
-	renderStars();
+void drawMap() {
 	drawSprite(ground, makeCoord(1024/2, 768/2));
 
 	// Draw walls (TODO: Should do once and save as single image).
@@ -247,6 +249,13 @@ void sceneRenderFrame() {
 				drawSprite(makeSimpleSprite("keen-tile-2.png"), makeCoord(x*16, y*16));
 			}
 		}
+	}
+}
+
+void sceneRenderFrame() {
+	if(inGame) {
+		renderStars();	// Bug: Game freezes (except mouse move if >10 stars on titlescreen after 4 seconds, or uncommented rendering)
+		drawMap();	
 	}
 
 	// 1. Ability to draw walls for *each* of the quadrants (hidden and clippable if not in visble quadrant).

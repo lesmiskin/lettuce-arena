@@ -20,18 +20,22 @@ bool PLAYER_INDICATOR = false;
 
 static const double RADIAN_CIRCLE = 6.28;
 
-GameMode currentMode = MODE_GAME;
+GameMode currentMode = MODE_TITLE;
 
 void changeMode(GameMode newMode) {
 	currentMode = newMode;
-    if(newMode == MODE_GAME) {
-        startEnemy();
-        startScene();
-        startPlayer();
-    	startMatch();
-        inGame = true;
-    }else{
-        inGame = false;
+    inGame = newMode == MODE_GAME;
+
+    switch(newMode) {
+        case MODE_GAME:
+            startEnemy();
+            startScene();
+            startPlayer();
+            startMatch();
+            break;
+        case MODE_TITLE:
+            startIntro();
+            break;
     }
 }
 

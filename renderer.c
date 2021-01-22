@@ -10,6 +10,7 @@ static const int BASE_SCALE_HEIGHT = 240;
 static const double PIXEL_SCALE = 1;				//pixel doubling for assets.
 Coord pixelGrid;					    			//helps aligning things to the tiled background.
 Coord screenBounds;
+int viewOffsetY = 0;
 
 Coord getTextureSize(SDL_Texture *texture) {
     int x, y;
@@ -121,9 +122,19 @@ void updateCanvas(void) {
     //Change rendering target to window.
     SDL_SetRenderTarget(renderer, NULL);
 
-    //Activate scaler, and blit the buffer to the screen.
+    //Activate scaler.
     SDL_RenderSetLogicalSize(renderer, pixelGrid.x, pixelGrid.y);
-    SDL_RenderCopy(renderer, renderBuffer, NULL, NULL);
+
+    // Clear outer canvas background if we are offsetting viewport (e.g. screen shaking)
+    if(viewOffsetY != 0) {
+        SDL_SetRenderDrawColor(renderer, 0,0,0,0);
+        SDL_RenderClear(renderer);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+    }
+
+    // Blit buffer to screen (taking offset into account for dest. rect.)
+    SDL_Rect view = { 0, viewOffsetY, 320, 240 };
+    SDL_RenderCopy(renderer, renderBuffer, NULL, &view);
 
     //Actually update the screen itself.
     SDL_RenderPresent(renderer);

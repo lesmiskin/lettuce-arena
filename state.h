@@ -12,5 +12,6 @@ extern const int PRACTICE_WAIT;
 extern bool usePlayer;
 extern int currentQuadrant;
 extern bool inGame;
+extern void startIntro();
 
 #endif

@@ -22,6 +22,7 @@ typedef enum {
 
 extern Colour makeColour(int red, int green, int blue, int alpha);
 extern SDL_Surface *colouriseSprite(SDL_Surface *original, Colour colour, ColourisationMethod method);
+extern int viewOffsetY;
 
 extern SDL_Renderer *renderer;
 extern SDL_Texture *renderBuffer;
