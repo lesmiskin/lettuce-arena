@@ -9,6 +9,7 @@
 #include "state.h"
 #include "lem.h"
 #include "fx.h"
+#include "weapon.h"
 
 // DEBUG SETTINGS
 bool CHEAT_GIVE_MACH = false;
@@ -38,6 +39,7 @@ void changeMode(GameMode newMode) {
         case MODE_TITLE:
             stopLem();
             stopFx();
+            stopWeap();
             startIntro();
             break;
     }

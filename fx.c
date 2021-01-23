@@ -202,7 +202,7 @@ void spawnHurt(Coord c, int lemColor, int quadrant) {
 }
 
 void spawnTele(Coord c, int quadrant) {
-	// if(quadrant == currentQuadrant) play("teleport2.wav");
+	if(quadrant == currentQuadrant) play("tele.wav");
 
 	for(int i=0; i < MAX_TELE; i++) {
 		if(teleporters[i].valid) continue;

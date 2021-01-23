@@ -6,8 +6,7 @@
 #include "state.h"
 #include "scene.h"
 
-#define INITIAL_ENEMIES 3
-#define LEMMINGS 4
+#define INITIAL_ENEMIES 7
 
 void spawnEnemy(Spawn spawn, int color, char* name) {
 	// spawn them.
@@ -25,28 +24,30 @@ int chosenColors[MAX_COLORS];
 int chosenColorInc = 0;
 
 int randomColor() {
-	bool different;
-	while(1) {
+	// Have to comment this out, as we *need* to reuse colors for >4 players.
+
+	// bool different;
+	// while(1) {
 		int random = randomMq(0,MAX_COLORS-1);
-		bool isColorTaken = false;
+	// 	bool isColorTaken = false;
 
-		// See if we already took this name.
-		for(int j=0; j < INITIAL_ENEMIES; j++) {
-			if(random == chosenColors[j]) {
-				isColorTaken = true;
-				break;
-			}
-		}
+	// 	// See if we already took this name.
+	// 	for(int j=0; j < INITIAL_ENEMIES; j++) {
+	// 		if(random == chosenColors[j]) {
+	// 			isColorTaken = true;
+	// 			break;
+	// 		}
+	// 	}
 
-		if(isColorTaken) continue;
+	// 	if(isColorTaken) continue;
 
-		chosenColors[chosenColorInc++] = random;
+	// 	chosenColors[chosenColorInc++] = random;
 		return colors[random];
-	}
+	// }
 }
 
-#define MAX_NAMES 6
-char* names[] = { "sherbert", "blinky", "bob", "whippy", "yorp", "wilkins" };
+#define MAX_NAMES 8
+char* names[] = { "sherbert", "blinky", "bob", "whippy", "yorp", "wilkins", "figgy", "duggie" };
 int chosenNames[INITIAL_ENEMIES];
 int chosenNameInc = 0;
 
@@ -73,9 +74,14 @@ char* randomName() {
 
 void initEnemy(void) {
 	spawns[0] = makeSpawn(0, makeCoord(20, 35));
-	spawns[1] = makeSpawn(0, makeCoord(300, 220));
-	spawns[2] = makeSpawn(1, makeCoord(20, 220));
-	spawns[3] = makeSpawn(1, makeCoord(300, 40));
+	spawns[1] = makeSpawn(0, makeCoord(20, 220));
+	spawns[2] = makeSpawn(0, makeCoord(300, 35));
+	spawns[3] = makeSpawn(0, makeCoord(300, 220));
+
+	spawns[4] = makeSpawn(1, makeCoord(20, 35));
+	spawns[5] = makeSpawn(1, makeCoord(20, 220));
+	spawns[6] = makeSpawn(1, makeCoord(300, 35));
+	spawns[7] = makeSpawn(1, makeCoord(300, 220));
 
 	// reset
 	for(int i=0; i < INITIAL_ENEMIES; i++) {
@@ -87,10 +93,10 @@ void initEnemy(void) {
 
 void startEnemy() {
 	// Pick a random player spawn point.
-	int playerOrder = randomMq(0, LEMMINGS-1);
+	int playerOrder = randomMq(0, MAX_LEM-1);
 
 	// Make the enemies
-	for(int i=0; i < LEMMINGS; i++) {
+	for(int i=0; i < MAX_LEM; i++) {
 		if(usePlayer && i == playerOrder) {
 			playerIndex = spawnLem(spawns[i], randomColor(), true, 0, "spud");
 		}else{

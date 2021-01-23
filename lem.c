@@ -128,7 +128,7 @@ Move tryMove(Coord target, Coord origin, int selfIndex) {
 	
 	for(int y=0; y < 15 && !breakWallOuterLoop; y++) {
 		for(int x=0; x < 20 && !breakWallOuterLoop; x++) {
-			if(map[y][x] == 1 && inBounds(target, makeSquareBounds(makeCoord(x * 16, y * 16), 16))) {
+			if(getMapTile(x, y, lemmings[selfIndex].quadrant) == 1 && inBounds(target, makeSquareBounds(makeCoord(x * 16, y * 16), 16))) {
 				bool breakWallInnerLoop = false;
 
 				// halt on X axis
@@ -254,7 +254,7 @@ void respawn(int i) {
 	lemmings[i].valid = false;
 
 	spawnLem(
-		spawns[randomMq(0,3)],
+		spawns[randomMq(0,MAX_SPAWNS-1)],
 		lemmings[i].color,
 		lemmings[i].isPlayer,
 		lemmings[i].frags,

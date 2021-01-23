@@ -8,6 +8,7 @@
 #include "weapon.h"
 #include "fx.h"
 #include "hud.h"
+#include "assets.h"
 
 bool usePlayer = true;
 bool gameover = false;
@@ -96,6 +97,11 @@ void nextIntroSeq() {
 void introFrame() {
 	switch(introSeqNumber) {
 		case INTRO_FALL:
+			if(!introSeqStarted) {
+				play("fall.wav");
+				introSeqStarted = true;
+			}
+
 			// Scene change
 			if(logoYPos >= 91) {
 				nextIntroSeq();
@@ -105,16 +111,11 @@ void introFrame() {
 			}
 			break;
 		case INTRO_EXP:
-			// for(int i=0; i < 8; i++) {
-			// 	spawnExpDelay(makeCoord(randomMq(130, 190),randomMq(logoYPos, logoYPos+30)), randomMq(0,1), randomMq(0, 50), 0);
-			// }
-				spawnExpDelay(makeCoord(130, randomMq(logoYPos+5, logoYPos+7)), 0, randomMq(0, 50), 0);
-				spawnExpDelay(makeCoord(150, randomMq(logoYPos+5, logoYPos+7)), randomMq(0, 1), randomMq(0, 50), 0);
-				spawnExpDelay(makeCoord(170, randomMq(logoYPos+5, logoYPos+7)), randomMq(0, 1), randomMq(0, 50), 0);
-				spawnExpDelay(makeCoord(190, randomMq(logoYPos+5, logoYPos+7)), 0, randomMq(0, 50), 0);
-			// for(int i=0; i < 4; i++) {
-			// 	spawnExpDelay(makeCoord(randomMq(130, 190), randomMq(logoYPos+5, logoYPos+10)), randomMq(0,1), randomMq(0, 50), 0);
-			// }
+			play("expdeath.wav");
+			spawnExpDelay(makeCoord(130, randomMq(logoYPos+5, logoYPos+7)), 0, randomMq(0, 50), 0);
+			spawnExpDelay(makeCoord(150, randomMq(logoYPos+5, logoYPos+7)), randomMq(0, 1), randomMq(0, 50), 0);
+			spawnExpDelay(makeCoord(170, randomMq(logoYPos+5, logoYPos+7)), randomMq(0, 1), randomMq(0, 50), 0);
+			spawnExpDelay(makeCoord(190, randomMq(logoYPos+5, logoYPos+7)), 0, randomMq(0, 50), 0);
 			nextIntroSeq();
 			break;
 		case INTRO_SHAKE:

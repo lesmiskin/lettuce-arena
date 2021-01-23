@@ -335,6 +335,8 @@ static void loadSounds(void) {
        { "hit.wav", SOUND_VOLUME },
        { "hit2.wav", SOUND_VOLUME },
        { "powerup.wav", SOUND_VOLUME },
+       { "fall.wav", 76 },
+       { "tele.wav", SOUND_VOLUME },
        { "mach2.wav", SOUND_VOLUME },
        { "mach.wav", 64 },
        { "rocket.wav", 64 }

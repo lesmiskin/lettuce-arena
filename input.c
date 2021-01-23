@@ -69,21 +69,23 @@ void pollInput(void) {
 	}
 
 	//Combat keys
-	if(keysHeld[SDL_SCANCODE_LEFT])
-		commands[CMD_PLAYER_LEFT] = true;
-	else if(keysHeld[SDL_SCANCODE_RIGHT])
-		commands[CMD_PLAYER_RIGHT] = true;
+	if(inGame) {
+		if(keysHeld[SDL_SCANCODE_LEFT])
+			commands[CMD_PLAYER_LEFT] = true;
+		else if(keysHeld[SDL_SCANCODE_RIGHT])
+			commands[CMD_PLAYER_RIGHT] = true;
 
-	if(keysHeld[SDL_SCANCODE_UP])
-		commands[CMD_PLAYER_UP] = true;
-	else if(keysHeld[SDL_SCANCODE_DOWN])
-		commands[CMD_PLAYER_DOWN] = true;
+		if(keysHeld[SDL_SCANCODE_UP])
+			commands[CMD_PLAYER_UP] = true;
+		else if(keysHeld[SDL_SCANCODE_DOWN])
+			commands[CMD_PLAYER_DOWN] = true;
 
-	if(keysHeld[SDL_SCANCODE_LCTRL] || keysHeld[SDL_SCANCODE_RCTRL])
-		commands[CMD_SHOOT] = true;
+		if(keysHeld[SDL_SCANCODE_LCTRL] || keysHeld[SDL_SCANCODE_RCTRL])
+			commands[CMD_SHOOT] = true;
 
-	if(keysHeld[SDL_SCANCODE_TAB])
-		commands[CMD_SCORES] = true;
+		if(keysHeld[SDL_SCANCODE_TAB])
+			commands[CMD_SCORES] = true;
+	}
 }
 
 void processSystemCommands(void) {

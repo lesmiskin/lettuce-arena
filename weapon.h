@@ -36,5 +36,6 @@ extern void shoot(int i, double deg);
 extern void initWeapon();
 extern long lastPlayerKillTime;
 extern int lastPlayerKillIndex;
+extern void stopWeap();
 
 #endif

@@ -76,7 +76,7 @@ typedef struct {
 	Dir4 freeDir;
 } Move;
 
-#define MAX_LEM 4
+#define MAX_LEM 8
 
 extern const int PLAYER_INDEX;
 

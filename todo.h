@@ -1,4 +1,11 @@
 
+// melee fist or pistol.
+// strafe ability.
+// fix 'walk through wall' weapon homing.
+
+
+
+
 // TODO: Game will sometimes freeze immediately upon launch (no rendered frame).
 // - A rebuild fixes it, after a while?
 // - Something to do with ground texture rendering. 

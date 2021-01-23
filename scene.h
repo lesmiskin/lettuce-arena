@@ -22,8 +22,9 @@ typedef struct {
 #define MAP_Y 15
 #define MAP_X 20
 extern int map[MAP_Y][MAP_X];
+extern int getMapTile(int x, int y, int quadrant);
 
-#define MAX_SPAWNS 4
+#define MAX_SPAWNS 8
 extern Spawn spawns[MAX_SPAWNS];
 
 extern void sceneRenderFrame(void);

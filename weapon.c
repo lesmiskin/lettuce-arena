@@ -76,7 +76,7 @@ void weaponGameFrame() {
 		// Checks for weapon impacts against walls.
 		for(int y=0; y < 15; y++) {
 			for(int x=0; x < 20; x++) {
-				if(map[y][x] == 1) {
+				if(getMapTile(x, y, shots[i].quadrant) == 1) {
 					if(inBounds(shots[i].coord, makeSquareBounds(makeCoord(x * 16, y * 16), 16))) {
 						shots[i].valid = false;
 						Coord c = makeCoord(x, y);
@@ -289,4 +289,10 @@ void shoot(int i, double deg) {
 
 	// drop weapon if run out of ammo.
 	if(lemmings[i].ammo == 0) lemmings[i].weap = 0;
+}
+
+void stopWeap() {
+	for(int i=0; i < MAX_SHOTS; i++) {
+		shots[i].valid = false;
+	}
 }
